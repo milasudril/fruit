@@ -4,6 +4,8 @@
 #include "./display_callback.hpp"
 #include "./device_id.hpp"
 #include "./typing_event.hpp"
+#include "./point.hpp"
+#include "./vector.hpp"
 
 namespace fruit
 {
