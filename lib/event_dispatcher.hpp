@@ -2,6 +2,7 @@
 #define FRUIT_EVENT_DISPATCHER_HPP
 
 #include "./display_callback.hpp"
+#include "./device_id.hpp"
 
 namespace fruit
 {
