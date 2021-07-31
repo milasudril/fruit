@@ -4,6 +4,7 @@
 #include "./display_callback.hpp"
 #include "./device_id.hpp"
 #include "./scancode.hpp"
+#include "./button_state.hpp"
 
 namespace fruit
 {
