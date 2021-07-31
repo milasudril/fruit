@@ -15,13 +15,20 @@
 
 namespace fruit
 {
+	class MessageHandler
+	{
+	public:
+	private:
+		void* m_handle;
+	};
+
 	class EventDispatcher
 	{
 	public:
 		template<DisplayCallback T>
-		void render(T&& cb) const
+		void render(DeviceId sender, T&& cb) const
 		{
-			render(&cb, [](void* self, Pixel const* srcbuff, int width, int height) {
+			render(sender, &cb, [](void* self, Pixel const* srcbuff, int width, int height) {
 				(*static_cast<T*>(self))(srcbuff, width, height);
 			});
 		}
@@ -34,14 +41,14 @@ namespace fruit
 		void send(DeviceId sender, MidiEvent const& event);
 		void send(DeviceId sender, FrameStartEvent const& event);
 
-		void bind(Widget& widget, DeviceId device);
-		void unbind(Widget& widget, DeviceId device);
-		void unbind(Widget& widget);
+		void bind(MessageHandler& widget, DeviceId device);
+		void unbind(MessageHandler& widget, DeviceId device);
+		void unbind(MessageHandler& widget);
 
 	private:
-		void render(void*, DisplayCallbackPtr) const;
+		void render(DeviceId sender, void*, DisplayCallbackPtr) const;
 
-		std::map<DeviceId, std::vector<std::reference_wrapper<Widget>>> m_sensitive_widgets;
+		std::map<DeviceId, std::vector<MessageHandler>> m_sensitive_widgets;
 	};
 }
 
