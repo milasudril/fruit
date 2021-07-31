@@ -50,6 +50,12 @@ namespace fruit
 	template<class Event, class ... Events>
 	class EventDispatcher : EventDispatcher<Event>, public EventDispatcher<Events...>
 	{
+	public:
+		void unbind(void const* widget)
+		{
+			EventDispatcher<Event>::unbind(widget);
+			EventDispatcher<Events...>::unbind(widget);
+		}
 	};
 
 	template<class Event>
