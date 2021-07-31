@@ -20,7 +20,7 @@ namespace fruit
 		}}
 		{}
 
-		void handle(Event const& event)
+		void handle(Event const& event) const
 		{
 			m_func(m_obj, event);
 		}
@@ -102,7 +102,7 @@ namespace fruit
 	class EventDispatcher<Event>
 	{
 	public:
-		void send(DeviceId sender, Event const& e)
+		void send(DeviceId sender, Event const& e) const
 		{
 			auto const& handlers = m_sensitive_widgets.find(sender);
 			if(handlers == std::end(m_sensitive_widgets))
