@@ -8,7 +8,8 @@ namespace fruit
 	class EventDispatcher
 	{
 	public:
-		void render(DisplayCallback&& cb) const
+		template<DisplayCallback T>
+		void render(T&& cb) const
 		{
 			render(&cb, [](void* self, GuiPixel const* srcbuff, int width, int height) {
 				(*static_cast<DisplayCallback*>(self))(srcbuff, width, height);
