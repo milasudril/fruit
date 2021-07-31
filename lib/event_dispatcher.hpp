@@ -22,7 +22,7 @@ namespace fruit
 		void render(T&& cb) const
 		{
 			render(&cb, [](void* self, Pixel const* srcbuff, int width, int height) {
-				(*static_cast<DisplayCallback*>(self))(srcbuff, width, height);
+				(*static_cast<T*>(self))(srcbuff, width, height);
 			});
 		}
 
