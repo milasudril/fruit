@@ -4,13 +4,14 @@
 #include "./pixel.hpp"
 
 #include <concepts>
+#include <utility>
 
 namespace fruit
 {
 	template<class T>
-	concept DisplayCallback = requires(T x)
+	concept DisplayCallback = requires(T x, Pixel const* source, int width, int height)
 	{
-		{x(Pixel const* source, int width, int height)} -> std::same_as<void>;
+		{x(source, width, height)} -> std::same_as<void>;
 	};
 
 	using DisplayCallbackPtr = void (*)(void* context, Pixel const* source, int width, int height);
