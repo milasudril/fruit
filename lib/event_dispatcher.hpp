@@ -51,6 +51,31 @@ namespace fruit
 			m_vt = &vt;
 		}
 
+		void handle(FrameStartEvent const& event)
+		{
+			m_vt.get().frame_start_event(m_handle, event);
+		}
+
+		void handle(LocationEvent const& event)
+		{
+			m_vt.get().location_event(m_handle, event);
+		}
+
+		void handle(BallEvent const& event)
+		{
+			m_vt.get().ball_event(m_handle, event);
+		}
+
+		void handle(MidiEvent const& event)
+		{
+			m_vt.get().midi_event(m_handle, event);
+		}
+
+		void handle(TypingEvent const& event)
+		{
+			m_vt.get().typing_event(m_handle, event);
+		}
+
 	private:
 		void* m_handle;
 		void (*m_render)(void* handle, Pixel* sinkbuff, int width, int height);
