@@ -5,8 +5,7 @@
 #include "./device_id.hpp"
 #include "./typing_event.hpp"
 #include "./location_event.hpp"
-#include "./point.hpp"
-#include "./vector.hpp"
+#include "./displace_event.hpp"
 
 namespace fruit
 {
@@ -25,7 +24,7 @@ namespace fruit
 
 		void send(DeviceId sender, TypingEvent const& event);
 		void send(DeviceId sender, LocationEvent const& event);
-		void send_displace_event(DeviceId sender, Vector<float> offset);
+		void send(DeviceId sender, DisplaceEvent const& event);
 		void send_midi_event(DeviceId sender, MidiEvent event);
 		void send_frame_start_event(DeviceId sender, uint64_t framecounter, Worldclock t);
 
