@@ -47,6 +47,17 @@ namespace fruit
 		return !(a == b);
 	}
 
+	namespace event_dispatcher_detail
+	{
+		struct CompareDeviceId
+		{
+			bool operator()(DeviceId a, DeviceId b) const
+			{
+				return a.value() < b.value();
+			}
+		};
+	}
+
 	template<class Event, class ... Events>
 	class EventDispatcher : EventDispatcher<Event>, public EventDispatcher<Events...>
 	{
@@ -64,7 +75,7 @@ namespace fruit
 	public:
 		void send(DeviceId sender, Event const& e)
 		{
-			auto& handlers = m_sensitive_widgets.find(sender);
+			auto const& handlers = m_sensitive_widgets.find(sender);
 			if(handlers == std::end(m_sensitive_widgets))
 			{ return; }
 
@@ -98,7 +109,7 @@ namespace fruit
 		}
 
 	private:
-		std::map<DeviceId, std::vector<EventHandler<Event>>> m_sensitive_widgets;
+		std::map<DeviceId, std::vector<EventHandler<Event>>, event_dispatcher_detail::CompareDeviceId> m_sensitive_widgets;
 	};
 
 
