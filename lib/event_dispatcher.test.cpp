@@ -42,4 +42,10 @@ TESTCASE(EventDispatcherSingle)
 	event_dispatcher.unbind(fruit::EventHandler<int>(std::ref(eh_2)), fruit::DeviceId{1});
 	event_dispatcher.send(fruit::DeviceId{1}, 2);
 	EXPECT_EQ(eh_2.recv_val, 2);
+
+	event_dispatcher.unbind(fruit::EventHandler<int>(std::ref(eh_1)));
+	event_dispatcher.send(fruit::DeviceId{1}, 4);
+	EXPECT_EQ(eh_1.recv_val, 3);
+	event_dispatcher.send(fruit::DeviceId{2}, 4);
+	EXPECT_EQ(eh_1.recv_val, 3);
 }
