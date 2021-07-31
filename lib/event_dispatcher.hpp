@@ -3,6 +3,7 @@
 
 #include "./display_callback.hpp"
 #include "./device_id.hpp"
+#include "./scancode.hpp"
 
 namespace fruit
 {
@@ -12,7 +13,7 @@ namespace fruit
 		template<DisplayCallback T>
 		void render(T&& cb) const
 		{
-			render(&cb, [](void* self, GuiPixel const* srcbuff, int width, int height) {
+			render(&cb, [](void* self, Pixel const* srcbuff, int width, int height) {
 				(*static_cast<DisplayCallback*>(self))(srcbuff, width, height);
 			});
 		}
