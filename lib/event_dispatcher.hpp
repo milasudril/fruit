@@ -16,7 +16,7 @@
 
 namespace fruit
 {
-	namespace message_handler_detail
+	namespace event_dispatcher_detail
 	{
 		template<class T>
 		void handle(void* reciever, T const& event)
@@ -25,9 +25,9 @@ namespace fruit
 		}
 	}
 
-	class MessageHandler
+	class EventHandler
 	{
-		struct MessageHandlerVtable
+		struct EventHandlerVtable
 		{
 			void (*frame_start_event)(void*, FrameStartEvent const&);
 			void (*location_event)(void*, LocationEvent const&);
@@ -38,14 +38,14 @@ namespace fruit
 
 	public:
 		template<class Widget>
-		explicit MessageHandler(std::reference_wrapper<Widget> widget):m_handle{&widget.get()}
+		explicit EventHandler(std::reference_wrapper<Widget> widget):m_handle{&widget.get()}
 		{
-			static MessageHandlerVtable vt{
-				message_handler_detail::handle<Widget, FrameStartEvent>,
-				message_handler_detail::handle<Widget, LocationEvent>,
-				message_handler_detail::handle<Widget, BallEvent>,
-				message_handler_detail::handle<Widget, MidiEvent>,
-				message_handler_detail::handle<Widget, TypingEvent>
+			static EventHandlerVtable vt{
+				event_dispatcher_detail::handle<Widget, FrameStartEvent>,
+				event_dispatcher_detail::handle<Widget, LocationEvent>,
+				event_dispatcher_detail::handle<Widget, BallEvent>,
+				event_dispatcher_detail::handle<Widget, MidiEvent>,
+				event_dispatcher_detail::handle<Widget, TypingEvent>
 			};
 
 			m_vt = &vt;
@@ -79,7 +79,7 @@ namespace fruit
 	private:
 		void* m_handle;
 		void (*m_render)(void* handle, Pixel* sinkbuff, int width, int height);
-		std::reference_wrapper<MessageHandlerVtable> m_vt;
+		std::reference_wrapper<EventHandlerVtable> m_vt;
 	};
 
 	class EventDispatcher
@@ -101,14 +101,14 @@ namespace fruit
 		void send(DeviceId sender, MidiEvent const& event);
 		void send(DeviceId sender, FrameStartEvent const& event);
 
-		void bind(MessageHandler& widget, DeviceId device);
-		void unbind(MessageHandler& widget, DeviceId device);
-		void unbind(MessageHandler& widget);
+		void bind(EventHandler& widget, DeviceId device);
+		void unbind(EventHandler& widget, DeviceId device);
+		void unbind(EventHandler& widget);
 
 	private:
 		void render(DeviceId sender, void*, DisplayCallbackPtr) const;
 
-		std::map<DeviceId, std::vector<MessageHandler>> m_sensitive_widgets;
+		std::map<DeviceId, std::vector<EventHandler>> m_sensitive_widgets;
 	};
 }
 
