@@ -1,12 +1,13 @@
-#ifndef FROZE_EVENT_DISPATCHER_HPP
-#define FROZE_EVENT_DISPATCHER_HPP
+#ifndef FRUIT_EVENT_DISPATCHER_HPP
+#define FRUIT_EVENT_DISPATCHER_HPP
+
+#include "./display_callback.hpp"
 
 namespace fruit
 {
 	class EventDispatcher
 	{
 	public:
-		template<class DisplayCallback>
 		void render(DisplayCallback&& cb) const
 		{
 			render(&cb, [](void* self, GuiPixel const* srcbuff, int width, int height) {
@@ -27,7 +28,7 @@ namespace fruit
 		void unbind(Widget& widget);
 
 	private:
-		void render(void*, void (*cb)(GuiPixel const*, int, int)) const;
+		void render(void*, DisplayCallbackPtr) const;
 
 		std::map<DeviceId, std::vector<std::reference_wrapper<Widget>>> m_sensitive_widgets;
 	};
