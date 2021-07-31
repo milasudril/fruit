@@ -5,7 +5,8 @@
 #include "./device_id.hpp"
 #include "./typing_event.hpp"
 #include "./location_event.hpp"
-#include "./displace_event.hpp"
+#include "./ball_event.hpp"
+#include "./midi_event.hpp"
 
 namespace fruit
 {
@@ -24,8 +25,8 @@ namespace fruit
 
 		void send(DeviceId sender, TypingEvent const& event);
 		void send(DeviceId sender, LocationEvent const& event);
-		void send(DeviceId sender, DisplaceEvent const& event);
-		void send_midi_event(DeviceId sender, MidiEvent event);
+		void send(DeviceId sender, BallEvent const& event);
+		void send(DeviceId sender, MidiEvent const& event);
 		void send_frame_start_event(DeviceId sender, uint64_t framecounter, Worldclock t);
 
 		void bind(Widget& widget, DeviceId device);
