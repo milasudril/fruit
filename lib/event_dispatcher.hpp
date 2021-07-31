@@ -4,6 +4,7 @@
 #include "./display_callback.hpp"
 #include "./device_id.hpp"
 #include "./typing_event.hpp"
+#include "./location_event.hpp"
 #include "./point.hpp"
 #include "./vector.hpp"
 
@@ -23,7 +24,7 @@ namespace fruit
 		void set_canvas_size(int width, int height);
 
 		void send(DeviceId sender, TypingEvent const& event);
-		void send_location_event(DeviceId sender, Point<float> loc, int button, ButtonState state);
+		void send(DeviceId sender, LocationEvent const& event);
 		void send_displace_event(DeviceId sender, Vector<float> offset);
 		void send_midi_event(DeviceId sender, MidiEvent event);
 		void send_frame_start_event(DeviceId sender, uint64_t framecounter, Worldclock t);
