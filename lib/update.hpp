@@ -17,7 +17,7 @@ namespace fruit
 
 	template<class UiUpdater, DisplayFunction Display>
 	requires requires(UiUpdater const& updater) {
-		{updater.send(std::declval<DeviceId>(), std::decltype<UpdateEventSw>())} -> std::same_as<void>;
+		{updater.send(std::declval<DeviceId>(), std::declval<UpdateEventSw>())} -> std::same_as<void>;
 	}
 	void update(UiUpdater const& updater, DeviceId id, UpdateEventSw const& event, Display&& display)
 	{
