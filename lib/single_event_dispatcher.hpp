@@ -47,6 +47,8 @@ namespace fruit
 		return !(a == b);
 	}
 
+
+
 	template<class Event>
 	class SingleEventDispatcher
 	{
@@ -89,6 +91,12 @@ namespace fruit
 	private:
 		std::map<DeviceId, std::vector<EventHandler<Event>>> m_sensitive_widgets;
 	};
+
+	template<class Event, class ... Events>
+	class EventDispatcher : SingleEventDispatcher<Event>, public EventDispatcher<Events...>
+	{
+	};
+
 }
 
 #endif
