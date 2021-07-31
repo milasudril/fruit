@@ -25,7 +25,8 @@
                         "cflags": [
                             "-g",
                             "-Wall",
-                            "-Wextra"
+                            "-Wextra",
+                            "-mavx2"
                         ],
                         "iquote": [
                             "."
@@ -50,7 +51,8 @@
                         "cflags": [
                             "-g",
                             "-Wall",
-                            "-Wextra"
+                            "-Wextra",
+                            "-mavx2"
                         ],
                         "iquote": [
                             "."
