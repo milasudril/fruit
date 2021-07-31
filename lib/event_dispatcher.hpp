@@ -66,12 +66,31 @@ namespace fruit
 
 			vals.erase(i);
 		}
+
+		template<class T>
+		void erase(std::vector<EventHandler<T>>& vals, void const* ptr)
+		{
+			auto i = std::ranges::find_if(vals, [ptr](auto item){
+				return item.object() == ptr;
+			});
+			if(i == std::end(vals))
+			{ return; }
+
+			vals.erase(i);
+		}
 	}
 
 	template<class Event, class ... Events>
-	class EventDispatcher : EventDispatcher<Event>, public EventDispatcher<Events...>
+	class EventDispatcher : EventDispatcher<Event>, EventDispatcher<Events...>
 	{
 	public:
+		using EventDispatcher<Event>::bind;
+		using EventDispatcher<Events...>::bind;
+		using EventDispatcher<Event>::send;
+		using EventDispatcher<Events...>::send;
+		using EventDispatcher<Event>::unbind;
+		using EventDispatcher<Events...>::unbind;
+
 		void unbind(void const* widget)
 		{
 			EventDispatcher<Event>::unbind(widget);
@@ -112,6 +131,13 @@ namespace fruit
 		}
 
 		void unbind(EventHandler<Event> widget)
+		{
+			std::ranges::for_each(m_sensitive_widgets, [widget](auto& item) {
+				event_dispatcher_detail::erase(item.second, widget);
+			});
+		}
+
+		void unbind(void const* widget)
 		{
 			std::ranges::for_each(m_sensitive_widgets, [widget](auto& item) {
 				event_dispatcher_detail::erase(item.second, widget);
