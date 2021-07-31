@@ -5,6 +5,7 @@
 #include "./device_id.hpp"
 #include "./scancode.hpp"
 #include "./button_state.hpp"
+#include "./char_codepoint.hpp"
 
 namespace fruit
 {
