@@ -10,6 +10,9 @@
 #include "./world_clock.hpp"
 #include "./frame_start_event.hpp"
 
+#include <map>
+#include <vector>
+
 namespace fruit
 {
 	class EventDispatcher
