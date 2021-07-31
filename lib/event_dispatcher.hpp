@@ -8,6 +8,7 @@
 #include "./ball_event.hpp"
 #include "./midi_event.hpp"
 #include "./world_clock.hpp"
+#include "./frame_start_event.hpp"
 
 namespace fruit
 {
@@ -28,7 +29,7 @@ namespace fruit
 		void send(DeviceId sender, LocationEvent const& event);
 		void send(DeviceId sender, BallEvent const& event);
 		void send(DeviceId sender, MidiEvent const& event);
-		void send_frame_start_event(DeviceId sender, uint64_t framecounter, WorldClock t);
+		void send(DeviceId sender, FrameStartEvent const& event);
 
 		void bind(Widget& widget, DeviceId device);
 		void unbind(Widget& widget, DeviceId device);
