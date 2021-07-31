@@ -12,14 +12,49 @@
 
 #include <map>
 #include <vector>
+#include <functional>
 
 namespace fruit
 {
+	namespace message_handler_detail
+	{
+		template<class T>
+		void handle(void* reciever, T const& event)
+		{
+			static_cast<T*>(reciever)->handle(event);
+		}
+	}
+
 	class MessageHandler
 	{
+		struct MessageHandlerVtable
+		{
+			void (*frame_start_event)(void*, FrameStartEvent const&);
+			void (*location_event)(void*, LocationEvent const&);
+			void (*ball_event)(void*, BallEvent const&);
+			void (*midi_event)(void*, MidiEvent const&);
+			void (*typing_event)(void*, TypingEvent const&);
+		};
+
 	public:
+		template<class Widget>
+		explicit MessageHandler(std::reference_wrapper<Widget> widget):m_handle{&widget.get()}
+		{
+			static MessageHandlerVtable vt{
+				message_handler_detail::handle<Widget, FrameStartEvent>,
+				message_handler_detail::handle<Widget, LocationEvent>,
+				message_handler_detail::handle<Widget, BallEvent>,
+				message_handler_detail::handle<Widget, MidiEvent>,
+				message_handler_detail::handle<Widget, TypingEvent>
+			};
+
+			m_vt = &vt;
+		}
+
 	private:
 		void* m_handle;
+		void (*m_render)(void* handle, Pixel* sinkbuff, int width, int height);
+		std::reference_wrapper<MessageHandlerVtable> m_vt;
 	};
 
 	class EventDispatcher
