@@ -1,6 +1,8 @@
 #ifndef FRUIT_DISPLAY_CALLBACK_HPP
 #define FRUIT_DISPLAY_CALLBACK_HPP
 
+#include "./pixel.hpp"
+
 #include <concepts>
 
 namespace fruit
