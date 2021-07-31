@@ -3,9 +3,7 @@
 
 #include "./display_callback.hpp"
 #include "./device_id.hpp"
-#include "./scancode.hpp"
-#include "./button_state.hpp"
-#include "./char_codepoint.hpp"
+#include "./typing_event.hpp"
 
 namespace fruit
 {
@@ -22,7 +20,7 @@ namespace fruit
 
 		void set_canvas_size(int width, int height);
 
-		void send_typing_event(DeviceId sender, Scancode scancode, ButtonState state, CharCodepoint mapped_codepoint);
+		void send(DeviceId sender, TypingEvent const& event);
 		void send_location_event(DeviceId sender, Point<float> loc, int button, ButtonState state);
 		void send_displace_event(DeviceId sender, Vector<float> offset);
 		void send_midi_event(DeviceId sender, MidiEvent event);
