@@ -2,6 +2,7 @@
 #define FRUIT_DEVICE_ID_HPP
 
 #include <cstdint>
+#include <string>
 
 namespace fruit
 {
@@ -24,6 +25,11 @@ namespace fruit
 
 	constexpr bool operator!=(DeviceId a, DeviceId b)
 	{ return !(a == b); }
+
+	inline std::string to_string(DeviceId id)
+	{
+		return std::to_string(id.value());
+	}
 }
 
 #endif
