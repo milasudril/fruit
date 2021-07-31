@@ -56,6 +56,16 @@ namespace fruit
 				return a.value() < b.value();
 			}
 		};
+
+		template<class T>
+		void erase(std::vector<T>& vals, T const& value)
+		{
+			auto i = std::ranges::find(vals, value);
+			if(i == std::end(vals))
+			{ return; }
+
+			vals.erase(i);
+		}
 	}
 
 	template<class Event, class ... Events>
@@ -98,13 +108,13 @@ namespace fruit
 			if(i == std::end(m_sensitive_widgets))
 			{ return; }
 
-			i->second.erase(widget);
+			event_dispatcher_detail::erase(i->second, widget);
 		}
 
 		void unbind(EventHandler<Event> widget)
 		{
 			std::ranges::for_each(m_sensitive_widgets, [widget](auto& item) {
-				item.second.erase(widget);
+				event_dispatcher_detail::erase(item.second, widget);
 			});
 		}
 
