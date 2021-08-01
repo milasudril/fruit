@@ -26,6 +26,7 @@
 							"-g",
 							"-Wall",
 							"-Wextra",
+							"-Werror",
 							"-mavx2"
 						],
 						"iquote": [
@@ -52,6 +53,7 @@
 							"-g",
 							"-Wall",
 							"-Wextra",
+							"-Werror",
 							"-mavx2"
 						],
 						"iquote": [

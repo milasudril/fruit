@@ -91,6 +91,6 @@ namespace fruit
 	}
 
 	template<class T>
-	constexpr Point<T> Origin{0.0f, 0.0f, 0.0f};
+	constexpr Point<T> Origin{0, 0, 0};
 }
 #endif

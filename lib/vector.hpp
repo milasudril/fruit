@@ -56,6 +56,13 @@ namespace fruit
 			return *this;
 		}
 
+		constexpr Vector& operator/=(T c)
+		{
+			m_value /= c;
+			return *this;
+		}
+
+
 	private:
 		vec4_t<T> m_value;
 	};
@@ -63,7 +70,14 @@ namespace fruit
 	template<class T>
 	constexpr Vector<T> operator*(T c, Vector<T> v)
 	{
-		v*=c;
+		v *= c;
+		return v;
+	}
+
+	template<class T>
+	constexpr Vector<T> operator/(Vector<T> v, T c)
+	{
+		v /= c;
 		return v;
 	}
 

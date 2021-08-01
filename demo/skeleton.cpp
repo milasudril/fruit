@@ -12,6 +12,7 @@
 
 #include "lib/update.hpp"
 #include "lib/event_dispatcher.hpp"
+#include "lib/rectangle.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -70,7 +71,7 @@ bool initOpenGL(GLFWwindow* window)
 }
 
 template<fruit::DisplayFunction UiUpdater>
-class Ui
+class Ui : public fruit::EventDispatcher<fruit::UpdateEventSw>
 {
 public:
 	void set_canvas_size(int width, int height)
@@ -83,12 +84,11 @@ public:
 
 	void update()
 	{
-		m_event_dispatcher.send(fruit::DeviceId{-1}, fruit::UpdateEventSw{m_framebuffer.get(), m_width, m_height});
+		send(fruit::DeviceId{-1}, fruit::UpdateEventSw{m_framebuffer.get(), m_width, m_height});
 		m_display(m_framebuffer.get(), m_width, m_height);
 	}
 
 private:
-	fruit::EventDispatcher<fruit::UpdateEventSw> m_event_dispatcher;
 	UiUpdater m_display;
 	std::unique_ptr<fruit::Pixel[]> m_framebuffer;
 	int m_width;
@@ -103,12 +103,14 @@ public:
 	}
 
 private:
-
 };
 
 int main()
 {
+	fruit::Rectangle rect;
 	Ui<GlTextureTransfer> ui;
+	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect)}, fruit::DeviceId{-1});
+
 	auto window = createWindow();
 	glfwSetWindowUserPointer(window.get(), &ui);
 
