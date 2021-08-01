@@ -1,0 +1,4 @@
+{
+	"target":{"name":"skeleton"}
+	,"dependencies":[{"ref":"./skeleton.o", "rel":"implementation"}]
+}
