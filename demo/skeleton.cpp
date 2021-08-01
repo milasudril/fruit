@@ -81,9 +81,9 @@ public:
 		update();
 	}
 
-	void update(fruit::DeviceId id, uint64_t framecounter, fruit::WorldClock::time_point now)
+	void update()
 	{
-		m_event_dispatcher.send(id, fruit::UpdateEventSw{m_framebuffer.get(), m_width, m_height, framecounter, now});
+		m_event_dispatcher.send(fruit::DeviceId{-1}, fruit::UpdateEventSw{m_framebuffer.get(), m_width, m_height});
 		m_display(m_framebuffer.get(), m_width, m_height);
 	}
 
@@ -111,21 +111,22 @@ int main()
 	Ui<GlTextureTransfer> ui;
 
 	auto window = createWindow();
+	glfwSetWindowUserPointer(window.get(), &ui);
+
 	if(!initOpenGL(window.get()))
 	{ return 1; }
 
 
-	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow*, int w, int h){
+	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
 		glViewport(0, 0, w, h);
+		auto& ui = *reinterpret_cast<Ui<GlTextureTransfer>*>(src);
+		ui.set_canvas_size(w, h);
 	});
-	uint64_t framecounter = 0;
-	fruit::WorldClock world_clock;
+
 	while(!glfwWindowShouldClose(window.get()))
 	{
 		glfwPollEvents();
-		ui.update(fruit::DeviceId{0}, framecounter, world_clock.now());
-
-		++framecounter;
+		ui.update();
 		glfwSwapBuffers(window.get());
 	}
 
