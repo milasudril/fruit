@@ -183,6 +183,16 @@ void main()
 	return program;
 }
 
+constexpr std::array<fruit::Point<float>, 6> texture_rect{
+	fruit::Point{-1.0f, -1.0f, 0.0f},
+	fruit::Point{1.0f, -1.0f, 0.0f},
+	fruit::Point{1.0f, 1.0f, 0.0f},
+
+	fruit::Point{1.0f, 1.0f, 0.0f},
+	fruit::Point{-1.0f, 1.0f, 0.0f},
+	fruit::Point{-1.0f, -1.0f, 0.0f}
+};
+
 int main()
 {
 	fruit::Rectangle rect;
@@ -201,6 +211,18 @@ int main()
 	auto shader_prog = create_shader_program();
 	glUseProgram(shader_prog);
 
+	GLuint vbo{};
+	glCreateBuffers(1, &vbo);
+	glNamedBufferStorage(vbo, std::size(texture_rect)*sizeof(fruit::Point<float>), std::data(texture_rect), GL_MAP_READ_BIT);
+
+	GLuint va{};
+	glCreateVertexArrays(1, &va);
+
+	glBindVertexArray(va);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(fruit::Point<float>), nullptr);
+	glEnableVertexAttribArray(0);
+
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);
 
@@ -215,6 +237,7 @@ int main()
 	{
 		glfwPollEvents();
 		ui.update();
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glfwSwapBuffers(window.get());
 	}
 
