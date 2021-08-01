@@ -6,23 +6,38 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <type_traits>
 
 namespace fruit
 {
+	namespace event_handler_detail
+	{
+		template <typename T, typename = void>
+		struct ResultType {
+			using type = void;
+		};
+		template <typename T>
+		struct ResultType<T,std::void_t<typename T::result_type>> {
+			using type = typename T::result_type;
+		};
+	}
+
 	template<class Event>
 	class EventHandler
 	{
 	public:
+		using result_type = typename event_handler_detail::ResultType<Event>::type;
+
 		template<class Widget>
 		explicit EventHandler(std::reference_wrapper<Widget> widget):m_obj{&widget.get()},
 		m_func{[](void* self, Event const& event){
-			static_cast<Widget*>(self)->handle(event);
+			return static_cast<Widget*>(self)->handle(event);
 		}}
 		{}
 
-		void handle(Event const& event) const
+		decltype(auto) handle(Event const& event) const
 		{
-			m_func(m_obj, event);
+			return m_func(m_obj, event);
 		}
 
 		void const* object() const
@@ -32,7 +47,7 @@ namespace fruit
 
 	private:
 		void* m_obj;
-		void (*m_func)(void* self, Event const& event);
+		result_type (*m_func)(void* self, Event const& event);
 	};
 
 	template<class Event>

@@ -1,6 +1,10 @@
 #ifndef FRUIT_LAYOUTBOX_HPP
 #define FRUIT_LAYOUTBOX_HPP
 
+#include "./point.hpp"
+
+#include <functional>
+
 namespace fruit
 {
 	struct Dimensions
@@ -18,8 +22,8 @@ namespace fruit
 		explicit LayoutBox(std::reference_wrapper<Widget> widget):m_obj{&widget.get()},
 		m_get_dimension{[](void const* self){
 			static_cast<Widget const*>(self)->get_dimensions();
-		},
-		m_get_dimension{[](void* self, Point<int> location, int width, int hegiht){
+		}},
+		m_get_dimension{[](void* self, Point<int> location, int width, int height){
 			static_cast<Widget*>(self)->get_dimensions(location, width, height);
 		}}
 		{}
