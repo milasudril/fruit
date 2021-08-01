@@ -18,6 +18,7 @@
 #include <GLFW/glfw3.h>
 
 #include <memory>
+#include <cstring>
 
 struct GlfwWindowDeleter
 {
@@ -84,6 +85,7 @@ public:
 
 	void update()
 	{
+		memset(m_framebuffer.get(), 0, m_width*m_height);
 		send(fruit::DeviceId{-1}, fruit::UpdateEventSw{m_framebuffer.get(), m_width, m_height});
 		m_display(m_framebuffer.get(), m_width, m_height);
 	}
@@ -92,6 +94,11 @@ public:
 	{
 		m_display = std::move(display);
 		update();
+	}
+
+	UiUpdater const& display() const
+	{
+		return m_display;
 	}
 
 private:
@@ -117,7 +124,11 @@ public:
 	void operator()(fruit::Pixel const* buffer, int width, int height)
 	{
 		if(m_handle == 0 || width != m_width || height != m_height)
-		{ allocate(width, height); }
+		{
+			allocate(width, height);
+			glTextureParameteri(m_handle, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTextureParameteri(m_handle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		}
 
 		glTextureSubImage2D(m_handle, 0, 0, 0, width, height, GL_RGBA, GL_FLOAT, buffer);
 	}
@@ -139,6 +150,11 @@ public:
 		m_height = height;
 	}
 
+	void bind() const
+	{
+		glBindTexture(GL_TEXTURE_2D, m_handle);
+	}
+
 private:
 	GLuint m_handle;
 	int m_width;
@@ -150,11 +166,14 @@ GLuint create_shader_program()
 	char const* vertex_shader_src = R"shader(#version 460
 
 layout (location = 0) in vec4 input_loc;
+layout (location = 1) in vec2 input_uv;
 out vec4 vertex_loc;
+out vec2 uv;
 void main()
 {
 	gl_Position = input_loc;
 	vertex_loc = input_loc;
+	uv = input_uv;
 }
 )shader";
 	auto const vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -164,10 +183,13 @@ void main()
 	char const* fragment_shader_src = R"shader(#version 460
 
 out vec4 FragColor;
+in vec2 uv;
+
+uniform sampler2D tex;
 
 void main()
 {
-	FragColor = vec4(0.5, 0.5, 0.5, 1.0);
+	FragColor = texture(tex, uv);
 }
 )shader";
 
@@ -193,6 +215,16 @@ constexpr std::array<fruit::Point<float>, 6> texture_rect{
 	fruit::Point{-1.0f, -1.0f, 0.0f}
 };
 
+constexpr std::array<std::pair<float, float>, 6> texture_uvs{
+	std::pair<float, float>{0.0f, 0.0f},
+	std::pair<float, float>{1.0f, 0.0f},
+	std::pair<float, float>{1.0f, 1.0f},
+
+	std::pair<float, float>{1.0f, 1.0f},
+	std::pair<float, float>{0.0f, 1.0f},
+	std::pair<float, float>{0.0f, 0.0f}
+};
+
 int main()
 {
 	fruit::Rectangle rect;
@@ -213,22 +245,26 @@ int main()
 
 	GLuint vbo{};
 	glCreateBuffers(1, &vbo);
-	glNamedBufferStorage(vbo, std::size(texture_rect)*sizeof(fruit::Point<float>), std::data(texture_rect), GL_MAP_READ_BIT);
+	glNamedBufferStorage(vbo,
+						 std::size(texture_rect)*sizeof(fruit::Point<float>),
+						 std::data(texture_rect),
+						 GL_MAP_READ_BIT);
+
+	GLuint uvs{};
+	glCreateBuffers(1, &uvs);
+	glNamedBufferStorage(uvs,
+						 std::size(texture_uvs)*sizeof(std::pair<float,float>),
+						 std::data(texture_uvs),
+						 GL_MAP_READ_BIT);
 
 	GLuint va{};
 	glCreateVertexArrays(1, &va);
-
-	glBindVertexArray(va);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(fruit::Point<float>), nullptr);
-	glEnableVertexAttribArray(0);
 
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);
 
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
 		glViewport(0, 0, w, h);
-
 		auto& ui = *reinterpret_cast<Ui<Texture>*>(glfwGetWindowUserPointer(src));
 		ui.set_viewport_size(w, h);
 	});
@@ -237,7 +273,17 @@ int main()
 	{
 		glfwPollEvents();
 		ui.update();
+
+		glBindVertexArray(va);
+		ui.display().bind();
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(fruit::Point<float>), nullptr);
+		glBindBuffer(GL_ARRAY_BUFFER, uvs);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(std::pair<float, float>), nullptr);
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+
 		glfwSwapBuffers(window.get());
 	}
 
