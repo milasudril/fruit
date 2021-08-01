@@ -109,7 +109,6 @@ private:
 int main()
 {
 	Ui<GlTextureTransfer> ui;
-
 	auto window = createWindow();
 	glfwSetWindowUserPointer(window.get(), &ui);
 
@@ -119,7 +118,8 @@ int main()
 
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
 		glViewport(0, 0, w, h);
-		auto& ui = *reinterpret_cast<Ui<GlTextureTransfer>*>(src);
+
+		auto& ui = *reinterpret_cast<Ui<GlTextureTransfer>*>(glfwGetWindowUserPointer(src));
 		ui.set_canvas_size(w, h);
 	});
 
