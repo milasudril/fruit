@@ -12,12 +12,15 @@ namespace fruit
 {
 	namespace event_handler_detail
 	{
-		template <typename T, typename = void>
-		struct ResultType {
+		template<class T, class = void>
+		struct ResultType
+		{
 			using type = void;
 		};
-		template <typename T>
-		struct ResultType<T,std::void_t<typename T::result_type>> {
+
+		template<class T>
+		struct ResultType<T,std::void_t<typename T::result_type>>
+		{
 			using type = typename T::result_type;
 		};
 	}
