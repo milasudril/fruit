@@ -108,6 +108,10 @@ private:
 int main()
 {
 	fruit::Rectangle rect;
+	rect.width=300;
+	rect.height=200;
+	rect.color = fruit::red();
+
 	Ui<GlTextureTransfer> ui;
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect)}, fruit::DeviceId{-1});
 
