@@ -74,7 +74,7 @@ template<fruit::DisplayFunction UiUpdater>
 class Ui : public fruit::EventDispatcher<fruit::UpdateEventSw>
 {
 public:
-	void set_canvas_size(int width, int height)
+	void set_viewport_size(int width, int height)
 	{
 		m_framebuffer = std::make_unique<fruit::Pixel[]>(width * height);
 		m_width = width;
@@ -88,6 +88,12 @@ public:
 		m_display(m_framebuffer.get(), m_width, m_height);
 	}
 
+	void set_display(UiUpdater&& display)
+	{
+		m_display = std::move(display);
+		update();
+	}
+
 private:
 	UiUpdater m_display;
 	std::unique_ptr<fruit::Pixel[]> m_framebuffer;
@@ -95,14 +101,49 @@ private:
 	int m_height;
 };
 
-class GlTextureTransfer
+class Texture
 {
 public:
-	void operator()(fruit::Pixel const*, int, int)
+	Texture():m_handle{0}, m_width{0}, m_height{0} {}
+
+	~Texture()
 	{
+		if(m_handle != 0)
+		{
+			glDeleteTextures(1, &m_handle);
+		}
+	}
+
+	void operator()(fruit::Pixel const*, int width, int height)
+	{
+		if(m_handle == 0 || width != m_width || height != m_height)
+		{ allocate(width, height); }
+
+
+	}
+
+	void allocate(int width, int height)
+	{
+		GLuint handle{0};
+		glCreateTextures(GL_TEXTURE_2D, 1, &handle);
+		if(handle == 0)
+		{ throw std::runtime_error{"Failed to create a texture"}; }
+
+		glTextureStorage2D(handle, 1, GL_RGBA16F, width, height);
+		if(glGetError() != GL_NO_ERROR)
+		{ throw std::runtime_error{"Failed to allocate storage for current texture"}; }
+
+		glDeleteTextures(1, &m_handle);
+		m_handle = handle;
+		m_width = width;
+		m_height = height;
 	}
 
 private:
+	GLuint m_handle;
+	int m_width;
+	int m_height;
+
 };
 
 int main()
@@ -112,8 +153,7 @@ int main()
 	rect.height=200;
 	rect.color = fruit::red();
 
-	Ui<GlTextureTransfer> ui;
-	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect)}, fruit::DeviceId{-1});
+	Ui<Texture> ui;
 
 	auto window = createWindow();
 	glfwSetWindowUserPointer(window.get(), &ui);
@@ -122,11 +162,14 @@ int main()
 	{ return 1; }
 
 
+	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect)}, fruit::DeviceId{-1});
+	ui.set_viewport_size(800 ,500);
+
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
 		glViewport(0, 0, w, h);
 
-		auto& ui = *reinterpret_cast<Ui<GlTextureTransfer>*>(glfwGetWindowUserPointer(src));
-		ui.set_canvas_size(w, h);
+		auto& ui = *reinterpret_cast<Ui<Texture>*>(glfwGetWindowUserPointer(src));
+		ui.set_viewport_size(w, h);
 	});
 
 	while(!glfwWindowShouldClose(window.get()))
