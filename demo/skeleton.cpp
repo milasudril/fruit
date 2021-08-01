@@ -114,12 +114,12 @@ public:
 		}
 	}
 
-	void operator()(fruit::Pixel const*, int width, int height)
+	void operator()(fruit::Pixel const* buffer, int width, int height)
 	{
 		if(m_handle == 0 || width != m_width || height != m_height)
 		{ allocate(width, height); }
 
-
+		glTextureSubImage2D(m_handle, 0, 0, 0, width, height, GL_RGBA, GL_FLOAT, buffer);
 	}
 
 	void allocate(int width, int height)
