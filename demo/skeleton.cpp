@@ -143,8 +143,45 @@ private:
 	GLuint m_handle;
 	int m_width;
 	int m_height;
-
 };
+
+GLuint create_shader_program()
+{
+	char const* vertex_shader_src = R"shader(#version 460
+
+layout (location = 0) in vec4 input_loc;
+out vec4 vertex_loc;
+void main()
+{
+	gl_Position = input_loc;
+	vertex_loc = input_loc;
+}
+)shader";
+	auto const vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertex_shader, 1, &vertex_shader_src, nullptr);
+	glCompileShader(vertex_shader);
+
+	char const* fragment_shader_src = R"shader(#version 460
+
+out vec4 FragColor;
+
+void main()
+{
+	FragColor = vec4(0.5, 0.5, 0.5, 1.0);
+}
+)shader";
+
+	auto const fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragment_shader, 1, &fragment_shader_src, nullptr);
+	glCompileShader(fragment_shader);
+
+	auto const program = glCreateProgram();
+	glAttachShader(program, vertex_shader);
+	glAttachShader(program, fragment_shader);
+	glLinkProgram(program);
+
+	return program;
+}
 
 int main()
 {
@@ -161,9 +198,11 @@ int main()
 	if(!initOpenGL(window.get()))
 	{ return 1; }
 
+	auto shader_prog = create_shader_program();
+	glUseProgram(shader_prog);
 
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect)}, fruit::DeviceId{-1});
-	ui.set_viewport_size(800 ,500);
+	ui.set_viewport_size(800, 500);
 
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
 		glViewport(0, 0, w, h);
