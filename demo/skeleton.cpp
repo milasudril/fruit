@@ -11,6 +11,7 @@
 //@	}
 
 #include "lib/update.hpp"
+#include "lib/event_dispatcher.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -68,27 +69,63 @@ bool initOpenGL(GLFWwindow* window)
 	return true;
 }
 
+template<fruit::DisplayFunction UiUpdater>
+class Ui
+{
+public:
+	void set_canvas_size(int width, int height)
+	{
+		m_framebuffer = std::make_unique<fruit::Pixel[]>(width * height);
+		m_width = width;
+		m_height = height;
+		update();
+	}
+
+	void update(fruit::DeviceId id, uint64_t framecounter, fruit::WorldClock::time_point now)
+	{
+		m_event_dispatcher.send(id, fruit::UpdateEventSw{m_framebuffer.get(), m_width, m_height, framecounter, now});
+		m_display(m_framebuffer.get(), m_width, m_height);
+	}
+
+private:
+	fruit::EventDispatcher<fruit::UpdateEventSw> m_event_dispatcher;
+	UiUpdater m_display;
+	std::unique_ptr<fruit::Pixel[]> m_framebuffer;
+	int m_width;
+	int m_height;
+};
+
+class GlTextureTransfer
+{
+public:
+	void operator()(fruit::Pixel const*, int, int)
+	{
+	}
+
+private:
+
+};
+
 int main()
 {
+	Ui<GlTextureTransfer> ui;
+
 	auto window = createWindow();
 	if(!initOpenGL(window.get()))
 	{ return 1; }
 
+
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow*, int w, int h){
 		glViewport(0, 0, w, h);
 	});
-
-	glfwSetCharCallback(window.get(), [](GLFWwindow*, unsigned int){
-		puts("Char callback");
-	});
-
-	glfwSetKeyCallback(window.get(), [](GLFWwindow*, int, int, int, int){
-		puts("Key callback");
-	});
-
+	uint64_t framecounter = 0;
+	fruit::WorldClock world_clock;
 	while(!glfwWindowShouldClose(window.get()))
 	{
 		glfwPollEvents();
+		ui.update(fruit::DeviceId{0}, framecounter, world_clock.now());
+
+		++framecounter;
 		glfwSwapBuffers(window.get());
 	}
 

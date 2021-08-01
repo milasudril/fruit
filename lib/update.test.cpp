@@ -30,7 +30,7 @@ TESTCASE(updateUi)
 	event.width = 3;
 	event.height = 2;
 	event.frame_number = 4;
-	event.time_point = fruit::WorldClock{std::chrono::duration<double>{4.0/60.0}};
+	event.time_point = fruit::WorldClock{}.now();
 	update(updater, fruit::DeviceId{1}, event, [&event](fruit::Pixel const* buffer, int w, int h){
 		EXPECT_EQ(buffer, event.buffer);
 		EXPECT_EQ(w, event.width);

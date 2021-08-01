@@ -15,7 +15,7 @@ namespace fruit
 		int width;
 		int height;
 		uint64_t frame_number;
-		WorldClock time_point;
+		WorldClock::time_point time_point;
 
 		constexpr bool operator==(UpdateEventSw const&) const = default;
 		constexpr bool operator!=(UpdateEventSw const&) const = default;
