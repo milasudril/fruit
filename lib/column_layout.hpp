@@ -5,11 +5,12 @@
 
 namespace fruit
 {
+	using LayoutBox = EventHandler<SizeRequestEvent, GeometryUpdateEvent>;
+
 	class ColumnLayout
 	{
 	public:
-		template<class LayoutBox>
-		void push_back(LayoutBox& object)
+		void push_back(LayoutBox box)
 		{
 			m_content.push_back(box);
 		}
@@ -19,8 +20,7 @@ namespace fruit
 		}
 
 	private:
-		std::vector<std::pair<EventHandler<SizeRequestEvent>,
-			EventHandler<GeometryUpdateEvent>> m_content;
+		std::vector<LayoutBox> m_content;
 	};
 }
 
