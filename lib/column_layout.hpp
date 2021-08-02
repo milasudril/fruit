@@ -2,6 +2,10 @@
 #define FRUIT_COLUMN_LAYOUT_HPP
 
 #include "./event_handler.hpp"
+#include "./size_request_event.hpp"
+#include "./geometry_update_event.hpp"
+
+#include <vector>
 
 namespace fruit
 {
@@ -15,7 +19,7 @@ namespace fruit
 			m_content.push_back(box);
 		}
 
-		void handle(ViewportSizeEvent const& event)
+		void handle(GeometryUpdateEvent const&)
 		{
 		}
 

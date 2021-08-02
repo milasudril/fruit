@@ -1,6 +1,8 @@
 #ifndef FRUIT_EVENTHANDLER_HPP
 #define FRUIT_EVENTHANDLER_HPP
 
+#include <type_traits>
+
 namespace fruit
 {
 	namespace event_handler_detail
