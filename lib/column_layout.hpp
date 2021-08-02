@@ -1,9 +1,7 @@
 #ifndef FRUIT_COLUMN_LAYOUT_HPP
 #define FRUIT_COLUMN_LAYOUT_HPP
 
-#include "./layout_box.hpp"
-
-#include <vector>
+#include "./event_dispatcher.hpp"
 
 namespace fruit
 {
@@ -22,8 +20,7 @@ namespace fruit
 		}
 
 	private:
-		Point<int> m_location;
-		std::vector<LayoutBox> m_content;
+
 	};
 }
 
