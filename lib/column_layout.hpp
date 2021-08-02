@@ -20,7 +20,7 @@ namespace fruit
 
 	private:
 		std::vector<std::pair<EventHandler<SizeRequestEvent>,
-			EventHandler<SizeUpdateEvent>> m_content;
+			EventHandler<GeometryUpdateEvent>> m_content;
 	};
 }
 
