@@ -18,14 +18,15 @@ namespace fruit
 		};
 	}
 
-	template<class Event>
-	class EventHandler
+	template<class Event, class ... Events>
+	class EventHandler : EventHandler<Events...>
 	{
 	public:
-		using result_type = typename event_handler_detail::ResultType<Event>::type;
+		using EventHandler<Events...>::object;
+		using EventHandler<Events...>::handle;
 
 		template<class Widget>
-		explicit EventHandler(std::reference_wrapper<Widget> widget):m_obj{&widget.get()},
+		explicit EventHandler(std::reference_wrapper<Widget> widget):EventHandler<Events...>{widget},
 		m_func{[](void* self, Event const& event){
 			return static_cast<Widget*>(self)->handle(event);
 		}}
@@ -33,10 +34,34 @@ namespace fruit
 
 		decltype(auto) handle(Event const& event) const
 		{
+			return m_func(object(), event);
+		}
+
+	private:
+		using result_type = typename event_handler_detail::ResultType<Event>::type;
+
+		result_type (*m_func)(void* self, Event const& event);
+	};
+
+	template<class Event>
+	class EventHandler<Event>
+	{
+	public:
+		template<class Widget>
+		explicit EventHandler(std::reference_wrapper<Widget> widget):m_obj{&widget.get()},
+		m_func{[](void* self, Event const& event){
+			return static_cast<Widget*>(self)->handle(event);
+		}}
+		{}
+
+		using result_type = typename event_handler_detail::ResultType<Event>::type;
+
+		decltype(auto) handle(Event const& event) const
+		{
 			return m_func(m_obj, event);
 		}
 
-		void const* object() const
+		void* object() const
 		{
 			return m_obj;
 		}
