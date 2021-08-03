@@ -13,6 +13,7 @@
 #include "lib/update.hpp"
 #include "lib/event_dispatcher.hpp"
 #include "lib/rectangle.hpp"
+#include "lib/column_layout.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -72,7 +73,7 @@ bool initOpenGL(GLFWwindow* window)
 }
 
 template<fruit::DisplayFunction UiUpdater>
-class Ui : public fruit::EventDispatcher<fruit::UpdateEventSw>
+class Ui : public fruit::EventDispatcher<fruit::UpdateEventSw, fruit::GeometryUpdateEvent>
 {
 public:
 	void set_viewport_size(int width, int height)
@@ -80,6 +81,7 @@ public:
 		m_framebuffer = std::make_unique<fruit::Pixel[]>(width * height);
 		m_width = width;
 		m_height = height;
+		send(fruit::DeviceId{-1}, fruit::GeometryUpdateEvent{fruit::ViewportSize{width, height}, fruit::Origin<int>});
 		update();
 	}
 
@@ -216,21 +218,30 @@ constexpr std::array<fruit::Point<float>, 6> texture_rect{
 };
 
 constexpr std::array<std::pair<float, float>, 6> texture_uvs{
-	std::pair<float, float>{0.0f, 0.0f},
-	std::pair<float, float>{1.0f, 0.0f},
-	std::pair<float, float>{1.0f, 1.0f},
-
-	std::pair<float, float>{1.0f, 1.0f},
 	std::pair<float, float>{0.0f, 1.0f},
-	std::pair<float, float>{0.0f, 0.0f}
+	std::pair<float, float>{1.0f, 1.0f},
+	std::pair<float, float>{1.0f, 0.0f},
+
+	std::pair<float, float>{1.0f, 0.0f},
+	std::pair<float, float>{0.0f, 0.0f},
+	std::pair<float, float>{0.0f, 1.0f}
 };
 
 int main()
 {
-	fruit::Rectangle rect;
-	rect.width=300;
-	rect.height=200;
-	rect.color = fruit::red();
+	fruit::Rectangle rect_a;
+	rect_a.width=300;
+	rect_a.height=200;
+	rect_a.color = fruit::red();
+
+	fruit::Rectangle rect_b;
+	rect_b.width=300;
+	rect_b.height=200;
+	rect_b.color = fruit::green();
+
+	fruit::ColumnLayout column;
+	column.push_back(fruit::LayoutBox{std::ref(rect_a)});
+	column.push_back(fruit::LayoutBox{std::ref(rect_b)});
 
 	Ui<Texture> ui;
 
@@ -260,7 +271,9 @@ int main()
 	GLuint va{};
 	glCreateVertexArrays(1, &va);
 
-	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect)}, fruit::DeviceId{-1});
+	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_a)}, fruit::DeviceId{-1});
+	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_b)}, fruit::DeviceId{-1});
+	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(column)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);
 
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){

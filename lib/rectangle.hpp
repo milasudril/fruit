@@ -4,11 +4,25 @@
 #include "./update_event.hpp"
 #include "./point.hpp"
 #include "./pixel.hpp"
+#include "./size_request_event.hpp"
+#include "./geometry_update_event.hpp"
 
 namespace fruit
 {
 	struct Rectangle
 	{
+		ViewportSize handle(SizeRequestEvent const&) const
+		{
+			return ViewportSize{width, height};
+		}
+
+		void handle(GeometryUpdateEvent const& event)
+		{
+			width = event.size.width;
+			height = event.size.height;
+			loc = event.location;
+		}
+
 		Point<int> loc = Origin<int>;
 		int width = 0;
 		int height = 0;
