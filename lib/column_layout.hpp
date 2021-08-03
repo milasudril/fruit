@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <numeric>
 
 namespace fruit
 {
@@ -20,7 +21,17 @@ namespace fruit
 			m_content.push_back(box);
 		}
 
-		void handle(GeometryUpdateEvent const& event)
+		ViewportSize handle(SizeRequestEvent const&) const
+		{
+			return std::accumulate(std::begin(m_content), std::end(m_content),
+					                     ViewportSize{0, 0},
+					                     [](auto a, auto item) {
+					auto size = item.handle(SizeRequestEvent{});
+					return ViewportSize{std::max(a.width, size.width), a.height + size.height};
+				});
+		}
+
+		void handle(GeometryUpdateEvent const& event) const
 		{
 			std::ranges::for_each(m_content, [origin = event.location](auto item) mutable {
 				auto const size = item.handle(SizeRequestEvent{});
