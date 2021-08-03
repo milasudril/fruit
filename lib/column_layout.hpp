@@ -1,9 +1,7 @@
-#ifndef FRUIT_COLUMN_LAYOUT_HPP
-#define FRUIT_COLUMN_LAYOUT_HPP
+#ifndef FRUIT_COLUMNLAYOUT_HPP
+#define FRUIT_COLUMNLAYOUT_HPP
 
-#include "./event_handler.hpp"
-#include "./size_request_event.hpp"
-#include "./geometry_update_event.hpp"
+#include "./layout_manager.hpp"
 
 #include <vector>
 #include <algorithm>
@@ -11,8 +9,6 @@
 
 namespace fruit
 {
-	using LayoutBox = EventHandler<SizeRequestEvent, GeometryUpdateEvent>;
-
 	class ColumnLayout
 	{
 	public:
