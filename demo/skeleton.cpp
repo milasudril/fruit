@@ -140,7 +140,7 @@ public:
 		if(handle == 0)
 		{ throw std::runtime_error{"Failed to create a texture"}; }
 
-		glTextureStorage2D(handle, 1, GL_RGBA16F, width, height);
+		glTextureStorage2D(handle, 1, GL_RGBA32F, width, height);
 		if(glGetError() != GL_NO_ERROR)
 		{ throw std::runtime_error{"Failed to allocate storage for current texture"}; }
 
