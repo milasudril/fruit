@@ -2,6 +2,7 @@
 #define FRUIT_EVENTHANDLER_HPP
 
 #include <type_traits>
+#include <string>
 
 namespace fruit
 {
@@ -23,12 +24,13 @@ namespace fruit
 	template<class Event, class ... Events>
 	class EventHandler : EventHandler<Events...>
 	{
+		using Base = EventHandler<Events...>;
 	public:
-		using EventHandler<Events...>::object;
-		using EventHandler<Events...>::handle;
+		using Base::object;
+		using Base::handle;
 
 		template<class Widget>
-		explicit EventHandler(std::reference_wrapper<Widget> widget):EventHandler<Events...>{widget},
+		explicit EventHandler(std::reference_wrapper<Widget> widget):Base{widget},
 		m_func{[](void* self, Event const& event){
 			return static_cast<Widget*>(self)->handle(event);
 		}}
@@ -39,11 +41,27 @@ namespace fruit
 			return m_func(object(), event);
 		}
 
+		bool operator==(EventHandler const& other) const
+		{
+			return static_cast<Base const&>(*this) == static_cast<Base const&>(other);
+		}
+
+		bool operator!=(EventHandler const& other) const
+		{
+			return !(*this == other);
+		}
+
 	private:
 		using result_type = typename event_handler_detail::ResultType<Event>::type;
 
 		result_type (*m_func)(void* self, Event const& event);
 	};
+
+	template<class Event, class ... Events>
+	std::string to_string(EventHandler<Event, Events...> const& obj)
+	{
+		return std::to_string(reinterpret_cast<intptr_t>(obj.object()));
+	}
 
 	template<class Event>
 	class EventHandler<Event>
