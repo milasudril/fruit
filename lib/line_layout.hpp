@@ -42,6 +42,16 @@ namespace fruit
 			});
 		}
 
+		void set_direction(Direction dir)
+		{
+			m_direction = dir;
+		}
+
+		Direction get_direction() const
+		{
+			return m_direction;
+		}
+
 	private:
 		Direction m_direction;
 		std::vector<LayoutBox> m_content;
