@@ -26,7 +26,7 @@ namespace
 
 TESTCASE(ColumnLayoutSizeRequest)
 {
-	fruit::ColumnLayout layout;
+	fruit::LineLayout layout{fruit::LineLayout::Direction::UpToDown};
 
 	Object a{fruit::ViewportSize{2, 3}, fruit::Origin<int>};
 	Object b{fruit::ViewportSize{3, 2}, fruit::Origin<int>};
@@ -43,7 +43,7 @@ TESTCASE(ColumnLayoutSizeRequest)
 
 TESTCASE(ColumnLayout)
 {
-	fruit::ColumnLayout layout;
+	fruit::LineLayout layout{fruit::LineLayout::Direction::UpToDown};
 
 	fruit::ViewportSize size_a{2, 3};
 	fruit::ViewportSize size_b{3, 2};

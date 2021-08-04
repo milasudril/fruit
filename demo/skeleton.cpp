@@ -239,7 +239,7 @@ int main()
 	rect_b.height=200;
 	rect_b.color = fruit::green();
 
-	fruit::ColumnLayout column;
+	fruit::LineLayout column;
 	column.push_back(fruit::LayoutBox{std::ref(rect_a)});
 	column.push_back(fruit::LayoutBox{std::ref(rect_b)});
 
