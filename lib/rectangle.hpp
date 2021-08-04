@@ -30,12 +30,12 @@ namespace fruit
 
 		void handle(UpdateEventSw const& event) const
 		{
-			auto buffer = event.buffer;
-			auto w_out = event.width;
-			auto h_out = event.height;
+			auto const buffer = event.buffer;
+			auto const w_out = event.width;
+			auto const h_out = event.height;
 
-			auto rect_begin = loc - Vector{width, height, 0}/2;
-			auto rect_end = loc + Vector{width, height, 0}/2;
+			auto const rect_begin = loc;
+			auto const rect_end = loc + Vector{width, height, 0};
 
 			for(int k = std::max(0, rect_begin.y()); k < std::min(h_out, rect_end.y()); ++k)
 			{
