@@ -12,7 +12,7 @@ namespace fruit
 	class LineLayout
 	{
 	public:
-		enum class Direction{LeftToRight, UpToDown};
+		enum class Direction:int{LeftToRight, UpToDown};
 
 		explicit LineLayout(Direction dir = Direction::LeftToRight):m_direction{dir}{}
 

@@ -239,9 +239,27 @@ int main()
 	rect_b.height=200;
 	rect_b.color = fruit::green();
 
-	fruit::LineLayout column;
-	column.push_back(fruit::LayoutBox{std::ref(rect_a)});
-	column.push_back(fruit::LayoutBox{std::ref(rect_b)});
+	fruit::Rectangle rect_c;
+	rect_c.width=300;
+	rect_c.height=200;
+	rect_c.color = fruit::blue();
+
+	fruit::Rectangle rect_d;
+	rect_d.width=300;
+	rect_d.height=300;
+	rect_d.color = fruit::yellow();
+
+	fruit::LineLayout row_a;
+	row_a.push_back(fruit::LayoutBox{std::ref(rect_a)});
+	row_a.push_back(fruit::LayoutBox{std::ref(rect_b)});
+
+	fruit::LineLayout row_b;
+	row_b.push_back(fruit::LayoutBox{std::ref(rect_c)});
+	row_b.push_back(fruit::LayoutBox{std::ref(rect_d)});
+
+	fruit::LineLayout column{fruit::LineLayout::Direction::UpToDown};
+	column.push_back(fruit::LayoutBox{std::ref(row_a)});
+	column.push_back(fruit::LayoutBox{std::ref(row_b)});
 
 	Ui<Texture> ui;
 
@@ -273,6 +291,8 @@ int main()
 
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_a)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_b)}, fruit::DeviceId{-1});
+	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_c)}, fruit::DeviceId{-1});
+	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_d)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(column)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);
 
