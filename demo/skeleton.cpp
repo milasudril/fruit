@@ -13,7 +13,7 @@
 #include "lib/update.hpp"
 #include "lib/event_dispatcher.hpp"
 #include "lib/rectangle.hpp"
-#include "lib/column_layout.hpp"
+#include "lib/line_layout.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>

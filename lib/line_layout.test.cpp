@@ -1,6 +1,6 @@
-//@	{"target":{"name":"column_layout.test"}}
+//@	{"target":{"name":"line_layout.test"}}
 
-#include "./column_layout.hpp"
+#include "./line_layout.hpp"
 
 #include "testfwk/testfwk.hpp"
 
@@ -24,7 +24,7 @@ namespace
 	};
 }
 
-TESTCASE(ColumnLayoutSizeRequest)
+TESTCASE(LineLayoutSizeRequest)
 {
 	fruit::LineLayout layout{fruit::LineLayout::Direction::UpToDown};
 
@@ -41,7 +41,7 @@ TESTCASE(ColumnLayoutSizeRequest)
 	EXPECT_EQ(size.height, 9);
 }
 
-TESTCASE(ColumnLayout)
+TESTCASE(LineLayoutGeometryUpdate)
 {
 	fruit::LineLayout layout{fruit::LineLayout::Direction::UpToDown};
 
