@@ -16,18 +16,18 @@ namespace fruit
 	public:
 		FontMapper();
 
-		~FontMapper()
+		~FontMapper() noexcept
 		{
 			reset();
 		}
 
-		FontMapper(FontMapper&& other)
+		FontMapper(FontMapper&& other) noexcept
 		{
 			m_handle = other.m_handle;
 			other.m_handle = nullptr;
 		}
 
-		FontMapper& operator=(FontMapper&& other)
+		FontMapper& operator=(FontMapper&& other) noexcept
 		{
 			std::swap(m_handle, other.m_handle);
 			other.reset();
