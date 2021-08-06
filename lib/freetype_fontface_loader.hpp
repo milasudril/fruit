@@ -23,13 +23,21 @@ namespace fruit
 
 	namespace freetype_detail
 	{
-		struct FaceDeleter
+		struct Deleter
 		{
 			void operator()(FT_Face face)
 			{
 				if(face != nullptr)
 				{
 					FT_Done_Face(face);
+				}
+			}
+
+			void operator()(FT_Library ft)
+			{
+				if(ft != nullptr)
+				{
+					FT_Done_FreeType(ft);
 				}
 			}
 		};
@@ -46,7 +54,7 @@ namespace fruit
 		ImageView<uint8_t const> render(uint32_t char_index) const;
 
 	private:
-		std::unique_ptr<std::remove_pointer_t<FT_Face>, freetype_detail::FaceDeleter> m_handle;
+		std::unique_ptr<std::remove_pointer_t<FT_Face>, freetype_detail::Deleter> m_handle;
 		std::vector<std::byte> m_data;
 	};
 
@@ -57,7 +65,6 @@ namespace fruit
 		static constexpr FontFaceHandle NullHandle = nullptr;
 
 		FreetypeFontfaceLoader();
-		~FreetypeFontfaceLoader();
 
 		[[nodiscard]] FontFaceHandle createFrom(std::span<std::byte const> src_buffer);
 
@@ -80,7 +87,7 @@ namespace fruit
 		}
 
 	private:
-		FT_Library m_handle;
+		std::unique_ptr<std::remove_pointer_t<FT_Library>, freetype_detail::Deleter> m_handle;
 	};
 }
 

@@ -28,20 +28,18 @@ namespace
 
 fruit::FreetypeFontfaceLoader::FreetypeFontfaceLoader()
 {
-	if(auto res = FT_Init_FreeType(&m_handle); res != FT_Err_Ok)
+	FT_Library handle{};
+	if(auto res = FT_Init_FreeType(&handle); res != FT_Err_Ok)
 	{ throw FreetypeInitError{}; }
-}
 
-fruit::FreetypeFontfaceLoader::~FreetypeFontfaceLoader()
-{
-	FT_Done_FreeType(m_handle);
+	m_handle.reset(handle);
 }
 
 FT_Face fruit::FreetypeFontfaceLoader::createFrom(std::span<std::byte const> src_buffer)
 {
 	FT_Face face{};
 	if(FT_New_Memory_Face(
-	      m_handle, reinterpret_cast<FT_Byte const*>(src_buffer.data()), src_buffer.size(), 0, &face)
+	      m_handle.get(), reinterpret_cast<FT_Byte const*>(src_buffer.data()), src_buffer.size(), 0, &face)
 	   != FT_Err_Ok)
 	{
 		throw FreetypeLoadError{};
