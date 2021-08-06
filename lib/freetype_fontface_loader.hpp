@@ -25,7 +25,7 @@ namespace fruit
 		FreetypeFontfaceLoader();
 		~FreetypeFontfaceLoader();
 
-		FontFaceHandle createFrom(std::byte const* src_buffer, size_t src_buffer_size);
+		FontFaceHandle createFrom(std::span<std::byte const> src_buffer);
 
 		static void free(FontFaceHandle handle)
 		{

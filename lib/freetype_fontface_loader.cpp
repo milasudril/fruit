@@ -37,12 +37,11 @@ fruit::FreetypeFontfaceLoader::~FreetypeFontfaceLoader()
 	FT_Done_FreeType(m_handle);
 }
 
-FT_Face fruit::FreetypeFontfaceLoader::createFrom(std::byte const* src_buffer,
-                                                                size_t src_buffer_size)
+FT_Face fruit::FreetypeFontfaceLoader::createFrom(std::span<std::byte const> src_buffer)
 {
 	FT_Face face;
 	if(FT_New_Memory_Face(
-	      m_handle, reinterpret_cast<FT_Byte const*>(src_buffer), src_buffer_size, 0, &face)
+	      m_handle, reinterpret_cast<FT_Byte const*>(src_buffer.data()), src_buffer.size(), 0, &face)
 	   != FT_Err_Ok)
 	{
 		throw FreetypeLoadError{};
