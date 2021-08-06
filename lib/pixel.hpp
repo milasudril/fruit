@@ -1,5 +1,3 @@
-//@	{"targets":[{"name":"pixel.hpp", "type":"include"}]}
-
 #ifndef FRUIT_PIXEL_HPP
 #define FRUIT_PIXEL_HPP
 
