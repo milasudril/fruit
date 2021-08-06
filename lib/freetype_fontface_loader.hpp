@@ -13,9 +13,43 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <vector>
+#include <memory>
+#include <type_traits>
 
 namespace fruit
 {
+	class FreetypeFontfaceLoader;
+
+	namespace freetype_detail
+	{
+		struct FaceDeleter
+		{
+			void operator()(FT_Face face)
+			{
+				if(face != nullptr)
+				{
+					FT_Done_Face(face);
+				}
+			}
+		};
+	}
+
+	class FreetypeFontFace
+	{
+	public:
+		explicit FreetypeFontFace(std::reference_wrapper<FreetypeFontfaceLoader const>,
+		                          std::vector<std::byte>&& src_buffer);
+
+		void set_size(int value);
+
+		ImageView<uint8_t const> render(uint32_t char_index) const;
+
+	private:
+		std::unique_ptr<std::remove_pointer_t<FT_Face>, freetype_detail::FaceDeleter> m_handle;
+		std::vector<std::byte> m_data;
+	};
+
 	class FreetypeFontfaceLoader
 	{
 	public:
