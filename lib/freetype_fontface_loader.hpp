@@ -25,7 +25,7 @@ namespace fruit
 		FreetypeFontfaceLoader();
 		~FreetypeFontfaceLoader();
 
-		FontFaceHandle createFrom(std::span<std::byte const> src_buffer);
+		[[nodiscard]] FontFaceHandle createFrom(std::span<std::byte const> src_buffer);
 
 		static void free(FontFaceHandle handle)
 		{
@@ -34,13 +34,13 @@ namespace fruit
 
 		static void size(FontFaceHandle handle, int val)
 		{
-			FT_Set_Char_Size(handle, 0, 64 * val, 0, 0);
+			FT_Set_Pixel_Sizes(handle, 0, val);
 		}
 
-		static ImageView<uint8_t> bitmap(FontFaceHandle handle, uint32_t char_index)
+		static ImageView<uint8_t const> bitmap(FontFaceHandle handle, uint32_t char_index)
 		{
 			FT_Load_Char(handle, char_index, FT_LOAD_RENDER);
-			return ImageView{handle->glyph->bitmap.buffer,
+			return ImageView<uint8_t const>{handle->glyph->bitmap.buffer,
 				static_cast<int>(handle->glyph->bitmap.width),
 				static_cast<int>(handle->glyph->bitmap.rows)};
 		}

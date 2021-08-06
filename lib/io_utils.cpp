@@ -26,7 +26,7 @@ std::vector<std::byte> fruit::io_utils::load(std::filesystem::path const& path, 
 {
 	std::unique_ptr<FILE, FileDeleter> file{fopen(path.c_str(), "rb")};
 	std::vector<std::byte> ret;
-	ret.reserve(std::max(max_num_bytes, static_cast<size_t>(65536)));
+	ret.reserve(std::min(max_num_bytes, static_cast<size_t>(65536)));
 	for(size_t k = 0; k < max_num_bytes; ++k)
 	{
 		auto input = getc(file.get());
@@ -37,4 +37,12 @@ std::vector<std::byte> fruit::io_utils::load(std::filesystem::path const& path, 
 		ret.push_back(static_cast<std::byte>(input));
 	}
 	return ret;
+}
+
+void fruit::io_utils::store(std::span<std::byte const> data, std::filesystem::path const& path)
+{
+	std::unique_ptr<FILE, FileDeleter> file{fopen(path.c_str(), "wb")};
+	std::ranges::for_each(data, [f = file.get()](auto item) {
+		putc(static_cast<int>(item), f);
+	});
 }
