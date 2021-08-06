@@ -49,9 +49,20 @@ namespace fruit
 		explicit FreetypeFontFace(std::reference_wrapper<FreetypeFontfaceLoader const>,
 		                          std::vector<std::byte>&& src_buffer);
 
-		void set_size(int value);
+		FreetypeFontFace& set_size(int value)
+		{
+			FT_Set_Pixel_Sizes(m_handle.get(), 0, value);
+			return *this;
+		}
 
-		ImageView<uint8_t const> render(uint32_t char_index) const;
+		ImageView<uint8_t const> render(uint32_t char_index) const
+		{
+			auto handle = m_handle.get();
+			FT_Load_Char(handle, char_index, FT_LOAD_RENDER);
+			return ImageView<uint8_t const>{handle->glyph->bitmap.buffer,
+				static_cast<int>(handle->glyph->bitmap.width),
+				static_cast<int>(handle->glyph->bitmap.rows)};
+		}
 
 	private:
 		std::unique_ptr<std::remove_pointer_t<FT_Face>, freetype_detail::Deleter> m_handle;
@@ -61,30 +72,12 @@ namespace fruit
 	class FreetypeFontfaceLoader
 	{
 	public:
-		using FontFaceHandle = FT_Face;
-		static constexpr FontFaceHandle NullHandle = nullptr;
+		using FontFace = FreetypeFontFace;
 
 		FreetypeFontfaceLoader();
 
-		[[nodiscard]] FontFaceHandle createFrom(std::span<std::byte const> src_buffer);
-
-		static void free(FontFaceHandle handle)
-		{
-			FT_Done_Face(handle);
-		}
-
-		static void size(FontFaceHandle handle, int val)
-		{
-			FT_Set_Pixel_Sizes(handle, 0, val);
-		}
-
-		static ImageView<uint8_t const> bitmap(FontFaceHandle handle, uint32_t char_index)
-		{
-			FT_Load_Char(handle, char_index, FT_LOAD_RENDER);
-			return ImageView<uint8_t const>{handle->glyph->bitmap.buffer,
-				static_cast<int>(handle->glyph->bitmap.width),
-				static_cast<int>(handle->glyph->bitmap.rows)};
-		}
+		FT_Library native_handle() const
+		{ return m_handle.get(); }
 
 	private:
 		std::unique_ptr<std::remove_pointer_t<FT_Library>, freetype_detail::Deleter> m_handle;
