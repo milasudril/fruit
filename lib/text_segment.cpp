@@ -5,6 +5,7 @@
 #include "./text_segment.hpp"
 
 #include <stdexcept>
+#include <numeric>
 
 namespace
 {
@@ -41,6 +42,18 @@ fruit::TextShapeResult::TextShapeResult(uint32_t num_glyphs,
 		return GlyphGeometry{Vector{item.x_advance, item.y_advance, 0},
 			Vector{item.x_offset, item.y_offset, 0}};
 	});
+
+	m_glyph_info = std::move(glyph_info);
+	m_glyph_geometry = std::move(glyph_geom);
+}
+
+fruit::ViewportSize fruit::bounding_box(TextShapeResult const& shape_result)
+{
+	auto const geom = shape_result.glyph_geometry();
+	auto const res = std::accumulate(std::begin(geom), std::end(geom), Vector{0, 0, 0},[](auto a, auto const b){
+		return a + b.cursor_increment;
+	});
+	return ViewportSize{res.x(), std::max(res.y(), shape_result.font().char_height())};
 }
 
 void fruit::TextSegment::text_impl(std::basic_string_view<char8_t> buffer)

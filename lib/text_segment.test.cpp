@@ -65,4 +65,8 @@ TESTCASE(TextSegmentShape)
 	// UTF-8
 	EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text) - 2);
 	EXPECT_EQ(std::size(shape_result.glyph_geometry()), std::size(text) - 2);
+
+	auto bb = bounding_box(shape_result);
+	EXPECT_EQ(bb.width, 156);
+	EXPECT_EQ(bb.height, 16);
 }

@@ -11,6 +11,7 @@
 #include "./language_tag.hpp"
 #include "./error_message.hpp"
 #include "./text_shaper.hpp"
+#include "./viewport_size.hpp"
 
 #include <hb.h>
 
@@ -54,11 +55,13 @@ namespace fruit
 
 		std::span<GlyphInfo const> glyph_info() const
 		{
+			FRUIT_ASSERT(m_glyph_info.get() != nullptr);
 			return std::span{m_glyph_info.get(), m_glyph_count};
 		}
 
 		std::span<GlyphGeometry const> glyph_geometry() const
 		{
+			FRUIT_ASSERT(m_glyph_geometry.get() != nullptr);
 			return std::span{m_glyph_geometry.get(), m_glyph_count};
 		}
 
@@ -73,6 +76,8 @@ namespace fruit
 		std::unique_ptr<GlyphGeometry[]> m_glyph_geometry;
 		std::reference_wrapper<FreetypeFontFace const> m_font;
 	};
+
+	ViewportSize bounding_box(TextShapeResult const& shape_result);
 
 	class TextSegment
 	{

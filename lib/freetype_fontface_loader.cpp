@@ -42,4 +42,5 @@ fruit::FreetypeFontFace::FreetypeFontFace(std::reference_wrapper<FreetypeFontfac
 		throw FreetypeLoadError{};
 	}
 	m_handle.reset(face);
+	char_height(16);
 }

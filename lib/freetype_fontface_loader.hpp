@@ -49,10 +49,16 @@ namespace fruit
 		explicit FreetypeFontFace(std::reference_wrapper<FreetypeFontfaceLoader const>,
 		                          std::vector<std::byte>&& src_buffer);
 
-		FreetypeFontFace& set_size(int value)
+		FreetypeFontFace& char_height(int value)
 		{
 			FT_Set_Pixel_Sizes(m_handle.get(), 0, value);
+			m_size = value;
 			return *this;
+		}
+
+		int char_height() const
+		{
+			return m_size;
 		}
 
 		ImageView<uint8_t const> render(uint32_t char_index) const
@@ -70,6 +76,7 @@ namespace fruit
 	private:
 		std::unique_ptr<std::remove_pointer_t<FT_Face>, freetype_detail::Deleter> m_handle;
 		std::vector<std::byte> m_data;
+		int m_size;
 	};
 
 	class FreetypeFontfaceLoader
