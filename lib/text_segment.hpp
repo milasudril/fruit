@@ -15,6 +15,9 @@
 
 namespace fruit
 {
+	/**
+	 * \internal
+	 */
 	namespace text_segment_detail
 	{
 		struct Deleter
@@ -30,14 +33,12 @@ namespace fruit
 	class TextSegment
 	{
 	public:
-		TextSegment()
+		TextSegment():m_handle{hb_buffer_create()}
 		{
-			auto handle = hb_buffer_create();
-			if(handle == nullptr)
+			if(m_handle == nullptr)
 			{
 				//FIXME
 			}
-			m_handle.reset(handle);
 		}
 
 		bool valid() const

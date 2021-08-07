@@ -21,6 +21,9 @@ namespace fruit
 {
 	class FreetypeFontfaceLoader;
 
+	/**
+	 * \internal
+	 */
 	namespace freetype_detail
 	{
 		struct Deleter

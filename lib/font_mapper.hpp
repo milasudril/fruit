@@ -6,6 +6,7 @@
 #define FRUIT_FONTMAPPER_HPP
 
 #include <fontconfig/fontconfig.h>
+
 #include <filesystem>
 #include <cassert>
 #include <memory>
