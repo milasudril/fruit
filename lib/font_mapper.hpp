@@ -13,9 +13,6 @@
 
 namespace fruit
 {
-	/**
-	 * \internal
-	 */
 	namespace font_mapper_detail
 	{
 		struct Deleter

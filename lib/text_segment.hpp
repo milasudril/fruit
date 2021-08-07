@@ -15,9 +15,6 @@
 
 namespace fruit
 {
-	/**
-	 * \internal
-	 */
 	namespace text_segment_detail
 	{
 		struct Deleter
