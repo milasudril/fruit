@@ -8,4 +8,3 @@ fruit::ErrorMessage::ErrorMessage(char const* file, int line, char const* tag):m
 	auto result = fmt::format_to_n(ptr, BufferSize, "{}:{}: {}: ", file, line, tag);
 	m_write_offset = std::distance(ptr, result.out);
 }
-
