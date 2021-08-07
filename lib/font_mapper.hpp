@@ -8,32 +8,29 @@
 #include <fontconfig/fontconfig.h>
 #include <filesystem>
 #include <cassert>
+#include <memory>
 
 namespace fruit
 {
+	/**
+	 * \internal
+	 */
+	namespace font_mapper_detail
+	{
+		struct Deleter
+		{
+			void operator()(FcConfig* handle)
+			{
+				if(handle != nullptr)
+				{ FcConfigDestroy(handle); }
+			}
+		};
+	}
+
 	class FontMapper
 	{
 	public:
 		FontMapper();
-
-		~FontMapper() noexcept
-		{
-			reset();
-		}
-
-		FontMapper(FontMapper&& other) noexcept
-		{
-			m_handle = other.m_handle;
-			other.m_handle = nullptr;
-		}
-
-		FontMapper& operator=(FontMapper&& other) noexcept
-		{
-			std::swap(m_handle, other.m_handle);
-			other.reset();
-			other.m_handle = nullptr;
-			return *this;
-		}
 
 		std::filesystem::path get_path(char const* font) const
 		{
@@ -47,8 +44,7 @@ namespace fruit
 		}
 
 	private:
-		void reset();
-		FcConfig* m_handle;
+		std::unique_ptr<FcConfig, font_mapper_detail::Deleter> m_handle;
 
 		std::filesystem::path get_path_impl(char const* font) const;
 	};

@@ -28,11 +28,6 @@ fruit::FontMapper::FontMapper(): m_handle{FcInitLoadConfigAndFonts()}
 	{ throw FontMapperError{}; }
 }
 
-void fruit::FontMapper::reset()
-{
-	if(m_handle != nullptr) { FcConfigDestroy(m_handle); }
-}
-
 namespace
 {
 	struct FcPatternDeleter
@@ -75,12 +70,14 @@ std::filesystem::path fruit::FontMapper::get_path_impl(char const* font) const
 	if(pattern == nullptr)
 	{ throw FontNameParseError{font}; }
 
-	FcConfigSubstitute(m_handle, pattern.get(), FcMatchPattern);
+	auto const handle = m_handle.get();
+
+	FcConfigSubstitute(handle, pattern.get(), FcMatchPattern);
 	FcDefaultSubstitute(pattern.get());
 
 	FcResult res;
 	auto font_resource =
-	   std::unique_ptr<FcPattern, FcPatternDeleter>{FcFontMatch(m_handle, pattern.get(), &res)};
+	   std::unique_ptr<FcPattern, FcPatternDeleter>{FcFontMatch(handle, pattern.get(), &res)};
 	if(font_resource == nullptr)
 	{ throw FontNameMatchError{font}; }
 

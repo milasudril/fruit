@@ -11,6 +11,7 @@
 
 #include <string_view>
 #include <memory>
+#include <cassert>
 
 namespace fruit
 {
@@ -51,6 +52,7 @@ namespace fruit
 
 		TextSegment& text(std::basic_string_view<char8_t> buffer)
 		{
+			assert(valid());
 			auto const handle = get();
 			// https://lists.freedesktop.org/archives/harfbuzz/2016-July/005711.html
 			auto const dir = direction();
@@ -70,23 +72,27 @@ namespace fruit
 
 		TextSegment& direction(TextDirection val)
 		{
+			assert(valid());
 			hb_buffer_set_direction(get(), static_cast<hb_direction_t>(val));
 			return *this;
 		}
 
 		TextDirection direction() const
 		{
+			assert(valid());
 			return static_cast<TextDirection>(hb_buffer_get_direction(get()));
 		}
 
 		TextSegment& language(LanguageTag const& lang)
 		{
+			assert(valid());
 			hb_buffer_set_language(get(), hb_language_from_string(lang.c_str(), -1));
 			return *this;
 		}
 
 		LanguageTag language() const
 		{
+			assert(valid());
 			return LanguageTag{hb_language_to_string(hb_buffer_get_language(get()))};
 		}
 
@@ -98,6 +104,7 @@ namespace fruit
 
 		WritingSystem script() const
 		{
+			assert(valid());
 			return static_cast<WritingSystem>(hb_buffer_get_script(get()));
 		}
 
