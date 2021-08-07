@@ -6,12 +6,13 @@
 #include "./text_direction.hpp"
 #include "./writing_system.hpp"
 #include "./language_tag.hpp"
+#include "./error_message.hpp"
 
 #include <hb.h>
 
 #include <string_view>
 #include <memory>
-#include <cassert>
+#include <stdexcept>
 
 namespace fruit
 {
@@ -32,10 +33,8 @@ namespace fruit
 	public:
 		TextSegment():m_handle{hb_buffer_create()}
 		{
-			if(m_handle == nullptr)
-			{
-				//FIXME
-			}
+			if(!hb_buffer_allocation_successful(get()))
+			{ FRUIT_JAM("Failed to allocate hb_buffer"); }
 		}
 
 		bool valid() const
@@ -50,7 +49,7 @@ namespace fruit
 
 		TextSegment& text(std::basic_string_view<char8_t> buffer)
 		{
-			assert(valid());
+			FRUIT_ASSERT(valid());
 			auto const handle = get();
 			// https://lists.freedesktop.org/archives/harfbuzz/2016-July/005711.html
 			auto const dir = direction();
@@ -70,27 +69,27 @@ namespace fruit
 
 		TextSegment& direction(TextDirection val)
 		{
-			assert(valid());
+			FRUIT_ASSERT(valid());
 			hb_buffer_set_direction(get(), static_cast<hb_direction_t>(val));
 			return *this;
 		}
 
 		TextDirection direction() const
 		{
-			assert(valid());
+			FRUIT_ASSERT(valid());
 			return static_cast<TextDirection>(hb_buffer_get_direction(get()));
 		}
 
 		TextSegment& language(LanguageTag const& lang)
 		{
-			assert(valid());
+			FRUIT_ASSERT(valid());
 			hb_buffer_set_language(get(), hb_language_from_string(lang.c_str(), -1));
 			return *this;
 		}
 
 		LanguageTag language() const
 		{
-			assert(valid());
+			FRUIT_ASSERT(valid());
 			return LanguageTag{hb_language_to_string(hb_buffer_get_language(get()))};
 		}
 
@@ -102,7 +101,7 @@ namespace fruit
 
 		WritingSystem script() const
 		{
-			assert(valid());
+			FRUIT_ASSERT(valid());
 			return static_cast<WritingSystem>(hb_buffer_get_script(get()));
 		}
 

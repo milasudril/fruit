@@ -5,10 +5,11 @@
 #ifndef FRUIT_FONTMAPPER_HPP
 #define FRUIT_FONTMAPPER_HPP
 
+#include "./error_message.hpp"
+
 #include <fontconfig/fontconfig.h>
 
 #include <filesystem>
-#include <cassert>
 #include <memory>
 
 namespace fruit
@@ -32,7 +33,7 @@ namespace fruit
 
 		std::filesystem::path get_path(char const* font) const
 		{
-			assert(valid());
+			FRUIT_ASSERT(valid());
 			return get_path_impl(font);
 		}
 
