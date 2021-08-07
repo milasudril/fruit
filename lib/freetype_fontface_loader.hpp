@@ -1,5 +1,5 @@
 //@	{
-//@	"dependencies_extra":[{"ref":"./freetype_fontface_loader.o", "rel":"implementation"}]
+//@	 "dependencies_extra":[{"ref":"./freetype_fontface_loader.o", "rel":"implementation"}]
 //@	,"dependencies":[{"ref":"freetype2","origin":"pkg-config"}]
 //@	}
 

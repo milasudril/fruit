@@ -1,9 +1,4 @@
-//@	{
-//@	"target":
-//@		{
-//@		"name":"freetype_fontface_loader.o","pkgconfig_libs":["freetype2"]
-//@		}
-//@	}
+//@	{ "target": {"name":"freetype_fontface_loader.o"}}
 
 #include "./freetype_fontface_loader.hpp"
 

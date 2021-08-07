@@ -1,5 +1,5 @@
 //@	{
-//@	"dependencies_extra":[{"ref":"harfbuzz", "origin":"pkg-config"}]
+//@	"dependencies":[{"ref":"harfbuzz", "origin":"pkg-config"}]
 //@	}
 
 #ifndef FRUIT_TEXTSHAPER_HPP

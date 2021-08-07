@@ -1,4 +1,4 @@
-//@	 { "dependencies_extra":[{"ref":"harfbuzz", "origin":"pkg-config"}]}
+//@	 {"dependencies":[{"ref":"harfbuzz", "origin":"pkg-config"}]}
 
 #ifndef FRUIT_WRITINGSYSTEM_HPP
 #define FRUIT_WRITINGSYSTEM_HPP

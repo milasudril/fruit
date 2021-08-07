@@ -1,4 +1,7 @@
-//@	 { "dependencies_extra":[{"ref":"harfbuzz", "origin":"pkg-config"}]}
+//@	{
+//@		"dependencies_extra":[{"ref":"./text_segment.o", "rel":"implementation"}],
+//@		"dependencies": [{"ref":"harfbuzz", "origin":"pkg-config"}]
+//@	}
 
 #ifndef FRUIT_TEXTSEGMENT_HPP
 #define FRUIT_TEXTSEGMENT_HPP
