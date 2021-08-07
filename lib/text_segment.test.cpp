@@ -29,11 +29,20 @@ TESTCASE(TextSegmentDirection)
 	EXPECT_EQ(segment.direction(), fruit::TextDirection::BottomToTop);
 }
 
-TESTCASE(TExtSegmentLanguage)
+TESTCASE(TextSegmentLanguage)
 {
 	fruit::TextSegment segment;
 	EXPECT_EQ(segment.language(), fruit::LanguageTag{"en-us"});
 
 	segment.language(fruit::LanguageTag{"sv-se"});
 	EXPECT_EQ(segment.language(), fruit::LanguageTag{"sv-se"});
+}
+
+TESTCASE(TextSegmentScript)
+{
+	fruit::TextSegment segment;
+	EXPECT_EQ(static_cast<int>(segment.script()), static_cast<int>(fruit::WritingSystem::Latin));
+
+	segment.script(fruit::WritingSystem::Arabic);
+	EXPECT_EQ(static_cast<int>(segment.script()), static_cast<int>(fruit::WritingSystem::Arabic));
 }

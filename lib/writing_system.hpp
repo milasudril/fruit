@@ -150,18 +150,18 @@ namespace fruit
 		MasaramGondi = HB_SCRIPT_MASARAM_GONDI,
 		Nushu = HB_SCRIPT_NUSHU,
 		Soyombo = HB_SCRIPT_SOYOMBO,
-		ZanabazarSquare = HB_SCRIPT_ZANABAZAR_SQUARE
-		,Dogra = HB_SCRIPT_DOGRA
-		,GunjalaGondi = HB_SCRIPT_GUNJALA_GONDI
-		,HanifiRohingya = HB_SCRIPT_HANIFI_ROHINGYA
-		,Makasar = HB_SCRIPT_MAKASAR
-		,Medefaidrin = HB_SCRIPT_MEDEFAIDRIN
-		,OldSogdian = HB_SCRIPT_OLD_SOGDIAN
-		,Sogdian = HB_SCRIPT_SOGDIAN
-		,Elymaic = HB_SCRIPT_ELYMAIC
-		,Nandinagari = HB_SCRIPT_NANDINAGARI
-		,NyiakengPuachueHmong = HB_SCRIPT_NYIAKENG_PUACHUE_HMONG
-		,Wancho = HB_SCRIPT_WANCHO
+		ZanabazarSquare = HB_SCRIPT_ZANABAZAR_SQUARE,
+		Dogra = HB_SCRIPT_DOGRA,
+		GunjalaGondi = HB_SCRIPT_GUNJALA_GONDI,
+		HanifiRohingya = HB_SCRIPT_HANIFI_ROHINGYA,
+		Makasar = HB_SCRIPT_MAKASAR,
+		Medefaidrin = HB_SCRIPT_MEDEFAIDRIN,
+		OldSogdian = HB_SCRIPT_OLD_SOGDIAN,
+		Sogdian = HB_SCRIPT_SOGDIAN,
+		Elymaic = HB_SCRIPT_ELYMAIC,
+		Nandinagari = HB_SCRIPT_NANDINAGARI,
+		NyiakengPuachueHmong = HB_SCRIPT_NYIAKENG_PUACHUE_HMONG,
+		Wancho = HB_SCRIPT_WANCHO
 	};
 }
 
