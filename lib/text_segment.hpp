@@ -40,8 +40,8 @@ namespace fruit
 
 	struct GlyphGeometry
 	{
-		Vector<int> cursor_increment;
-		Vector<int> render_offest;
+		Vector<int> cursor_increment{0, 0, 0};
+		Vector<int> render_offest{0, 0, 0};
 	};
 
 	class TextShapeResult
@@ -100,20 +100,7 @@ namespace fruit
 		TextSegment& text(std::basic_string_view<char8_t> buffer)
 		{
 			FRUIT_ASSERT(valid());
-			auto const handle = native_handle();
-			// https://lists.freedesktop.org/archives/harfbuzz/2016-July/005711.html
-			auto const dir = direction();
-			auto const s = script();
-			// Do not want to convert to string and back
-			auto lang = hb_buffer_get_language(handle);
-
-			hb_buffer_reset(handle);
-			auto const data = reinterpret_cast<char const*>(std::data(buffer));
-			auto const size = std::size(buffer);
-			hb_buffer_add_utf8(handle, data, size, 0, size);
-
-			hb_buffer_set_language(handle, lang);
-			direction(dir).script(s);
+			text_impl(buffer);
 			return *this;
 		}
 
@@ -159,18 +146,12 @@ namespace fruit
 		{
 			FRUIT_ASSERT(valid());
 			FRUIT_ASSERT(shaper.valid());
-			auto const handle = m_handle.get();
-			auto const shaper_ref = shaper.native_handle();
-
-			hb_shape(shaper_ref, handle, nullptr, 0);
-			unsigned int glyph_count{};
-			auto const glyph_info = hb_buffer_get_glyph_infos(handle, &glyph_count);
-			auto const glyph_pos = hb_buffer_get_glyph_positions(handle, &glyph_count);
-
-			return TextShapeResult{glyph_count, glyph_info, glyph_pos, shaper.font()};
+			return shape_impl(shaper);
 		}
 
 	private:
+		void text_impl(std::basic_string_view<char8_t> buffer);
+		TextShapeResult shape_impl(TextShaper const& shaper) const;
 		std::unique_ptr<hb_buffer_t, text_segment_detail::Deleter> m_handle;
 	};
 }

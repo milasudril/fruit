@@ -2,6 +2,9 @@
 
 #include "./text_segment.hpp"
 
+#include "./io_utils.hpp"
+#include "./font_mapper.hpp"
+
 #include "testfwk/testfwk.hpp"
 
 TESTCASE(TextSegmentValidity)
@@ -45,4 +48,21 @@ TESTCASE(TextSegmentScript)
 
 	segment.script(fruit::WritingSystem::Arabic);
 	EXPECT_EQ(static_cast<int>(segment.script()), static_cast<int>(fruit::WritingSystem::Arabic));
+}
+
+TESTCASE(TextSegmentShape)
+{
+	fruit::FreetypeFontfaceLoader loader;
+	fruit::FreetypeFontFace face{loader, fruit::io_utils::load(fruit::FontMapper{}.get_path("DejaVu Sans"))};
+	fruit::TextShaper foobar{face};
+
+	fruit::TextSegment segment;
+	auto const text = std::basic_string_view{u8"Hallå, världen!"};
+	auto shape_result = segment.text(text).shape(foobar);
+
+	EXPECT_EQ(&shape_result.font(), &face);
+	// Subtract two from std::size(text) because we have ä and å, which occupy two code units in
+	// UTF-8
+	EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text) - 2);
+	EXPECT_EQ(std::size(shape_result.glyph_geometry()), std::size(text) - 2);
 }

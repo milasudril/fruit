@@ -20,10 +20,3 @@ TESTCASE(TextShaperCreateAndMove)
 	EXPECT_EQ(foobar.valid(), false);
 	EXPECT_EQ(other.valid(), true);
 }
-
-TESTCASE(TextShaperRasterize)
-{
-	fruit::FreetypeFontfaceLoader loader;
-	fruit::FreetypeFontFace face{loader, fruit::io_utils::load(fruit::FontMapper{}.get_path("DejaVu Sans"))};
-	fruit::TextShaper foobar{face};
-}
