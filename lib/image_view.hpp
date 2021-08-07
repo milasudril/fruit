@@ -18,12 +18,12 @@ namespace fruit
 
 		constexpr T& operator()(int x, int y)
 		{
-			return data[y*m_width + x];
+			return m_data[y*m_width + x];
 		}
 
 		constexpr T operator()(int x, int y) const
 		{
-			return data[y*m_width + x];
+			return m_data[y*m_width + x];
 		}
 
 		constexpr int width() const

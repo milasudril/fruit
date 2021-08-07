@@ -58,7 +58,7 @@ TESTCASE(TextSegmentShape)
 
 	fruit::TextSegment segment;
 	auto const text = std::basic_string_view{u8"Hallå, världen!"};
-	auto shape_result = segment.text(text).shape(foobar);
+	auto shape_result = segment.text(text).language(fruit::LanguageTag{"sv-se"}).shape(foobar);
 
 	EXPECT_EQ(&shape_result.font(), &face);
 	// Subtract two from std::size(text) because we have ä and å, which occupy two code units in
@@ -67,6 +67,10 @@ TESTCASE(TextSegmentShape)
 	EXPECT_EQ(std::size(shape_result.glyph_geometry()), std::size(text) - 2);
 
 	auto bb = bounding_box(shape_result);
-	EXPECT_EQ(bb.width, 156);
+	EXPECT_EQ(bb.width, 117);
 	EXPECT_EQ(bb.height, 16);
+
+	auto buffer = std::make_unique<uint8_t[]>(bb.width * bb.height);
+	render(shape_result, fruit::ImageView{buffer.get(), bb.width, bb.height});
+	fruit::io_utils::store(std::as_bytes(std::span<uint8_t const>{buffer.get(), static_cast<size_t>(bb.width*bb.height)}), "./test.dat");
 }

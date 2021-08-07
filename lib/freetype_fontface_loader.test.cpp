@@ -19,7 +19,7 @@ TESTCASE(FreetypeFontfaceLoaderLoadFont)
 	fruit::FreetypeFontfaceLoader loader;
 	fruit::FreetypeFontFace font{loader, fruit::io_utils::load(fruit::FontMapper{}.get_path("DejaVu Sans"))};
 
-	auto A = std::as_bytes(make_span(font.char_height(16).render('A')));
+	auto A = std::as_bytes(make_span(font.char_height(16).renderChar('A')));
 	auto A_ref = fruit::io_utils::load("testdata/A_rendered.dat");
 	EXPECT_EQ(std::ranges::equal(A, A_ref), true);
 }

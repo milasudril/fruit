@@ -53,7 +53,27 @@ fruit::ViewportSize fruit::bounding_box(TextShapeResult const& shape_result)
 	auto const res = std::accumulate(std::begin(geom), std::end(geom), Vector{0, 0, 0},[](auto a, auto const b){
 		return a + b.cursor_increment;
 	});
-	return ViewportSize{res.x(), std::max(res.y(), shape_result.font().char_height())};
+	return ViewportSize{res.x()/64, std::max(res.y()/64, shape_result.font().char_height())};
+}
+
+void fruit::render(TextShapeResult const& res, ImageView<uint8_t> buffer)
+{
+	auto glyphs = res.glyph_info();
+	auto geom = res.glyph_geometry();
+	auto location = Origin<int>;
+	for(size_t k = 0; k < std::size(glyphs); ++k)
+	{
+		auto src = res.font().renderGlyph(glyphs[k].index);
+		printf("rendering %x\n", glyphs[k].index);
+		for(int k = 0; k < src.height(); ++k)
+		{
+			for(int l = 0; l < src.width(); ++l)
+			{
+				buffer(l + location.x()/64, k + location.y()/64) = src(l, k);
+			}
+		}
+		location += geom[k].cursor_increment;
+	}
 }
 
 void fruit::TextSegment::text_impl(std::basic_string_view<char8_t> buffer)

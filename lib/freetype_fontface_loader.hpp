@@ -61,10 +61,19 @@ namespace fruit
 			return m_size;
 		}
 
-		ImageView<uint8_t const> render(uint32_t char_index) const
+		ImageView<uint8_t const> renderChar(uint32_t char_index) const
 		{
 			auto handle = m_handle.get();
 			FT_Load_Char(handle, char_index, FT_LOAD_RENDER);
+			return ImageView<uint8_t const>{handle->glyph->bitmap.buffer,
+				static_cast<int>(handle->glyph->bitmap.width),
+				static_cast<int>(handle->glyph->bitmap.rows)};
+		}
+
+		ImageView<uint8_t const> renderGlyph(uint32_t index) const
+		{
+			auto handle = m_handle.get();
+			FT_Load_Glyph(handle, index, FT_LOAD_RENDER);
 			return ImageView<uint8_t const>{handle->glyph->bitmap.buffer,
 				static_cast<int>(handle->glyph->bitmap.width),
 				static_cast<int>(handle->glyph->bitmap.rows)};

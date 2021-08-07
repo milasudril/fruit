@@ -79,6 +79,8 @@ namespace fruit
 
 	ViewportSize bounding_box(TextShapeResult const& shape_result);
 
+	void render(TextShapeResult const& res, ImageView<uint8_t> buffer);
+
 	class TextSegment
 	{
 	public:
