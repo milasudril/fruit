@@ -14,7 +14,7 @@ TESTCASE(TextSegmentValidity)
 	EXPECT_EQ(other.valid(), true);
 }
 
-TESTCASE(TextSegmentSetDirection)
+TESTCASE(TextSegmentDirection)
 {
 	fruit::TextSegment segment;
 	EXPECT_EQ(segment.direction(), fruit::TextDirection::LeftToRight);
@@ -27,4 +27,13 @@ TESTCASE(TextSegmentSetDirection)
 
 	segment.direction(fruit::TextDirection::BottomToTop);
 	EXPECT_EQ(segment.direction(), fruit::TextDirection::BottomToTop);
+}
+
+TESTCASE(TExtSegmentLanguage)
+{
+	fruit::TextSegment segment;
+	EXPECT_EQ(segment.language(), fruit::LanguageTag{"en-us"});
+
+	segment.language(fruit::LanguageTag{"sv-se"});
+	EXPECT_EQ(segment.language(), fruit::LanguageTag{"sv-se"});
 }

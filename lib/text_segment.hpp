@@ -37,6 +37,7 @@ namespace fruit
 			{ FRUIT_JAM("Failed to allocate hb_buffer"); }
 
 			direction(TextDirection::LeftToRight);
+			language(LanguageTag{"en-US"});
 		}
 
 		bool valid() const
