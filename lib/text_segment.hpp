@@ -33,7 +33,7 @@ namespace fruit
 	public:
 		TextSegment():m_handle{hb_buffer_create()}
 		{
-			if(!hb_buffer_allocation_successful(get()))
+			if(!hb_buffer_allocation_successful(native_handle()))
 			{ FRUIT_JAM("Failed to allocate hb_buffer"); }
 
 			direction(TextDirection::LeftToRight).
@@ -46,7 +46,7 @@ namespace fruit
 			return m_handle != nullptr;
 		}
 
-		hb_buffer_t* get() const
+		hb_buffer_t* native_handle() const
 		{
 			return m_handle.get();
 		}
@@ -54,7 +54,7 @@ namespace fruit
 		TextSegment& text(std::basic_string_view<char8_t> buffer)
 		{
 			FRUIT_ASSERT(valid());
-			auto const handle = get();
+			auto const handle = native_handle();
 			// https://lists.freedesktop.org/archives/harfbuzz/2016-July/005711.html
 			auto const dir = direction();
 			auto const s = script();
@@ -74,39 +74,39 @@ namespace fruit
 		TextSegment& direction(TextDirection val)
 		{
 			FRUIT_ASSERT(valid());
-			hb_buffer_set_direction(get(), static_cast<hb_direction_t>(val));
+			hb_buffer_set_direction(native_handle(), static_cast<hb_direction_t>(val));
 			return *this;
 		}
 
 		TextDirection direction() const
 		{
 			FRUIT_ASSERT(valid());
-			return static_cast<TextDirection>(hb_buffer_get_direction(get()));
+			return static_cast<TextDirection>(hb_buffer_get_direction(native_handle()));
 		}
 
 		TextSegment& language(LanguageTag const& lang)
 		{
 			FRUIT_ASSERT(valid());
-			hb_buffer_set_language(get(), hb_language_from_string(lang.c_str(), -1));
+			hb_buffer_set_language(native_handle(), hb_language_from_string(lang.c_str(), -1));
 			return *this;
 		}
 
 		LanguageTag language() const
 		{
 			FRUIT_ASSERT(valid());
-			return LanguageTag{hb_language_to_string(hb_buffer_get_language(get()))};
+			return LanguageTag{hb_language_to_string(hb_buffer_get_language(native_handle()))};
 		}
 
 		TextSegment& script(WritingSystem val)
 		{
-			hb_buffer_set_script(get(), static_cast<hb_script_t>(val));
+			hb_buffer_set_script(native_handle(), static_cast<hb_script_t>(val));
 			return *this;
 		}
 
 		WritingSystem script() const
 		{
 			FRUIT_ASSERT(valid());
-			return static_cast<WritingSystem>(hb_buffer_get_script(get()));
+			return static_cast<WritingSystem>(hb_buffer_get_script(native_handle()));
 		}
 
 	private:

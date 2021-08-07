@@ -64,6 +64,9 @@ namespace fruit
 				static_cast<int>(handle->glyph->bitmap.rows)};
 		}
 
+		FT_Face native_handle() const
+		{return m_handle.get();}
+
 	private:
 		std::unique_ptr<std::remove_pointer_t<FT_Face>, freetype_detail::Deleter> m_handle;
 		std::vector<std::byte> m_data;
