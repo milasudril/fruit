@@ -7,6 +7,7 @@
 #include "./writing_system.hpp"
 #include "./language_tag.hpp"
 #include "./error_message.hpp"
+#include "./text_shaper.hpp"
 
 #include <hb.h>
 
@@ -27,6 +28,48 @@ namespace fruit
 			}
 		};
 	}
+
+	struct GlyphInfo
+	{
+		uint32_t index;
+		uint32_t start_offset;
+	};
+
+	struct GlyphGeometry
+	{
+		Vector<int> cursor_increment;
+		Vector<int> render_offest;
+	};
+
+	class TextShapeResult
+	{
+	public:
+		explicit TextShapeResult(uint32_t num_glyphs,
+		                         hb_glyph_info_t const* info,
+		                         hb_glyph_position_t const* geom,
+		                         std::reference_wrapper<FreetypeFontFace const> font);
+
+		std::span<GlyphInfo const> glyph_info() const
+		{
+			return std::span{m_glyph_info.get(), m_glyph_count};
+		}
+
+		std::span<GlyphGeometry const> glyph_geometry() const
+		{
+			return std::span{m_glyph_geometry.get(), m_glyph_count};
+		}
+
+		FreetypeFontFace const& font() const
+		{
+			return m_font;
+		}
+
+	private:
+		size_t m_glyph_count;
+		std::unique_ptr<GlyphInfo[]> m_glyph_info;
+		std::unique_ptr<GlyphGeometry[]> m_glyph_geometry;
+		std::reference_wrapper<FreetypeFontFace const> m_font;
+	};
 
 	class TextSegment
 	{
@@ -107,6 +150,21 @@ namespace fruit
 		{
 			FRUIT_ASSERT(valid());
 			return static_cast<WritingSystem>(hb_buffer_get_script(native_handle()));
+		}
+
+		TextShapeResult shape(TextShaper const& shaper) const
+		{
+			FRUIT_ASSERT(valid());
+			FRUIT_ASSERT(shaper.valid());
+			auto const handle = m_handle.get();
+			auto const shaper_ref = shaper.native_handle();
+
+			hb_shape(shaper_ref, handle, nullptr, 0);
+			unsigned int glyph_count{};
+			auto const glyph_info = hb_buffer_get_glyph_infos(handle, &glyph_count);
+			auto const glyph_pos = hb_buffer_get_glyph_positions(handle, &glyph_count);
+
+			return TextShapeResult{glyph_count, glyph_info, glyph_pos, shaper.font()};
 		}
 
 	private:
