@@ -80,7 +80,7 @@ namespace fruit
 				Vector{glyph.bitmap_left, -glyph.bitmap_top, 0}};
 		}
 
-		GlyphRenderResult renderGlyph(GlyphIndex index) const
+		GlyphRenderResult render(GlyphIndex index) const
 		{
 			auto handle = m_handle.get();
 			FT_Load_Glyph(handle, index.value(), FT_LOAD_RENDER);

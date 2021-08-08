@@ -63,7 +63,7 @@ void fruit::render(TextShapeResult const& res, ImageView<uint8_t> buffer)
 	auto location = Origin<int>;
 	for(size_t k = 0; k < std::size(glyphs); ++k)
 	{
-		auto const glyph = res.font().renderGlyph(glyphs[k].index);
+		auto const glyph = res.font().render(glyphs[k].index);
 		auto const src = glyph.image;
 		auto render_pos = (location + geom[k].render_offset - Origin<int>)/64 + glyph.render_offset
 			+ buffer.height()*Y<int>/2;
