@@ -70,31 +70,50 @@ namespace fruit
 	};
 
 	template<class T>
-	size_t size(Image<T> img)
+	size_t size(Image<T> const& img)
 	{
 		return img.width() * img.height();
 	}
 
+
 	template<class T>
-	T* data(Image<T> img)
+	T const* data(Image<T> const&& img) = delete;
+
+	template<class T>
+	T const* data(Image<T> const& img)
 	{
 		return img.data();
 	}
 
 	template<class T>
-	T* begin(Image<T> img)
+	T* data(Image<T>& img)
 	{
 		return img.data();
 	}
 
 	template<class T>
-	T* end(Image<T> img)
+	T* begin(Image<T> const& img)
+	{
+		return img.data();
+	}
+
+	template<class T>
+	T* end(Image<T> const& img)
 	{
 		return img.data() + size(img);
 	}
 
 	template<class T>
-	std::span<T> make_span(Image<T> img)
+	std::span<T const> make_span(Image<T> const&& img) = delete;
+
+	template<class T>
+	std::span<T const> make_span(Image<T> const& img)
+	{
+		return std::span{data(img), size(img)};
+	}
+
+	template<class T>
+	std::span<T> make_span(Image<T>& img)
 	{
 		return std::span{data(img), size(img)};
 	}

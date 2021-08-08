@@ -12,6 +12,7 @@
 #include "./error_message.hpp"
 #include "./text_shaper.hpp"
 #include "./viewport_size.hpp"
+#include "./image.hpp"
 
 #include <hb.h>
 
@@ -79,7 +80,7 @@ namespace fruit
 
 	ViewportSize bounding_box(TextShapeResult const& shape_result);
 
-	void render(TextShapeResult const& res, ImageView<uint8_t> buffer);
+	Image<uint8_t> render(TextShapeResult const& res);
 
 	class TextSegment
 	{
