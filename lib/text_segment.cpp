@@ -35,7 +35,7 @@ fruit::TextShapeResult::TextShapeResult(uint32_t num_glyphs,
 	}
 
 	std::transform(info, info + num_glyphs, glyph_info.get(), [](auto const item) {
-		return GlyphInfo{item.codepoint, item.cluster};
+		return GlyphInfo{GlyphIndex{item.codepoint}, item.cluster};
 	});
 
 	std::transform(geom, geom + num_glyphs, glyph_geom.get(), [](auto const& item) {

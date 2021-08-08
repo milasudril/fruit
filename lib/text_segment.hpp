@@ -35,7 +35,7 @@ namespace fruit
 
 	struct GlyphInfo
 	{
-		uint32_t index;
+		GlyphIndex index;
 		uint32_t start_offset;
 	};
 

@@ -8,6 +8,7 @@
 
 #include "./image_view.hpp"
 #include "./vector.hpp"
+#include "./chartypes.hpp"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -68,7 +69,7 @@ namespace fruit
 			return m_size;
 		}
 
-		GlyphRenderResult renderChar(uint32_t char_index) const
+		GlyphRenderResult render(CharCodepoint char_index) const
 		{
 			auto handle = m_handle.get();
 			FT_Load_Char(handle, char_index, FT_LOAD_RENDER);
@@ -79,10 +80,10 @@ namespace fruit
 				Vector{glyph.bitmap_left, -glyph.bitmap_top, 0}};
 		}
 
-		GlyphRenderResult renderGlyph(uint32_t index) const
+		GlyphRenderResult renderGlyph(GlyphIndex index) const
 		{
 			auto handle = m_handle.get();
-			FT_Load_Glyph(handle, index, FT_LOAD_RENDER);
+			FT_Load_Glyph(handle, index.value(), FT_LOAD_RENDER);
 			auto& glyph = *handle->glyph;
 			return GlyphRenderResult{ImageView<uint8_t const>{glyph.bitmap.buffer,
 				static_cast<int>(glyph.bitmap.width),

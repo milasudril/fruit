@@ -3,7 +3,7 @@
 
 #include "./scancode.hpp"
 #include "./button_state.hpp"
-#include "./char_codepoint.hpp"
+#include "./chartypes.hpp"
 
 namespace fruit
 {
