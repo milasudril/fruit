@@ -53,7 +53,7 @@ fruit::ViewportSize fruit::bounding_box(TextShapeResult const& shape_result)
 	auto const res = std::accumulate(std::begin(geom), std::end(geom), Vector{0, 0, 0},[](auto a, auto const b){
 		return a + b.cursor_increment;
 	});
-	return ViewportSize{res.x()/64, std::max(res.y()/64, shape_result.font().char_height())};
+	return ViewportSize{res.x()/64, 2*std::max(res.y()/64, shape_result.font().char_height())};
 }
 
 void fruit::render(TextShapeResult const& res, ImageView<uint8_t> buffer)
@@ -63,13 +63,16 @@ void fruit::render(TextShapeResult const& res, ImageView<uint8_t> buffer)
 	auto location = Origin<int>;
 	for(size_t k = 0; k < std::size(glyphs); ++k)
 	{
-		auto src = res.font().renderGlyph(glyphs[k].index);
-		printf("rendering %x\n", glyphs[k].index);
+		auto const glyph = res.font().renderGlyph(glyphs[k].index);
+		auto const src = glyph.image;
+		auto render_pos = (location + geom[k].render_offset - Origin<int>)/64 + glyph.render_offset
+			+ buffer.height()*Y<int>/2;
+		printf("%d\n", render_pos.y());
 		for(int k = 0; k < src.height(); ++k)
 		{
 			for(int l = 0; l < src.width(); ++l)
 			{
-				buffer(l + location.x()/64, k + location.y()/64) = src(l, k);
+				buffer(l + render_pos.x(), k + render_pos.y()) = src(l, k);
 			}
 		}
 		location += geom[k].cursor_increment;

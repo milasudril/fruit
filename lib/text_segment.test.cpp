@@ -68,7 +68,7 @@ TESTCASE(TextSegmentShape)
 
 	auto bb = bounding_box(shape_result);
 	EXPECT_EQ(bb.width, 117);
-	EXPECT_EQ(bb.height, 16);
+	EXPECT_EQ(bb.height, 2*16);
 
 	auto buffer = std::make_unique<uint8_t[]>(bb.width * bb.height);
 	render(shape_result, fruit::ImageView{buffer.get(), bb.width, bb.height});

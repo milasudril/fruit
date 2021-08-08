@@ -42,7 +42,7 @@ namespace fruit
 	struct GlyphGeometry
 	{
 		Vector<int> cursor_increment{0, 0, 0};
-		Vector<int> render_offest{0, 0, 0};
+		Vector<int> render_offset{0, 0, 0};
 	};
 
 	class TextShapeResult

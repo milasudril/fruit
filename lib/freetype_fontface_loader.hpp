@@ -7,6 +7,7 @@
 #define FRUIT_FREETYPE_FONTFACE_LOADER_HPP
 
 #include "./image_view.hpp"
+#include "./vector.hpp"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -43,6 +44,12 @@ namespace fruit
 		};
 	}
 
+	struct GlyphRenderResult
+	{
+		ImageView<uint8_t const> image;
+		Vector<int> render_offset;
+	};
+
 	class FreetypeFontFace
 	{
 	public:
@@ -61,22 +68,26 @@ namespace fruit
 			return m_size;
 		}
 
-		ImageView<uint8_t const> renderChar(uint32_t char_index) const
+		GlyphRenderResult renderChar(uint32_t char_index) const
 		{
 			auto handle = m_handle.get();
 			FT_Load_Char(handle, char_index, FT_LOAD_RENDER);
-			return ImageView<uint8_t const>{handle->glyph->bitmap.buffer,
-				static_cast<int>(handle->glyph->bitmap.width),
-				static_cast<int>(handle->glyph->bitmap.rows)};
+			auto& glyph = *handle->glyph;
+			return GlyphRenderResult{ImageView<uint8_t const>{glyph.bitmap.buffer,
+				static_cast<int>(glyph.bitmap.width),
+				static_cast<int>(glyph.bitmap.rows)},
+				Vector{glyph.bitmap_left, -glyph.bitmap_top, 0}};
 		}
 
-		ImageView<uint8_t const> renderGlyph(uint32_t index) const
+		GlyphRenderResult renderGlyph(uint32_t index) const
 		{
 			auto handle = m_handle.get();
 			FT_Load_Glyph(handle, index, FT_LOAD_RENDER);
-			return ImageView<uint8_t const>{handle->glyph->bitmap.buffer,
-				static_cast<int>(handle->glyph->bitmap.width),
-				static_cast<int>(handle->glyph->bitmap.rows)};
+			auto& glyph = *handle->glyph;
+			return GlyphRenderResult{ImageView<uint8_t const>{glyph.bitmap.buffer,
+				static_cast<int>(glyph.bitmap.width),
+				static_cast<int>(glyph.bitmap.rows)},
+				Vector{glyph.bitmap_left, -glyph.bitmap_top, 0}};
 		}
 
 		FT_Face native_handle() const
