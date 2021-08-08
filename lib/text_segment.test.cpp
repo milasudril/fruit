@@ -25,11 +25,13 @@ TESTCASE(TextSegmentDirection)
 	segment.direction(fruit::TextDirection::RightToLeft);
 	EXPECT_EQ(segment.direction(), fruit::TextDirection::RightToLeft);
 
+#if 0
 	segment.direction(fruit::TextDirection::TopToBottom);
 	EXPECT_EQ(segment.direction(), fruit::TextDirection::TopToBottom);
 
 	segment.direction(fruit::TextDirection::BottomToTop);
 	EXPECT_EQ(segment.direction(), fruit::TextDirection::BottomToTop);
+#endif
 }
 
 TESTCASE(TextSegmentLanguage)
@@ -174,3 +176,40 @@ TESTCASE(TextSegmentShapeCheck)
 	fruit::io_utils::store(std::as_bytes(make_span(image)),
 						"testdata/Vodní žíňky běží kolem lesní tůně a kadeřemi svými čeří stříbrosvit měsíce.dat");
 }
+
+TESTCASE(TextSegmentShapeRightToLeft)
+{
+	fruit::FreetypeFontfaceLoader loader;
+	fruit::FreetypeFontFace face{loader, fruit::io_utils::load(fruit::FontMapper{}.get_path("DejaVu Sans"))};
+	fruit::TextShaper foobar{face};
+
+	fruit::TextSegment segment;
+	std::u8string_view const text{u8"Integer sit amet tortor quis ex ornare mollis"};
+	auto shape_result = segment.direction(fruit::TextDirection::RightToLeft).text(text).shape(foobar);
+
+	EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text));
+
+	auto image = render(shape_result);
+	fruit::io_utils::store(std::as_bytes(make_span(image)),
+						"testdata/rtl Integer sit amet tortor quis ex ornare mollis.dat");
+}
+
+#if 0
+FIXME
+TESTCASE(TextSegmentShapeTopToBottom)
+{
+	fruit::FreetypeFontfaceLoader loader;
+	fruit::FreetypeFontFace face{loader, fruit::io_utils::load(fruit::FontMapper{}.get_path("DejaVu Sans"))};
+	fruit::TextShaper foobar{face};
+
+	fruit::TextSegment segment;
+	std::u8string_view const text{u8"Integer sit amet tortor quis ex ornare mollis"};
+	auto shape_result = segment.direction(fruit::TextDirection::TopToBottom).text(text).shape(foobar);
+
+	EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text));
+
+	auto image = render(shape_result);
+	fruit::io_utils::store(std::as_bytes(make_span(image)),
+						"testdata/ttb Integer sit amet tortor quis ex ornare mollis.dat");
+}
+#endif

@@ -72,10 +72,16 @@ fruit::write_and_abort(__FILE__, __LINE__, "Fruit jam", __VA_ARGS__)
 do \
 { \
 	if(!(expression)) \
-	{ fruit::write_and_abort(__FILE__, __LINE__, "Fruit mold detected", "{}", expression); } \
+	{ fruit::write_and_abort(__FILE__, __LINE__, "Fruit mold detected", "{}", #expression); } \
 } while(false)
 #else
 	#define FRUIT_ASSERT(expression)
 #endif
 
+#define FRUIT_UNRIPE(expression) \
+do \
+{ \
+	if(expression) \
+	{ fruit::write_and_abort(__FILE__, __LINE__, "Unripe fruit", "{}", #expression); } \
+} while(false)
 #endif
