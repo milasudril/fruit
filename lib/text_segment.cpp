@@ -50,17 +50,30 @@ fruit::TextShapeResult::TextShapeResult(uint32_t num_glyphs,
 fruit::ViewportSize fruit::bounding_box(TextShapeResult const& shape_result)
 {
 	auto const geom = shape_result.glyph_geometry();
-	auto const res = std::accumulate(std::begin(geom), std::end(geom), Vector{0, 0, 0},[](auto a, auto const b){
-		return a + b.cursor_increment;
-	});
-	return ViewportSize{res.x()/64, 2*std::max(res.y()/64, shape_result.font().char_height())};
+	auto const glyphs = shape_result.glyph_info();
+
+	// FIXME: Make this work for vertical layout
+	auto location = Origin<int>;
+	auto height = 0;
+	for(size_t k = 0; k < std::size(glyphs); ++k)
+	{
+		auto const glyph = shape_result.font().render(glyphs[k].index);
+		auto const src = glyph.image;
+		auto const render_pos = (location + geom[k].render_offset - Origin<int>)/64 + glyph.render_offset;
+		height = std::max(height, render_pos.y() + src.height());
+		location += geom[k].cursor_increment;
+	}
+
+	return ViewportSize{location.x()/64, height};
 }
 
 fruit::Image<uint8_t> fruit::render(TextShapeResult const& shape_result)
 {
 	auto bb = bounding_box(shape_result);
+//	bb.height *= 2;
+	printf("%d %d\n", bb.width, bb.height);
 	fruit::Image<uint8_t> buffer{bb.width, bb.height};
-
+#if 1
 	auto glyphs = shape_result.glyph_info();
 	auto geom = shape_result.glyph_geometry();
 	auto location = Origin<int>;
@@ -68,8 +81,7 @@ fruit::Image<uint8_t> fruit::render(TextShapeResult const& shape_result)
 	{
 		auto const glyph = shape_result.font().render(glyphs[k].index);
 		auto const src = glyph.image;
-		auto render_pos = (location + geom[k].render_offset - Origin<int>)/64 + glyph.render_offset
-			+ buffer.height()*Y<int>/2;
+		auto render_pos = (location + geom[k].render_offset - Origin<int>)/64 + glyph.render_offset;
 		printf("%d\n", render_pos.y());
 		for(int k = 0; k < src.height(); ++k)
 		{
@@ -80,7 +92,7 @@ fruit::Image<uint8_t> fruit::render(TextShapeResult const& shape_result)
 		}
 		location += geom[k].cursor_increment;
 	}
-
+#endif
 	return buffer;
 }
 
