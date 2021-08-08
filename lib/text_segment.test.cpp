@@ -101,7 +101,7 @@ TESTCASE(TextSegmentShape)
 
 		EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text) - 22);
 
-				auto image = render(shape_result);
+		auto image = render(shape_result);
 		fruit::io_utils::store(std::as_bytes(make_span(image)),
 							"testdata/Dès Noël, où un zéphyr haï me vêt de glaçons würmiens, je dîne d’exquis rôtis de bœuf au kir, à l’aÿ d’âge mûr, &cætera.dat");
 	}

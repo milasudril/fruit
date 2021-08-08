@@ -70,10 +70,7 @@ fruit::ViewportSize fruit::bounding_box(TextShapeResult const& shape_result)
 fruit::Image<uint8_t> fruit::render(TextShapeResult const& shape_result)
 {
 	auto bb = bounding_box(shape_result);
-//	bb.height *= 2;
-	printf("%d %d\n", bb.width, bb.height);
 	fruit::Image<uint8_t> buffer{bb.width, bb.height};
-#if 1
 	auto glyphs = shape_result.glyph_info();
 	auto geom = shape_result.glyph_geometry();
 	auto location = Origin<int>;
@@ -82,7 +79,6 @@ fruit::Image<uint8_t> fruit::render(TextShapeResult const& shape_result)
 		auto const glyph = shape_result.font().render(glyphs[k].index);
 		auto const src = glyph.image;
 		auto render_pos = (location + geom[k].render_offset - Origin<int>)/64 + glyph.render_offset;
-		printf("%d\n", render_pos.y());
 		for(int k = 0; k < src.height(); ++k)
 		{
 			for(int l = 0; l < src.width(); ++l)
@@ -92,7 +88,6 @@ fruit::Image<uint8_t> fruit::render(TextShapeResult const& shape_result)
 		}
 		location += geom[k].cursor_increment;
 	}
-#endif
 	return buffer;
 }
 
