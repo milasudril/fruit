@@ -39,8 +39,8 @@ fruit::TextShapeResult::TextShapeResult(uint32_t num_glyphs,
 	});
 
 	std::transform(geom, geom + num_glyphs, glyph_geom.get(), [](auto const& item) {
-		return GlyphGeometry{Vector{item.x_advance, item.y_advance, 0},
-			Vector{item.x_offset, item.y_offset, 0}};
+		return GlyphGeometry{Vector{item.x_advance, -item.y_advance, 0},
+			Vector{item.x_offset, -item.y_offset, 0}};
 	});
 
 	m_glyph_info = std::move(glyph_info);
