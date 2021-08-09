@@ -2,7 +2,6 @@
 
 #include "./freetype_fontface_loader.hpp"
 
-#include "./font_mapper.hpp"
 #include "./io_utils.hpp"
 
 #include "testfwk/testfwk.hpp"
@@ -17,7 +16,7 @@ TESTCASE(FreetypeFontfaceLoaderInit)
 TESTCASE(FreetypeFontfaceLoaderLoadFont)
 {
 	fruit::FreetypeFontfaceLoader loader;
-	fruit::FreetypeFontFace font{loader, fruit::io_utils::load(fruit::FontMapper{}.get_path("DejaVu Sans"))};
+	fruit::FreetypeFontFace font{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
 
 	auto A = std::as_bytes(make_span(font.char_height(16).render('A').image));
 	auto A_ref = fruit::io_utils::load("testdata/A_rendered.dat");
