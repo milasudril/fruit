@@ -22,9 +22,11 @@ namespace
 fruit::TextShapeResult::TextShapeResult(uint32_t num_glyphs,
 							hb_glyph_info_t const* info,
 							hb_glyph_position_t const* geom,
-							std::reference_wrapper<FreetypeFontFace const> font):
+							std::reference_wrapper<FreetypeFontFace const> font,
+							TextDirection direction):
 	m_glyph_count{num_glyphs},
-	m_font{font}
+	m_font{font},
+	m_direction{direction}
 {
 	auto glyph_info = std::make_unique<GlyphInfo[]>(num_glyphs);
 	auto glyph_geom = std::make_unique<GlyphGeometry[]>(num_glyphs);
@@ -119,5 +121,5 @@ fruit::TextShapeResult fruit::TextSegment::shape_impl(TextShaper const& shaper) 
 	auto const glyph_info = hb_buffer_get_glyph_infos(handle, &glyph_count);
 	auto const glyph_pos = hb_buffer_get_glyph_positions(handle, &glyph_count);
 
-	return TextShapeResult{glyph_count, glyph_info, glyph_pos, shaper.font()};
+	return TextShapeResult{glyph_count, glyph_info, glyph_pos, shaper.font(), direction()};
 }

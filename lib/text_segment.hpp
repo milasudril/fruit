@@ -52,7 +52,8 @@ namespace fruit
 		explicit TextShapeResult(uint32_t num_glyphs,
 		                         hb_glyph_info_t const* info,
 		                         hb_glyph_position_t const* geom,
-		                         std::reference_wrapper<FreetypeFontFace const> font);
+		                         std::reference_wrapper<FreetypeFontFace const> font,
+		                         TextDirection direction);
 
 		std::span<GlyphInfo const> glyph_info() const
 		{
@@ -71,11 +72,17 @@ namespace fruit
 			return m_font;
 		}
 
+		TextDirection direction() const
+		{
+			return m_direction;
+		}
+
 	private:
 		size_t m_glyph_count;
 		std::unique_ptr<GlyphInfo[]> m_glyph_info;
 		std::unique_ptr<GlyphGeometry[]> m_glyph_geometry;
 		std::reference_wrapper<FreetypeFontFace const> m_font;
+		TextDirection m_direction;
 	};
 
 	ViewportSize bounding_box(TextShapeResult const& shape_result);
