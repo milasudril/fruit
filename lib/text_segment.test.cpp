@@ -25,13 +25,11 @@ TESTCASE(TextSegmentDirection)
 	segment.direction(fruit::TextDirection::RightToLeft);
 	EXPECT_EQ(segment.direction(), fruit::TextDirection::RightToLeft);
 
-#if 0
 	segment.direction(fruit::TextDirection::TopToBottom);
 	EXPECT_EQ(segment.direction(), fruit::TextDirection::TopToBottom);
 
 	segment.direction(fruit::TextDirection::BottomToTop);
 	EXPECT_EQ(segment.direction(), fruit::TextDirection::BottomToTop);
-#endif
 }
 
 TESTCASE(TextSegmentLanguage)

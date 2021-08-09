@@ -122,8 +122,6 @@ namespace fruit
 		TextSegment& direction(TextDirection val)
 		{
 			FRUIT_ASSERT(valid());
-			FRUIT_UNRIPE(val == TextDirection::TopToBottom);
-			FRUIT_UNRIPE(val == TextDirection::BottomToTop);
 			hb_buffer_set_direction(native_handle(), static_cast<hb_direction_t>(val));
 			return *this;
 		}
