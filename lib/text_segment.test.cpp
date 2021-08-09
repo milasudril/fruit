@@ -69,8 +69,8 @@ TESTCASE(TextSegmentShapeSwedish)
 	EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text) - 3);
 
 	auto image = render(shape_result);
-	fruit::io_utils::store(std::as_bytes(make_span(image)),
-						"testdata/Yxmördaren Julia Blomqvist på fäktning i Schweiz.dat");
+	auto expected = fruit::io_utils::load("testdata/Yxmördaren Julia Blomqvist på fäktning i Schweiz.dat");
+	EXPECT_EQ(std::ranges::equal(std::as_bytes(make_span(image)), expected), true);
 }
 
 TESTCASE(TextSegmentShapeBrittish)
@@ -87,8 +87,8 @@ TESTCASE(TextSegmentShapeBrittish)
 	EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text) - 1);
 
 	auto image = render(shape_result);
-	fruit::io_utils::store(std::as_bytes(make_span(image)),
-						"testdata/The five boxing wizards jump quickly.dat");
+	auto expected = fruit::io_utils::load("testdata/The five boxing wizards jump quickly.dat");
+	EXPECT_EQ(std::ranges::equal(std::as_bytes(make_span(image)), expected), true);
 }
 
 TESTCASE(TextSegmentShapeGerman)
@@ -104,8 +104,8 @@ TESTCASE(TextSegmentShapeGerman)
 	EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text) - 4);
 
 	auto image = render(shape_result);
-	fruit::io_utils::store(std::as_bytes(make_span(image)),
-						"testdata/Die heiße Zypernsonne quälte Max und Victoria ja böse auf dem Weg bis zur Küste.dat");
+	auto expected = fruit::io_utils::load("testdata/Die heiße Zypernsonne quälte Max und Victoria ja böse auf dem Weg bis zur Küste.dat");
+	EXPECT_EQ(std::ranges::equal(std::as_bytes(make_span(image)), expected), true);
 }
 
 TESTCASE(TextSegmentShapeFrance)
@@ -121,8 +121,8 @@ TESTCASE(TextSegmentShapeFrance)
 	EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text) - 22);
 
 	auto image = render(shape_result);
-	fruit::io_utils::store(std::as_bytes(make_span(image)),
-						"testdata/Dès Noël, où un zéphyr haï me vêt de glaçons würmiens, je dîne d’exquis rôtis de bœuf au kir, à l’aÿ d’âge mûr, &cætera.dat");
+	auto expected = fruit::io_utils::load("testdata/Dès Noël, où un zéphyr haï me vêt de glaçons würmiens, je dîne d’exquis rôtis de bœuf au kir, à l’aÿ d’âge mûr, &cætera.dat");
+	EXPECT_EQ(std::ranges::equal(std::as_bytes(make_span(image)), expected), true);
 }
 
 TESTCASE(TextSegmentShapeNorwegian)
@@ -138,9 +138,8 @@ TESTCASE(TextSegmentShapeNorwegian)
 	EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text) - 4);
 
 	auto image = render(shape_result);
-	fruit::io_utils::store(std::as_bytes(make_span(image)),
-						"testdata/Taxisjåføren quizet bedre om calypso, watt og klær på hjemveien.dat");
-
+	auto expected = fruit::io_utils::load("testdata/Taxisjåføren quizet bedre om calypso, watt og klær på hjemveien.dat");
+	EXPECT_EQ(std::ranges::equal(std::as_bytes(make_span(image)), expected), true);
 }
 
 TESTCASE(TextSegmentShapeIcelandic)
@@ -156,8 +155,8 @@ TESTCASE(TextSegmentShapeIcelandic)
 	EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text) - 11);
 
 	auto image = render(shape_result);
-	fruit::io_utils::store(std::as_bytes(make_span(image)),
-						"testdata/Kæmi ný öxi hér, ykist þjólfum nú bæði víl og ádrepa.dat");
+	auto expected = fruit::io_utils::load("testdata/Kæmi ný öxi hér, ykist þjólfum nú bæði víl og ádrepa.dat");
+	EXPECT_EQ(std::ranges::equal(std::as_bytes(make_span(image)), expected), true);
 }
 
 TESTCASE(TextSegmentShapeCheck)
@@ -173,8 +172,8 @@ TESTCASE(TextSegmentShapeCheck)
 	EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text) - 19);
 
 	auto image = render(shape_result);
-	fruit::io_utils::store(std::as_bytes(make_span(image)),
-						"testdata/Vodní žíňky běží kolem lesní tůně a kadeřemi svými čeří stříbrosvit měsíce.dat");
+	auto expected = fruit::io_utils::load("testdata/Vodní žíňky běží kolem lesní tůně a kadeřemi svými čeří stříbrosvit měsíce.dat");
+	EXPECT_EQ(std::ranges::equal(std::as_bytes(make_span(image)), expected), true);
 }
 
 TESTCASE(TextSegmentShapeRightToLeft)
@@ -190,8 +189,8 @@ TESTCASE(TextSegmentShapeRightToLeft)
 	EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text));
 
 	auto image = render(shape_result);
-	fruit::io_utils::store(std::as_bytes(make_span(image)),
-						"testdata/rtl Integer sit amet tortor quis ex ornare mollis.dat");
+	auto expected = fruit::io_utils::load("testdata/rtl Integer sit amet tortor quis ex ornare mollis.dat");
+	EXPECT_EQ(std::ranges::equal(std::as_bytes(make_span(image)), expected), true);
 }
 
 #if 0
