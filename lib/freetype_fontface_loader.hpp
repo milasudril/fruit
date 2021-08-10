@@ -80,7 +80,7 @@ namespace fruit
 				static_cast<int>(glyph.bitmap.rows)},
 				is_horizontal(dir) ?
 					Vector{glyph.bitmap_left, char_height() - glyph.bitmap_top, 0}:
-					Vector{0, 0, 0}};
+					Vector{-glyph.bitmap_left, -glyph.bitmap_top, 0}};
 		}
 
 		GlyphRenderResult render(GlyphIndex index, TextDirection dir) const
@@ -93,7 +93,7 @@ namespace fruit
 				static_cast<int>(glyph.bitmap.rows)},
 				is_horizontal(dir) ?
 					Vector{glyph.bitmap_left, char_height() - glyph.bitmap_top, 0}:
-					Vector{0, 0, 0}};
+					Vector{-glyph.bitmap_left, -glyph.bitmap_top, 0}};
 		}
 
 		FT_Face native_handle() const
