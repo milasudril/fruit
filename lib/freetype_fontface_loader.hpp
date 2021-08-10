@@ -77,7 +77,7 @@ namespace fruit
 			return GlyphRenderResult{ImageView<uint8_t const>{glyph.bitmap.buffer,
 				static_cast<int>(glyph.bitmap.width),
 				static_cast<int>(glyph.bitmap.rows)},
-				Vector{glyph.bitmap_left, -glyph.bitmap_top, 0}};
+				Vector{glyph.bitmap_left, char_height() - glyph.bitmap_top, 0}};
 		}
 
 		GlyphRenderResult render(GlyphIndex index) const
