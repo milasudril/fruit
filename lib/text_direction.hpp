@@ -31,6 +31,11 @@ namespace fruit
 	{
 		return dir == TextDirection::TopToBottom || dir == TextDirection::BottomToTop;
 	}
+
+	inline bool is_horizontal(TextDirection dir)
+	{
+		return !(is_vertical(dir));
+	}
 }
 
 

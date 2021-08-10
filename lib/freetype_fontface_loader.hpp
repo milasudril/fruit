@@ -9,6 +9,7 @@
 #include "./image_view.hpp"
 #include "./vector.hpp"
 #include "./chartypes.hpp"
+#include "./text_direction.hpp"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -69,7 +70,7 @@ namespace fruit
 			return m_size;
 		}
 
-		GlyphRenderResult render(CharCodepoint char_index) const
+		GlyphRenderResult render(CharCodepoint char_index, TextDirection dir) const
 		{
 			auto handle = m_handle.get();
 			FT_Load_Char(handle, char_index, FT_LOAD_RENDER);
@@ -77,10 +78,12 @@ namespace fruit
 			return GlyphRenderResult{ImageView<uint8_t const>{glyph.bitmap.buffer,
 				static_cast<int>(glyph.bitmap.width),
 				static_cast<int>(glyph.bitmap.rows)},
-				Vector{glyph.bitmap_left, char_height() - glyph.bitmap_top, 0}};
+				is_horizontal(dir) ?
+					Vector{glyph.bitmap_left, char_height() - glyph.bitmap_top, 0}:
+					Vector{0, 0, 0}};
 		}
 
-		GlyphRenderResult render(GlyphIndex index) const
+		GlyphRenderResult render(GlyphIndex index, TextDirection dir) const
 		{
 			auto handle = m_handle.get();
 			FT_Load_Glyph(handle, index.value(), FT_LOAD_RENDER);
@@ -88,7 +91,9 @@ namespace fruit
 			return GlyphRenderResult{ImageView<uint8_t const>{glyph.bitmap.buffer,
 				static_cast<int>(glyph.bitmap.width),
 				static_cast<int>(glyph.bitmap.rows)},
-				Vector{glyph.bitmap_left, char_height() - glyph.bitmap_top, 0}};
+				is_horizontal(dir) ?
+					Vector{glyph.bitmap_left, char_height() - glyph.bitmap_top, 0}:
+					Vector{0, 0, 0}};
 		}
 
 		FT_Face native_handle() const

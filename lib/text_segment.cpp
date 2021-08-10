@@ -66,7 +66,7 @@ namespace
 		auto height = 0;
 		for(size_t k = 0; k < std::size(glyphs); ++k)
 		{
-			auto const glyph = shape_result.font().render(glyphs[k].index);
+			auto const glyph = shape_result.font().render(glyphs[k].index, shape_result.direction());
 			auto const src = glyph.image;
 			auto const render_pos = (location + geom[k].render_offset - fruit::Origin<int>)/64 + glyph.render_offset;
 			height = std::max(height, render_pos.y() + src.height());
@@ -92,7 +92,7 @@ fruit::Image<uint8_t> fruit::render(TextShapeResult const& shape_result)
 	auto location = Origin<int>;
 	for(size_t k = 0; k < std::size(glyphs); ++k)
 	{
-		auto const glyph = shape_result.font().render(glyphs[k].index);
+		auto const glyph = shape_result.font().render(glyphs[k].index, shape_result.direction());
 		auto const src = glyph.image;
 		auto render_pos = (location + geom[k].render_offset - Origin<int>)/64 + glyph.render_offset;
 		for(int k = 0; k < src.height(); ++k)
