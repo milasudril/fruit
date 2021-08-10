@@ -27,7 +27,7 @@ namespace fruit
 		__builtin_unreachable();
 	}
 
-	inline bool vertical(TextDirection dir)
+	inline bool is_vertical(TextDirection dir)
 	{
 		return dir == TextDirection::TopToBottom || dir == TextDirection::BottomToTop;
 	}

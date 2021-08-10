@@ -51,7 +51,7 @@ fruit::TextShapeResult::TextShapeResult(uint32_t num_glyphs,
 
 fruit::ViewportSize fruit::bounding_box(TextShapeResult const& shape_result)
 {
-	FRUIT_UNRIPE(vertical(shape_result.direction()));
+	FRUIT_UNRIPE(is_vertical(shape_result.direction()));
 
 	auto const geom = shape_result.glyph_geometry();
 	auto const glyphs = shape_result.glyph_info();
