@@ -51,12 +51,24 @@ fruit::TextShapeResult::TextShapeResult(uint32_t num_glyphs,
 
 namespace
 {
-#if 0
-	fruit::ViewportSize bounding_box_vertical(fruit::TextShapeResult const&)
+	fruit::ViewportSize bounding_box_vertical(fruit::TextShapeResult const& shape_result)
 	{
-		return fruit::ViewportSize{0, 0};
+		auto const geom = shape_result.glyph_geometry();
+		auto const glyphs = shape_result.glyph_info();
+
+		auto location = fruit::Origin<int>;
+		auto width = 0;
+		for(size_t k = 0; k < std::size(glyphs); ++k)
+		{
+			auto const glyph = shape_result.font().render(glyphs[k].index, shape_result.direction());
+			auto const src = glyph.image;
+			width = std::max(width, src.width());
+			location += geom[k].cursor_increment;
+		}
+
+		return fruit::ViewportSize{width, location.y()/64};
 	}
-#endif
+
 	fruit::ViewportSize bounding_box_horizontal(fruit::TextShapeResult const& shape_result)
 	{
 		auto const geom = shape_result.glyph_geometry();
@@ -75,36 +87,64 @@ namespace
 
 		return fruit::ViewportSize{location.x()/64, height};
 	}
-}
 
-fruit::ViewportSize fruit::bounding_box(TextShapeResult const& shape_result)
-{
-	FRUIT_UNRIPE(is_vertical(shape_result.direction()));
-	return bounding_box_horizontal(shape_result);
+	fruit::Image<uint8_t> render_horizontal(fruit::TextShapeResult const& shape_result)
+	{
+		auto bb = bounding_box_horizontal(shape_result);
+		fruit::Image<uint8_t> buffer{bb.width, bb.height};
+		auto glyphs = shape_result.glyph_info();
+		auto geom = shape_result.glyph_geometry();
+		auto location = fruit::Origin<int>;
+		for(size_t k = 0; k < std::size(glyphs); ++k)
+		{
+			auto const glyph = shape_result.font().render(glyphs[k].index, shape_result.direction());
+			auto const src = glyph.image;
+			auto render_pos = (location + geom[k].render_offset - fruit::Origin<int>)/64 + glyph.render_offset;
+			for(int k = 0; k < src.height(); ++k)
+			{
+				for(int l = 0; l < src.width(); ++l)
+				{
+					buffer(l + render_pos.x(), k + render_pos.y()) = src(l, k);
+				}
+			}
+			location += geom[k].cursor_increment;
+		}
+		return buffer;
+	}
+
+	fruit::Image<uint8_t> render_vertical(fruit::TextShapeResult const& shape_result)
+	{
+		auto bb = bounding_box_vertical(shape_result);
+		fruit::Image<uint8_t> buffer{bb.width, bb.height};
+		auto glyphs = shape_result.glyph_info();
+		auto geom = shape_result.glyph_geometry();
+		auto location = fruit::Origin<int>;
+		for(size_t k = 0; k < std::size(glyphs); ++k)
+		{
+			auto const glyph = shape_result.font().render(glyphs[k].index, shape_result.direction());
+			auto const src = glyph.image;
+			auto render_pos = (location + geom[k].render_offset.y()*fruit::Y<int> - fruit::Origin<int>)/64
+				+ glyph.render_offset
+				+ (bb.width - src.width())*fruit::X<int>/2;
+
+			for(int k = 0; k < src.height(); ++k)
+			{
+				for(int l = 0; l < src.width(); ++l)
+				{
+					buffer(l + render_pos.x(), k + render_pos.y()) = src(l, k);
+				}
+			}
+			location += geom[k].cursor_increment;
+		}
+		return buffer;
+	}
 }
 
 fruit::Image<uint8_t> fruit::render(TextShapeResult const& shape_result)
 {
-	auto bb = bounding_box(shape_result);
-	fruit::Image<uint8_t> buffer{bb.width, bb.height};
-	auto glyphs = shape_result.glyph_info();
-	auto geom = shape_result.glyph_geometry();
-	auto location = Origin<int>;
-	for(size_t k = 0; k < std::size(glyphs); ++k)
-	{
-		auto const glyph = shape_result.font().render(glyphs[k].index, shape_result.direction());
-		auto const src = glyph.image;
-		auto render_pos = (location + geom[k].render_offset - Origin<int>)/64 + glyph.render_offset;
-		for(int k = 0; k < src.height(); ++k)
-		{
-			for(int l = 0; l < src.width(); ++l)
-			{
-				buffer(l + render_pos.x(), k + render_pos.y()) = src(l, k);
-			}
-		}
-		location += geom[k].cursor_increment;
-	}
-	return buffer;
+	return is_vertical(shape_result.direction())?
+		render_vertical(shape_result):
+		render_horizontal(shape_result);
 }
 
 void fruit::TextSegment::text_impl(std::basic_string_view<char8_t> buffer)

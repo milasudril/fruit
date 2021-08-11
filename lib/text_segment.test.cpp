@@ -191,8 +191,7 @@ TESTCASE(TextSegmentShapeRightToLeft)
 	EXPECT_EQ(std::ranges::equal(std::as_bytes(make_span(image)), expected), true);
 }
 
-#if 0
-FIXME
+#if 1
 TESTCASE(TextSegmentShapeTopToBottom)
 {
 	fruit::FreetypeFontfaceLoader loader;
