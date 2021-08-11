@@ -191,7 +191,6 @@ TESTCASE(TextSegmentShapeRightToLeft)
 	EXPECT_EQ(std::ranges::equal(std::as_bytes(make_span(image)), expected), true);
 }
 
-#if 1
 TESTCASE(TextSegmentShapeTopToBottom)
 {
 	fruit::FreetypeFontfaceLoader loader;
@@ -205,7 +204,6 @@ TESTCASE(TextSegmentShapeTopToBottom)
 	EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text));
 
 	auto image = render(shape_result);
-	fruit::io_utils::store(std::as_bytes(make_span(image)),
-						"testdata/ttb Integer sit amet tortor quis ex ornare mollis.dat");
+	auto expected = fruit::io_utils::load("testdata/ttb Integer sit amet tortor quis ex ornare mollis.dat");
+	EXPECT_EQ(std::ranges::equal(std::as_bytes(make_span(image)), expected), true);
 }
-#endif
