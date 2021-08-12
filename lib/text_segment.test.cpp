@@ -207,3 +207,20 @@ TESTCASE(TextSegmentShapeTopToBottom)
 	auto expected = fruit::io_utils::load("testdata/ttb Integer sit amet tortor quis ex ornare mollis.dat");
 	EXPECT_EQ(std::ranges::equal(std::as_bytes(make_span(image)), expected), true);
 }
+
+TESTCASE(TextSegmentShapeBottomToTop)
+{
+	fruit::FreetypeFontfaceLoader loader;
+	fruit::FreetypeFontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
+	fruit::TextShaper foobar{face};
+
+	fruit::TextSegment segment;
+	std::u8string_view const text{u8"Integer sit amet tortor quis ex ornare mollis"};
+	auto shape_result = segment.direction(fruit::TextDirection::BottomToTop).text(text).shape(foobar);
+
+	EXPECT_EQ(std::size(shape_result.glyph_info()), std::size(text));
+
+	auto image = render(shape_result);
+	auto expected = fruit::io_utils::load("testdata/btt Integer sit amet tortor quis ex ornare mollis.dat");
+	EXPECT_EQ(std::ranges::equal(std::as_bytes(make_span(image)), expected), true);
+}
