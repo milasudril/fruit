@@ -3,6 +3,7 @@
 //@	 }
 
 #include "./text_segment.hpp"
+#include "./error_message.hpp"
 
 #include <stdexcept>
 #include <numeric>
@@ -23,10 +24,12 @@ fruit::TextShapeResult::TextShapeResult(uint32_t num_glyphs,
 							hb_glyph_info_t const* info,
 							hb_glyph_position_t const* geom,
 							std::reference_wrapper<FontFace const> font,
-							TextDirection direction):
+							TextDirection direction,
+							int char_height):
 	m_glyph_count{num_glyphs},
 	m_font{font},
-	m_direction{direction}
+	m_direction{direction},
+	m_char_height{char_height}
 {
 	auto glyph_info = std::make_unique<GlyphInfo[]>(num_glyphs);
 	auto glyph_geom = std::make_unique<GlyphGeometry[]>(num_glyphs);
@@ -51,7 +54,7 @@ fruit::TextShapeResult::TextShapeResult(uint32_t num_glyphs,
 
 namespace
 {
-	fruit::ViewportSize bounding_box_vertical(fruit::TextShapeResult const& shape_result)
+	fruit::ViewportSize bounding_box_vertical(fruit::TextShapeResult const& shape_result, int size)
 	{
 		auto const geom = shape_result.glyph_geometry();
 		auto const glyphs = shape_result.glyph_info();
@@ -60,7 +63,7 @@ namespace
 		auto width = 0;
 		for(size_t k = 0; k < std::size(glyphs); ++k)
 		{
-			auto const glyph = shape_result.font().render(glyphs[k].index, shape_result.direction());
+			auto const glyph = shape_result.font().render(glyphs[k].index, shape_result.direction(), size);
 			auto const src = glyph.image;
 			width = std::max(width, src.width());
 			location += geom[k].cursor_increment;
@@ -73,12 +76,13 @@ namespace
 	{
 		auto const geom = shape_result.glyph_geometry();
 		auto const glyphs = shape_result.glyph_info();
+		auto const size = shape_result.char_height();
 
 		auto location = fruit::Origin<int>;
 		auto height = 0;
 		for(size_t k = 0; k < std::size(glyphs); ++k)
 		{
-			auto const glyph = shape_result.font().render(glyphs[k].index, shape_result.direction());
+			auto const glyph = shape_result.font().render(glyphs[k].index, shape_result.direction(), size);
 			auto const src = glyph.image;
 			auto const render_pos = (location + geom[k].render_offset - fruit::Origin<int>)/64 + glyph.render_offset;
 			height = std::max(height, render_pos.y() + src.height());
@@ -90,14 +94,18 @@ namespace
 
 	fruit::Image<uint8_t> render_horizontal(fruit::TextShapeResult const& shape_result)
 	{
+		auto const size = shape_result.char_height();
 		auto bb = bounding_box_horizontal(shape_result);
+		FRUIT_ASSERT(bb.width > 0);
+		FRUIT_ASSERT(bb.height > 0);
+
 		fruit::Image<uint8_t> buffer{bb.width, bb.height};
 		auto glyphs = shape_result.glyph_info();
 		auto geom = shape_result.glyph_geometry();
 		auto location = fruit::Origin<int>;
 		for(size_t k = 0; k < std::size(glyphs); ++k)
 		{
-			auto const glyph = shape_result.font().render(glyphs[k].index, shape_result.direction());
+			auto const glyph = shape_result.font().render(glyphs[k].index, shape_result.direction(), size);
 			auto const src = glyph.image;
 			auto render_pos = (location + geom[k].render_offset - fruit::Origin<int>)/64 + glyph.render_offset;
 			for(int k = 0; k < src.height(); ++k)
@@ -114,14 +122,18 @@ namespace
 
 	fruit::Image<uint8_t> render_vertical(fruit::TextShapeResult const& shape_result)
 	{
-		auto bb = bounding_box_vertical(shape_result);
+		auto const size = shape_result.char_height();
+		auto bb = bounding_box_vertical(shape_result, size);
+		FRUIT_ASSERT(bb.width > 0);
+		FRUIT_ASSERT(bb.height > 0);
+
 		fruit::Image<uint8_t> buffer{bb.width, bb.height};
 		auto glyphs = shape_result.glyph_info();
 		auto geom = shape_result.glyph_geometry();
 		auto location = fruit::Origin<int>;
 		for(size_t k = 0; k < std::size(glyphs); ++k)
 		{
-			auto const glyph = shape_result.font().render(glyphs[k].index, shape_result.direction());
+			auto const glyph = shape_result.font().render(glyphs[k].index, shape_result.direction(), size);
 			auto const src = glyph.image;
 			auto render_pos = (location + geom[k].render_offset.y()*fruit::Y<int> - fruit::Origin<int>)/64
 				+ glyph.render_offset
@@ -169,11 +181,12 @@ fruit::TextShapeResult fruit::TextSegment::shape_impl(TextShaper const& shaper) 
 {
 	auto const handle = m_handle.get();
 	auto const shaper_ref = shaper.native_handle();
-
+	FT_Set_Pixel_Sizes(shaper.font().native_handle(), 0, shaper.char_height());
+	hb_ft_font_changed(shaper_ref);
 	hb_shape(shaper_ref, handle, nullptr, 0);
 	unsigned int glyph_count{};
 	auto const glyph_info = hb_buffer_get_glyph_infos(handle, &glyph_count);
 	auto const glyph_pos = hb_buffer_get_glyph_positions(handle, &glyph_count);
 
-	return TextShapeResult{glyph_count, glyph_info, glyph_pos, shaper.font(), direction()};
+	return TextShapeResult{glyph_count, glyph_info, glyph_pos, shaper.font(), direction(), shaper.char_height()};
 }

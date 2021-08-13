@@ -40,9 +40,10 @@ namespace fruit
 	class TextShaper
 	{
 	public:
-		explicit TextShaper(std::reference_wrapper<FontFace const> face):
+		explicit TextShaper(std::reference_wrapper<FontFace const> face, int char_height = 16):
 		m_face{face},
-		m_handle{hb_ft_font_create(face.get().native_handle(), nullptr)}
+		m_handle{hb_ft_font_create(face.get().native_handle(), nullptr)},
+		m_char_height{char_height}
 		{
 			if(m_handle == nullptr)
 			{ throw text_shaper_detail::InitError{}; }
@@ -58,6 +59,11 @@ namespace fruit
 			return m_face.get();
 		}
 
+		int char_height() const
+		{
+			return m_char_height;
+		}
+
 		hb_font_t* native_handle() const
 		{
 			return m_handle.get();
@@ -66,6 +72,7 @@ namespace fruit
 	private:
 		std::reference_wrapper<FontFace const> m_face;
 		std::unique_ptr<hb_font_t, text_shaper_detail::Deleter> m_handle;
+		int m_char_height;
 	};
 }
 

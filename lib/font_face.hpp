@@ -58,34 +58,24 @@ namespace fruit
 		explicit FontFace(std::reference_wrapper<FontfaceLoader const>,
 		                          std::vector<std::byte>&& src_buffer);
 
-		FontFace& char_height(int value)
-		{
-			FT_Set_Pixel_Sizes(m_handle.get(), 0, value);
-			m_size = value;
-			return *this;
-		}
-
-		int char_height() const
-		{
-			return m_size;
-		}
-
-		GlyphRenderResult render(CharCodepoint char_index, TextDirection dir) const
+		GlyphRenderResult render(CharCodepoint char_index, TextDirection dir, int size) const
 		{
 			auto handle = m_handle.get();
+			FT_Set_Pixel_Sizes(handle, 0, size);
 			FT_Load_Char(handle, char_index, FT_LOAD_RENDER);
 			auto& glyph = *handle->glyph;
 			return GlyphRenderResult{ImageView<uint8_t const>{glyph.bitmap.buffer,
 				static_cast<int>(glyph.bitmap.width),
 				static_cast<int>(glyph.bitmap.rows)},
 				is_horizontal(dir) ?
-					Vector{glyph.bitmap_left, char_height() - glyph.bitmap_top, 0}:
+					Vector{glyph.bitmap_left, size - glyph.bitmap_top, 0}:
 					Vector{static_cast<int>(glyph.bitmap.width/2 + glyph.bitmap_left), -glyph.bitmap_top, 0}};
 		}
 
-		GlyphRenderResult render(GlyphIndex index, TextDirection dir) const
+		GlyphRenderResult render(GlyphIndex index, TextDirection dir, int size) const
 		{
 			auto handle = m_handle.get();
+			FT_Set_Pixel_Sizes(handle, 0, size);
 			FT_Load_Glyph(handle, index.value(), FT_LOAD_RENDER);
 			auto& glyph = *handle->glyph;
 
@@ -93,7 +83,7 @@ namespace fruit
 				static_cast<int>(glyph.bitmap.width),
 				static_cast<int>(glyph.bitmap.rows)},
 				is_horizontal(dir) ?
-					Vector{glyph.bitmap_left, char_height() - glyph.bitmap_top, 0}:
+					Vector{glyph.bitmap_left, size - glyph.bitmap_top, 0}:
 					Vector{0, -glyph.bitmap_top, 0}};
 		}
 

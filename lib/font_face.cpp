@@ -42,5 +42,4 @@ fruit::FontFace::FontFace(std::reference_wrapper<FontfaceLoader const> ft,
 		throw FontfaceLoadError{};
 	}
 	m_handle.reset(face);
-	char_height(16);
 }

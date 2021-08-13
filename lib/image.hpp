@@ -3,6 +3,8 @@
 
 #include "./image_view.hpp"
 
+#include <memory>
+
 namespace fruit
 {
 	template<class T>

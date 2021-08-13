@@ -53,7 +53,8 @@ namespace fruit
 		                         hb_glyph_info_t const* info,
 		                         hb_glyph_position_t const* geom,
 		                         std::reference_wrapper<FontFace const> font,
-		                         TextDirection direction);
+		                         TextDirection direction,
+		                         int char_height);
 
 		std::span<GlyphInfo const> glyph_info() const
 		{
@@ -72,6 +73,11 @@ namespace fruit
 			return m_font;
 		}
 
+		int char_height() const
+		{
+			return m_char_height;
+		}
+
 		TextDirection direction() const
 		{
 			return m_direction;
@@ -83,9 +89,8 @@ namespace fruit
 		std::unique_ptr<GlyphGeometry[]> m_glyph_geometry;
 		std::reference_wrapper<FontFace const> m_font;
 		TextDirection m_direction;
+		int m_char_height;
 	};
-
-	ViewportSize bounding_box(TextShapeResult const& shape_result);
 
 	Image<uint8_t> render(TextShapeResult const& res);
 
