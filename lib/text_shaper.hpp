@@ -5,7 +5,7 @@
 #ifndef FRUIT_TEXTSHAPER_HPP
 #define FRUIT_TEXTSHAPER_HPP
 
-#include "./freetype_fontface_loader.hpp"
+#include "./font_face.hpp"
 #include "./point.hpp"
 
 #include <hb.h>
@@ -40,7 +40,7 @@ namespace fruit
 	class TextShaper
 	{
 	public:
-		explicit TextShaper(std::reference_wrapper<FreetypeFontFace const> face):
+		explicit TextShaper(std::reference_wrapper<FontFace const> face):
 		m_face{face},
 		m_handle{hb_ft_font_create(face.get().native_handle(), nullptr)}
 		{
@@ -53,7 +53,7 @@ namespace fruit
 			return m_handle != nullptr;
 		}
 
-		FreetypeFontFace const& font() const
+		FontFace const& font() const
 		{
 			return m_face.get();
 		}
@@ -64,7 +64,7 @@ namespace fruit
 		}
 
 	private:
-		std::reference_wrapper<FreetypeFontFace const> m_face;
+		std::reference_wrapper<FontFace const> m_face;
 		std::unique_ptr<hb_font_t, text_shaper_detail::Deleter> m_handle;
 	};
 }

@@ -52,8 +52,8 @@ TESTCASE(TextSegmentScript)
 
 TESTCASE(TextSegmentShapeSwedish)
 {
-	fruit::FreetypeFontfaceLoader loader;
-	fruit::FreetypeFontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
+	fruit::FontfaceLoader loader;
+	fruit::FontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
 	fruit::TextShaper foobar{face};
 
 	fruit::TextSegment segment;
@@ -73,8 +73,8 @@ TESTCASE(TextSegmentShapeSwedish)
 
 TESTCASE(TextSegmentShapeBrittish)
 {
-	fruit::FreetypeFontfaceLoader loader;
-	fruit::FreetypeFontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
+	fruit::FontfaceLoader loader;
+	fruit::FontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
 	fruit::TextShaper foobar{face};
 
 	fruit::TextSegment segment;
@@ -91,8 +91,8 @@ TESTCASE(TextSegmentShapeBrittish)
 
 TESTCASE(TextSegmentShapeGerman)
 {
-	fruit::FreetypeFontfaceLoader loader;
-	fruit::FreetypeFontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
+	fruit::FontfaceLoader loader;
+	fruit::FontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
 	fruit::TextShaper foobar{face};
 
 	fruit::TextSegment segment;
@@ -108,8 +108,8 @@ TESTCASE(TextSegmentShapeGerman)
 
 TESTCASE(TextSegmentShapeFrance)
 {
-	fruit::FreetypeFontfaceLoader loader;
-	fruit::FreetypeFontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
+	fruit::FontfaceLoader loader;
+	fruit::FontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
 	fruit::TextShaper foobar{face};
 
 	fruit::TextSegment segment;
@@ -125,8 +125,8 @@ TESTCASE(TextSegmentShapeFrance)
 
 TESTCASE(TextSegmentShapeNorwegian)
 {
-	fruit::FreetypeFontfaceLoader loader;
-	fruit::FreetypeFontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
+	fruit::FontfaceLoader loader;
+	fruit::FontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
 	fruit::TextShaper foobar{face};
 
 	fruit::TextSegment segment;
@@ -142,8 +142,8 @@ TESTCASE(TextSegmentShapeNorwegian)
 
 TESTCASE(TextSegmentShapeIcelandic)
 {
-	fruit::FreetypeFontfaceLoader loader;
-	fruit::FreetypeFontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
+	fruit::FontfaceLoader loader;
+	fruit::FontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
 	fruit::TextShaper foobar{face};
 
 	fruit::TextSegment segment;
@@ -159,8 +159,8 @@ TESTCASE(TextSegmentShapeIcelandic)
 
 TESTCASE(TextSegmentShapeCheck)
 {
-	fruit::FreetypeFontfaceLoader loader;
-	fruit::FreetypeFontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
+	fruit::FontfaceLoader loader;
+	fruit::FontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
 	fruit::TextShaper foobar{face};
 
 	fruit::TextSegment segment;
@@ -176,8 +176,8 @@ TESTCASE(TextSegmentShapeCheck)
 
 TESTCASE(TextSegmentShapeRightToLeft)
 {
-	fruit::FreetypeFontfaceLoader loader;
-	fruit::FreetypeFontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
+	fruit::FontfaceLoader loader;
+	fruit::FontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
 	fruit::TextShaper foobar{face};
 
 	fruit::TextSegment segment;
@@ -193,8 +193,8 @@ TESTCASE(TextSegmentShapeRightToLeft)
 
 TESTCASE(TextSegmentShapeTopToBottom)
 {
-	fruit::FreetypeFontfaceLoader loader;
-	fruit::FreetypeFontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
+	fruit::FontfaceLoader loader;
+	fruit::FontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
 	fruit::TextShaper foobar{face};
 
 	fruit::TextSegment segment;
@@ -210,8 +210,8 @@ TESTCASE(TextSegmentShapeTopToBottom)
 
 TESTCASE(TextSegmentShapeBottomToTop)
 {
-	fruit::FreetypeFontfaceLoader loader;
-	fruit::FreetypeFontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
+	fruit::FontfaceLoader loader;
+	fruit::FontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
 	fruit::TextShaper foobar{face};
 
 	fruit::TextSegment segment;

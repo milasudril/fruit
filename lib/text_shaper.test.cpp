@@ -11,8 +11,8 @@
 
 TESTCASE(TextShaperCreateAndMove)
 {
-	fruit::FreetypeFontfaceLoader loader;
-	fruit::FreetypeFontFace face{loader, fruit::io_utils::load(fruit::FontMapper{}.get_path("DejaVu Sans"))};
+	fruit::FontfaceLoader loader;
+	fruit::FontFace face{loader, fruit::io_utils::load(fruit::FontMapper{}.get_path("DejaVu Sans"))};
 	fruit::TextShaper foobar{face};
 
 	EXPECT_EQ(foobar.valid(), true)

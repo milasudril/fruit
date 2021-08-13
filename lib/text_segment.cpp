@@ -22,7 +22,7 @@ namespace
 fruit::TextShapeResult::TextShapeResult(uint32_t num_glyphs,
 							hb_glyph_info_t const* info,
 							hb_glyph_position_t const* geom,
-							std::reference_wrapper<FreetypeFontFace const> font,
+							std::reference_wrapper<FontFace const> font,
 							TextDirection direction):
 	m_glyph_count{num_glyphs},
 	m_font{font},

@@ -1,19 +1,19 @@
-//@	{ "target": {"name":"freetype_fontface_loader.o"}}
+//@	{ "target": {"name":"font_face.o"}}
 
-#include "./freetype_fontface_loader.hpp"
+#include "./font_face.hpp"
 
 #include <stdexcept>
 
 namespace
 {
-	class FreetypeInitError:public std::exception
+	class FontfaceLoaderInitError:public std::exception
 	{
 	public:
 		char const* what() const noexcept override
 		{ return "Failed to create a FreeType instance"; }
 	};
 
-	class FreetypeLoadError:public std::exception
+	class FontfaceLoadError:public std::exception
 	{
 	public:
 		char const* what() const noexcept override
@@ -21,16 +21,16 @@ namespace
 	};
 }
 
-fruit::FreetypeFontfaceLoader::FreetypeFontfaceLoader()
+fruit::FontfaceLoader::FontfaceLoader()
 {
 	FT_Library handle{};
 	if(auto res = FT_Init_FreeType(&handle); res != FT_Err_Ok)
-	{ throw FreetypeInitError{}; }
+	{ throw FontfaceLoaderInitError{}; }
 
 	m_handle.reset(handle);
 }
 
-fruit::FreetypeFontFace::FreetypeFontFace(std::reference_wrapper<FreetypeFontfaceLoader const> ft,
+fruit::FontFace::FontFace(std::reference_wrapper<FontfaceLoader const> ft,
 	                                      std::vector<std::byte>&& src_buffer):
 	m_data{std::move(src_buffer)}
 {
@@ -39,7 +39,7 @@ fruit::FreetypeFontFace::FreetypeFontFace(std::reference_wrapper<FreetypeFontfac
 		reinterpret_cast<FT_Byte const*>(std::data(m_data)), std::size(m_data),
 		0, &face) != FT_Err_Ok)
 	{
-		throw FreetypeLoadError{};
+		throw FontfaceLoadError{};
 	}
 	m_handle.reset(face);
 	char_height(16);

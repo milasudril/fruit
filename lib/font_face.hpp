@@ -1,10 +1,10 @@
 //@	{
-//@	 "dependencies_extra":[{"ref":"./freetype_fontface_loader.o", "rel":"implementation"}]
+//@	 "dependencies_extra":[{"ref":"./font_face.o", "rel":"implementation"}]
 //@	,"dependencies":[{"ref":"freetype2","origin":"pkg-config"}]
 //@	}
 
-#ifndef FRUIT_FREETYPE_FONTFACE_LOADER_HPP
-#define FRUIT_FREETYPE_FONTFACE_LOADER_HPP
+#ifndef FRUIT_FONTFACE_HPP
+#define FRUIT_FONTFACE_HPP
 
 #include "./image_view.hpp"
 #include "./vector.hpp"
@@ -22,9 +22,9 @@
 
 namespace fruit
 {
-	class FreetypeFontfaceLoader;
+	class FontfaceLoader;
 
-	namespace freetype_detail
+	namespace detail
 	{
 		struct Deleter
 		{
@@ -52,13 +52,13 @@ namespace fruit
 		Vector<int> render_offset;
 	};
 
-	class FreetypeFontFace
+	class FontFace
 	{
 	public:
-		explicit FreetypeFontFace(std::reference_wrapper<FreetypeFontfaceLoader const>,
+		explicit FontFace(std::reference_wrapper<FontfaceLoader const>,
 		                          std::vector<std::byte>&& src_buffer);
 
-		FreetypeFontFace& char_height(int value)
+		FontFace& char_height(int value)
 		{
 			FT_Set_Pixel_Sizes(m_handle.get(), 0, value);
 			m_size = value;
@@ -101,23 +101,21 @@ namespace fruit
 		{return m_handle.get();}
 
 	private:
-		std::unique_ptr<std::remove_pointer_t<FT_Face>, freetype_detail::Deleter> m_handle;
+		std::unique_ptr<std::remove_pointer_t<FT_Face>, detail::Deleter> m_handle;
 		std::vector<std::byte> m_data;
 		int m_size;
 	};
 
-	class FreetypeFontfaceLoader
+	class FontfaceLoader
 	{
 	public:
-		using FontFace = FreetypeFontFace;
-
-		FreetypeFontfaceLoader();
+		FontfaceLoader();
 
 		FT_Library native_handle() const
 		{ return m_handle.get(); }
 
 	private:
-		std::unique_ptr<std::remove_pointer_t<FT_Library>, freetype_detail::Deleter> m_handle;
+		std::unique_ptr<std::remove_pointer_t<FT_Library>, detail::Deleter> m_handle;
 	};
 }
 
