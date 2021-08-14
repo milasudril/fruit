@@ -11,9 +11,9 @@ namespace fruit
 {
 	struct Rectangle
 	{
-		ViewportSize handle(SizeRequestEvent const&) const
+		SizeRequestResult handle(SizeRequestEvent const&) const
 		{
-			return ViewportSize{width, height};
+			return SizeRequestResult{ViewportSize{width, height}, ViewportSize{width, height}};
 		}
 
 		void handle(GeometryUpdateEvent const& event)

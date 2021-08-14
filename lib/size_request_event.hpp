@@ -5,9 +5,15 @@
 
 namespace fruit
 {
+	struct SizeRequestResult
+	{
+		ViewportSize min_size;
+		ViewportSize max_size;
+	};
+
 	struct SizeRequestEvent
 	{
-		using result_type =  ViewportSize;
+		using result_type =  SizeRequestResult;
 	};
 }
 

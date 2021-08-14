@@ -11,9 +11,9 @@ namespace
 		fruit::ViewportSize size;
 		fruit::Point<int> location;
 
-		fruit::ViewportSize handle(fruit::SizeRequestEvent const&) const
+		fruit::SizeRequestResult handle(fruit::SizeRequestEvent const&) const
 		{
-			return size;
+			return fruit::SizeRequestResult{size, size};
 		}
 
 		void handle(fruit::GeometryUpdateEvent const& event)
@@ -36,7 +36,7 @@ TESTCASE(LineLayoutSizeRequest)
 	layout.push_back(fruit::LayoutBox{std::ref(b)});
 	layout.push_back(fruit::LayoutBox{std::ref(c)});
 
-	auto size = layout.handle(fruit::SizeRequestEvent{});
+	auto size = layout.handle(fruit::SizeRequestEvent{}).min_size;
 	EXPECT_EQ(size.width, 3);
 	EXPECT_EQ(size.height, 9);
 }
