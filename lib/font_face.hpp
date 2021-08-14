@@ -55,6 +55,8 @@ namespace fruit
 	class FontFace
 	{
 	public:
+		FontFace() = default;
+
 		explicit FontFace(std::reference_wrapper<FontfaceLoader const>,
 		                          std::vector<std::byte>&& src_buffer);
 

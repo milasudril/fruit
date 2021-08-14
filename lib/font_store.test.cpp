@@ -6,52 +6,24 @@
 
 #include "testfwk/testfwk.hpp"
 
-TESTCASE(FontStoreLoadFile)
+TESTCASE(FontStoreLoadAndGet)
 {
 	::fruit::FontStore store;
-	auto res = store.load("testdata/DejaVuSans.ttf");
-	EXPECT_EQ(res.name, "DejaVu Sans/Book");
-	EXPECT_EQ(res.font.get().valid(), true);
+	auto res1 = store.load("testdata/DejaVuSans.ttf");
+	EXPECT_EQ(res1.name, "DejaVu Sans/Book");
+	EXPECT_EQ(res1.font->valid(), true);
+
+	::fruit::FontMapper mapper;
+	auto res2 = store.load(mapper, "DejaVu Serif");
+	EXPECT_EQ(res2.name, "DejaVu Serif/Book");
+	EXPECT_EQ(res2.font->valid(), true);
+
+	auto res1_found = store.find("DejaVu Sans/Book");
+	EXPECT_EQ(res1_found.font, res1.font);
+
+	auto res2_found = store.find("DejaVu Serif/Book");
+	EXPECT_EQ(res2_found.font, res2.font);
+
+	auto res_not_found = store.find("Bajs");
+	EXPECT_EQ(res_not_found.font, nullptr)
 }
-
-#if 0
-#ifndef FRUIT_FONTSTORE_HPP
-#define FRUIT_FONTSTORE_HPP
-
-#include "./io_utils.hpp"
-#include "./font_face.hpp"
-
-#include <map>
-
-namespace fruit
-{
-	struct FontResource
-	{
-		std::string_view name;
-		std::reference_wrapper<FontFace const> font;
-	};
-
-	class FontStore
-	{
-	public:
-		FontResource load(std::vector<std::byte>&& buffer);
-
-		template<class Source>
-		requires requires(Source s)
-		{
-			{io_utils::load(s)} -> std::same_as<std::vector<std::byte>>;
-		}
-		FontResource load(Source&& src)
-		{
-			return load(io_utils::load(std::forward<Source>(src)));
-		}
-
-
-	private:
-		std::map<std::string, FontFace> m_fonts;
-		FontfaceLoader m_loader;
-	};
-}
-
-#endif
-#endif

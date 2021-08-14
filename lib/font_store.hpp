@@ -7,6 +7,7 @@
 
 #include "./io_utils.hpp"
 #include "./font_face.hpp"
+#include "./font_mapper.hpp"
 
 #include <map>
 
@@ -15,7 +16,7 @@ namespace fruit
 	struct FontResource
 	{
 		std::string_view name;
-		std::reference_wrapper<FontFace const> font;
+		FontFace const* font;
 	};
 
 	class FontStore
@@ -33,10 +34,25 @@ namespace fruit
 			return load(io_utils::load(std::forward<Source>(src)));
 		}
 
+		FontResource load(FontMapper const& font_mapper, char const* name)
+		{
+			return load(font_mapper.get_path(name));
+		}
+
+		FontResource find(std::string_view item) const
+		{
+			auto i = m_fonts.find(item);
+			if(i == std::end(m_fonts))
+			{
+				return FontResource{item, nullptr};
+			}
+
+			return FontResource{i->first, &i->second};
+		}
 
 	private:
 		FontfaceLoader m_loader;
-		std::map<std::string, FontFace> m_fonts;
+		std::map<std::string, FontFace, std::less<>> m_fonts;
 	};
 }
 

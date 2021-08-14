@@ -13,5 +13,5 @@ fruit::FontResource fruit::FontStore::load(std::vector<std::byte>&& buffer)
 
 	auto ip = m_fonts.insert_or_assign(std::move(name), std::move(face));
 
-	return FontResource{ip.first->first, ip.first->second};
+	return FontResource{ip.first->first, &ip.first->second};
 }
