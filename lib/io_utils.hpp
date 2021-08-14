@@ -10,10 +10,39 @@
 
 namespace fruit::io_utils
 {
+	void store(std::span<std::byte const> data, std::filesystem::path const& path);
+
+	using WriteCallback = size_t (*)(void*, std::span<std::byte const>);
+
+	void store(std::span<std::byte const> data, void* sink, WriteCallback write_callback);
+
+	template<class OutputStream>
+	requires requires(OutputStream s)
+	{
+		{write(s, std::declval<std::span<std::byte const>>())} -> std::same_as<size_t>;
+	}
+	void store(std::span<std::byte const> buffer, OutputStream&& sink)
+	{
+		store(buffer, &sink, [](void* handle, std::span<std::byte> buffer){
+			return write(*static_cast<OutputStream*>(handle), buffer);
+		});
+	}
+
+	template<class OutputStream>
+	requires requires(OutputStream s)
+	{
+		{s(std::declval<std::span<std::byte const>>())} -> std::same_as<size_t>;
+	}
+	void store(std::span<std::byte const> buffer, OutputStream&& sink)
+	{
+		store(buffer, &sink, [](void* handle, std::span<std::byte const> buffer){
+			return (*static_cast<OutputStream*>(handle))(buffer);
+		});
+	}
+
+
 	std::vector<std::byte> load(std::filesystem::path const& path,
 								size_t max_num_bytes = std::numeric_limits<size_t>::max());
-
-	void store(std::span<std::byte const> data, std::filesystem::path const& path);
 
 	using ReadCallback = size_t (*)(void*, std::span<std::byte>);
 
