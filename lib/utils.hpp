@@ -15,6 +15,8 @@ namespace fruit
 			return a + b;
 		});
 
+		sum = (sum == T{0}) ? T{1} : sum;
+
 		std::ranges::for_each(std::begin(values), std::end(values), [sum](auto& val){
 			val /= sum;
 		});
