@@ -46,9 +46,10 @@ namespace fruit
 			return load_and_replace(std::move(resource_name), io_utils::load(std::forward<Source>(src)));
 		}
 
-		FontResource load_and_replace(FontMapper const& font_mapper, char const* name)
+		FontResource load_and_replace(std::string&& name, FontMapper const& font_mapper)
 		{
-			return load_and_replace(name, font_mapper.get_path(name));
+			auto path = font_mapper.get_path(name.c_str());
+			return load_and_replace(std::move(name), std::move(path));
 		}
 
 		FontResource find(std::string_view item) const
@@ -60,6 +61,15 @@ namespace fruit
 			}
 
 			return FontResource{i->first, &i->second};
+		}
+
+		template<class Source>
+		FontResource get_or_load(std::string_view resource_name, Source&& source)
+		{
+			if(auto ret = find(resource_name); ret.font != nullptr)
+			{ return ret; }
+
+			return load_and_replace(std::string{resource_name}, std::move(source));
 		}
 
 	private:
