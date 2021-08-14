@@ -18,9 +18,7 @@ namespace fruit::io_utils
 
 	template<class OutputStream>
 	requires requires(OutputStream s)
-	{
-		{write(s, std::declval<std::span<std::byte const>>())} -> std::same_as<size_t>;
-	}
+	{ { write(s, std::declval<std::span<std::byte const>>())} -> std::same_as<size_t>; }
 	void store(std::span<std::byte const> buffer, OutputStream&& sink)
 	{
 		store(buffer, &sink, [](void* handle, std::span<std::byte> buffer){
@@ -30,9 +28,7 @@ namespace fruit::io_utils
 
 	template<class OutputStream>
 	requires requires(OutputStream s)
-	{
-		{s(std::declval<std::span<std::byte const>>())} -> std::same_as<size_t>;
-	}
+	{ { s(std::declval<std::span<std::byte const>>()) } -> std::same_as<size_t>; }
 	void store(std::span<std::byte const> buffer, OutputStream&& sink)
 	{
 		store(buffer, &sink, [](void* handle, std::span<std::byte const> buffer){
@@ -50,9 +46,7 @@ namespace fruit::io_utils
 
 	template<class InputStream>
 	requires requires(InputStream s)
-	{
-		{read(s, std::declval<std::span<std::byte>>())} -> std::same_as<size_t>;
-	}
+	{{read(s, std::declval<std::span<std::byte>>())} -> std::same_as<size_t>;}
 	std::vector<std::byte> load(InputStream&& source,
 	                            size_t max_num_bytes = std::numeric_limits<size_t>::max())
 	{
@@ -63,9 +57,7 @@ namespace fruit::io_utils
 
 	template<class InputStream>
 	requires requires(InputStream s)
-	{
-		{s(std::declval<std::span<std::byte>>())} -> std::same_as<size_t>;
-	}
+	{ { s(std::declval<std::span<std::byte>>()) } -> std::same_as<size_t>; }
 	std::vector<std::byte> load(InputStream&& source,
 	                            size_t max_num_bytes = std::numeric_limits<size_t>::max())
 	{

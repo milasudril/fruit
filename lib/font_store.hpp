@@ -32,9 +32,7 @@ namespace fruit
 
 		template<class Source>
 		requires requires(Source s)
-		{
-			{io_utils::load(s)} -> std::same_as<std::vector<std::byte>>;
-		}
+		{ {io_utils::load(s)} -> std::same_as<std::vector<std::byte>>; }
 		FontResource load_and_replace(Source&& src)
 		{
 			return load_and_replace(io_utils::load(std::forward<Source>(src)));
@@ -42,9 +40,7 @@ namespace fruit
 
 		template<class Source>
 		requires requires(Source s)
-		{
-			{io_utils::load(s)} -> std::same_as<std::vector<std::byte>>;
-		}
+		{ { io_utils::load(s)} -> std::same_as<std::vector<std::byte>>; }
 		FontResource load_and_replace(std::string&& resource_name, Source&& src)
 		{
 			return load_and_replace(std::move(resource_name), io_utils::load(std::forward<Source>(src)));
