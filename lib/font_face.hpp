@@ -88,17 +88,16 @@ namespace fruit
 		}
 
 		FT_Face native_handle() const
-		{return m_handle.get();}
+		{ return m_handle.get(); }
 
 		char const* family() const
-		{
-			return m_handle->family_name;
-		}
+		{ return m_handle->family_name; }
 
 		char const* style() const
-		{
-			return m_handle->style_name;
-		}
+		{ return m_handle->style_name; }
+
+		bool valid() const
+		{ return m_handle != nullptr; }
 
 	private:
 		std::unique_ptr<std::remove_pointer_t<FT_Face>, detail::Deleter> m_handle;
