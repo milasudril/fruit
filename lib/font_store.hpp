@@ -22,21 +22,37 @@ namespace fruit
 	class FontStore
 	{
 	public:
-		FontResource load(std::vector<std::byte>&& buffer);
+		FontResource load_and_replace(std::vector<std::byte>&& buffer);
+
+		FontResource load_and_replace(std::string&& resource_name, std::vector<std::byte>&& buffer)
+		{
+			auto ip = m_fonts.insert_or_assign(std::move(resource_name), fruit::FontFace{m_loader, std::move(buffer)});
+			return FontResource{ip.first->first, &ip.first->second};
+		}
 
 		template<class Source>
 		requires requires(Source s)
 		{
 			{io_utils::load(s)} -> std::same_as<std::vector<std::byte>>;
 		}
-		FontResource load(Source&& src)
+		FontResource load_and_replace(Source&& src)
 		{
-			return load(io_utils::load(std::forward<Source>(src)));
+			return load_and_replace(io_utils::load(std::forward<Source>(src)));
 		}
 
-		FontResource load(FontMapper const& font_mapper, char const* name)
+		template<class Source>
+		requires requires(Source s)
 		{
-			return load(font_mapper.get_path(name));
+			{io_utils::load(s)} -> std::same_as<std::vector<std::byte>>;
+		}
+		FontResource load_and_replace(std::string&& resource_name, Source&& src)
+		{
+			return load_and_replace(std::move(resource_name), io_utils::load(std::forward<Source>(src)));
+		}
+
+		FontResource load_and_replace(FontMapper const& font_mapper, char const* name)
+		{
+			return load_and_replace(name, font_mapper.get_path(name));
 		}
 
 		FontResource find(std::string_view item) const

@@ -4,7 +4,7 @@
 
 #include "./font_store.hpp"
 
-fruit::FontResource fruit::FontStore::load(std::vector<std::byte>&& buffer)
+fruit::FontResource fruit::FontStore::load_and_replace(std::vector<std::byte>&& buffer)
 {
 	fruit::FontFace face{m_loader,std::move(buffer)};
 
@@ -15,3 +15,4 @@ fruit::FontResource fruit::FontStore::load(std::vector<std::byte>&& buffer)
 
 	return FontResource{ip.first->first, &ip.first->second};
 }
+
