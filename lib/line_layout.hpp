@@ -1,3 +1,5 @@
+//@	{"dependencies_extra":[{"ref":"./line_layout.o", "rel":"implementation"}]}
+
 #ifndef FRUIT_COLUMNLAYOUT_HPP
 #define FRUIT_COLUMNLAYOUT_HPP
 
@@ -24,19 +26,7 @@ namespace fruit
 			m_cell_sizes.push_back(0.0f);
 		}
 
-		SizeRequestResult handle(SizeRequestEvent const&) const
-		{
-			auto min_size = std::accumulate(std::begin(m_content), std::end(m_content),
-					                     ViewportSize{0, 0},
-					                     [dir = m_direction](auto a, auto item) {
-					auto const res = item.handle(SizeRequestEvent{});
-					auto const size = res.min_size;
-					return dir == Direction::LeftToRight ?
-						ViewportSize{a.width + size.width, std::max(a.height, size.height)}
-						:ViewportSize{std::max(a.width, size.width), a.height + size.height};
-				});
-			return SizeRequestResult{min_size, min_size};
-		}
+		SizeRequestResult handle(SizeRequestEvent const&) const;
 
 		void handle(GeometryUpdateEvent const& event) const
 		{
