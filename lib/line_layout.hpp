@@ -28,15 +28,7 @@ namespace fruit
 
 		SizeRequestResult handle(SizeRequestEvent const&) const;
 
-		void handle(GeometryUpdateEvent const& event) const
-		{
-			std::ranges::for_each(m_content, [origin = event.location, dir = m_direction](auto item) mutable {
-				auto const res = item.handle(SizeRequestEvent{});
-				auto const size = res.min_size;
-				item.handle(GeometryUpdateEvent{size, origin});
-				origin += dir == Direction::LeftToRight? Vector{size.width, 0, 0} : Vector{0, size.height, 0};
-			});
-		}
+		void handle(GeometryUpdateEvent const& event) const;
 
 		void set_direction(Direction dir)
 		{

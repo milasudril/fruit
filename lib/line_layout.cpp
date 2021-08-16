@@ -15,3 +15,15 @@ fruit::SizeRequestResult fruit::LineLayout::handle(SizeRequestEvent const&) cons
 		});
 	return SizeRequestResult{min_size, min_size};
 }
+
+void fruit::LineLayout::handle(GeometryUpdateEvent const& event) const
+{
+
+
+	std::ranges::for_each(m_content, [origin = event.location, dir = m_direction](auto item) mutable {
+		auto const res = item.handle(SizeRequestEvent{});
+		auto const size = res.min_size;
+		item.handle(GeometryUpdateEvent{size, origin});
+		origin += dir == Direction::LeftToRight? Vector{size.width, 0, 0} : Vector{0, size.height, 0};
+	});
+}
