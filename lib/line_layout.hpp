@@ -23,7 +23,6 @@ namespace fruit
 		void push_back(LayoutBox box)
 		{
 			m_content.push_back(box);
-			m_cell_sizes.push_back(0.0f);
 		}
 
 		SizeRequestResult handle(SizeRequestEvent const&) const;
@@ -33,13 +32,6 @@ namespace fruit
 		void set_direction(Direction dir)
 		{
 			m_direction = dir;
-		}
-
-		void set_cell_sizes(std::vector<float> sizes)
-		{
-			FRUIT_ASSERT(std::size(sizes) == std::size(m_content));
-			normalize_sum(std::span{std::data(sizes), std::size(sizes)});
-			m_cell_sizes = std::move(sizes);
 		}
 
 		Direction get_direction() const
@@ -52,7 +44,6 @@ namespace fruit
 	private:
 		Direction m_direction;
 		std::vector<LayoutBox> m_content;
-		std::vector<float> m_cell_sizes;
 	};
 }
 
