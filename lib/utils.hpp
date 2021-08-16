@@ -1,18 +1,19 @@
 #ifndef FRUIT_UTILS_HPP
 #define FRUIT_UTILS_HPP
 
-#include <concepts>
 #include <span>
 #include <numeric>
 #include <algorithm>
+#include <functional>
 
 namespace fruit
 {
-	template<std::floating_point T>
-	void normalize_sum(std::span<T> values)
+	template<class T, class Projection = std::identity>
+	void normalize_sum(std::span<T> values, Projection&& proj = {})
 	{
-		auto sum = std::accumulate(std::begin(values), std::end(values), T{0}, [](auto a, auto b) {
-			return a + b;
+		auto sum = std::accumulate(std::begin(values), std::end(values), T{0}, [f = std::forward<Projection>(proj)]
+			(auto a, auto b) {
+			return f(a) + f(b);
 		});
 
 		sum = (sum == T{0}) ? T{1} : sum;
@@ -21,6 +22,7 @@ namespace fruit
 			val /= sum;
 		});
 	}
+
 }
 
 #endif
