@@ -1,6 +1,7 @@
 //@	 {"target":{"name":"line_layout.o"}}
 
 #include "./line_layout.hpp"
+#include "./utils.hpp"
 
 fruit::SizeRequestResult fruit::LineLayout::handle(SizeRequestEvent const&) const
 {
@@ -16,9 +17,11 @@ fruit::SizeRequestResult fruit::LineLayout::handle(SizeRequestEvent const&) cons
 	return SizeRequestResult{min_size, min_size};
 }
 
-void fruit::LineLayout::handle(GeometryUpdateEvent const& event) const
+void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 {
-
+	normalize_sum(std::span{std::data(m_content), std::size(m_content)}, [](auto&& item) -> float& {
+		return item.size;
+	});
 
 	std::ranges::for_each(m_content, [origin = event.location, dir = m_direction](auto item) mutable {
 		auto const res = item.event_handler.handle(SizeRequestEvent{});

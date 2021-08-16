@@ -4,7 +4,6 @@
 #define FRUIT_COLUMNLAYOUT_HPP
 
 #include "./layout_manager.hpp"
-#include "./utils.hpp"
 #include "./error_message.hpp"
 
 #include <vector>
@@ -20,14 +19,14 @@ namespace fruit
 
 		explicit LineLayout(Direction dir = Direction::LeftToRight):m_direction{dir}{}
 
-		void push_back(LayoutBox box)
+		void push_back(LayoutBox const& box)
 		{
 			m_content.push_back(box);
 		}
 
 		SizeRequestResult handle(SizeRequestEvent const&) const;
 
-		void handle(GeometryUpdateEvent const& event) const;
+		void handle(GeometryUpdateEvent const& event);
 
 		void set_direction(Direction dir)
 		{
