@@ -7,7 +7,15 @@
 
 namespace fruit
 {
-	using LayoutBox = EventHandler<SizeRequestEvent, GeometryUpdateEvent>;
+	struct LayoutBox
+	{
+		template<class T>
+		explicit LayoutBox(T obj, float s = 0.0f): event_handler{obj}, size{s}
+		{}
+
+		EventHandler<SizeRequestEvent, GeometryUpdateEvent> event_handler;
+		float size;
+	};
 }
 
 #endif

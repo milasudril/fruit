@@ -7,7 +7,7 @@ fruit::SizeRequestResult fruit::LineLayout::handle(SizeRequestEvent const&) cons
 	auto min_size = std::accumulate(std::begin(m_content), std::end(m_content),
 									ViewportSize{0, 0},
 									[dir = m_direction](auto a, auto item) {
-			auto const res = item.handle(SizeRequestEvent{});
+			auto const res = item.event_handler.handle(SizeRequestEvent{});
 			auto const size = res.min_size;
 			return dir == Direction::LeftToRight ?
 				ViewportSize{a.width + size.width, std::max(a.height, size.height)}
@@ -21,9 +21,9 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event) const
 
 
 	std::ranges::for_each(m_content, [origin = event.location, dir = m_direction](auto item) mutable {
-		auto const res = item.handle(SizeRequestEvent{});
+		auto const res = item.event_handler.handle(SizeRequestEvent{});
 		auto const size = res.min_size;
-		item.handle(GeometryUpdateEvent{size, origin});
+		item.event_handler.handle(GeometryUpdateEvent{size, origin});
 		origin += dir == Direction::LeftToRight? Vector{size.width, 0, 0} : Vector{0, size.height, 0};
 	});
 }
