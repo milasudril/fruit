@@ -7,8 +7,7 @@
 #include "./error_message.hpp"
 
 #include <vector>
-#include <algorithm>
-#include <numeric>
+#include <variant>
 
 namespace fruit
 {
@@ -40,9 +39,19 @@ namespace fruit
 
 		size_t widget_count() const { return std::size(m_content); }
 
+		template<class T>
+		void set_width(T&& value)
+		{  m_min_width = std::forward<T>(value);}
+
+		template<class T>
+		void set_height(T&& value)
+		{ m_min_height = std::forward<T>(value);}
+
 	private:
 		Direction m_direction;
 		std::vector<LayoutBox> m_content;
+		std::variant<int, float> m_min_width;
+		std::variant<int, float> m_min_height;
 	};
 }
 

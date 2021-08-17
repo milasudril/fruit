@@ -252,6 +252,7 @@ int main()
 	fruit::LineLayout row_a;
 	row_a.push_back(fruit::LayoutBox{std::ref(rect_a)});
 	row_a.push_back(fruit::LayoutBox{std::ref(rect_b)});
+	row_a.set_width(1.0f);
 
 	fruit::LineLayout row_b;
 	row_b.push_back(fruit::LayoutBox{std::ref(rect_c)});
