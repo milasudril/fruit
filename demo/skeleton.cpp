@@ -257,7 +257,7 @@ int main()
 	row_b.push_back(fruit::LayoutBox{std::ref(rect_c)});
 	row_b.push_back(fruit::LayoutBox{std::ref(rect_d)});
 
-	fruit::LineLayout column{fruit::LineLayout::Direction::UpToDown};
+	fruit::LineLayout column{fruit::LineLayout::Direction::TopToBottom};
 	column.push_back(fruit::LayoutBox{std::ref(row_a)});
 	column.push_back(fruit::LayoutBox{std::ref(row_b)});
 

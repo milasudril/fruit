@@ -26,7 +26,7 @@ namespace
 
 TESTCASE(LineLayoutSizeRequest)
 {
-	fruit::LineLayout layout{fruit::LineLayout::Direction::UpToDown};
+	fruit::LineLayout layout{fruit::LineLayout::Direction::TopToBottom};
 
 	Object a{fruit::ViewportSize{2, 3}, fruit::Origin<int>};
 	Object b{fruit::ViewportSize{3, 2}, fruit::Origin<int>};
@@ -43,7 +43,7 @@ TESTCASE(LineLayoutSizeRequest)
 
 TESTCASE(LineLayoutGeometryUpdate)
 {
-	fruit::LineLayout layout{fruit::LineLayout::Direction::UpToDown};
+	fruit::LineLayout layout{fruit::LineLayout::Direction::TopToBottom};
 
 	fruit::ViewportSize size_a{2, 3};
 	fruit::ViewportSize size_b{3, 2};
@@ -73,7 +73,7 @@ TESTCASE(LineLayoutGeometryUpdate)
 
 TESTCASE(LineLayoutGeometryUpdateNoConstraints)
 {
-	fruit::LineLayout layout{fruit::LineLayout::Direction::UpToDown};
+	fruit::LineLayout layout{fruit::LineLayout::Direction::TopToBottom};
 
 	fruit::ViewportSize size_a{2, 0};
 	fruit::ViewportSize size_b{3, 0};
@@ -103,7 +103,7 @@ TESTCASE(LineLayoutGeometryUpdateNoConstraints)
 
 TESTCASE(LineLayoutGeometryUpdatePartialConstraints)
 {
-	fruit::LineLayout layout{fruit::LineLayout::Direction::UpToDown};
+	fruit::LineLayout layout{fruit::LineLayout::Direction::TopToBottom};
 
 	fruit::ViewportSize size_a{2, 0};
 	fruit::ViewportSize size_b{3, 2};
