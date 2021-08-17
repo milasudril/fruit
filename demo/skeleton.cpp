@@ -238,7 +238,7 @@ int main()
 	rect_b.width=300;
 	rect_b.height=200;
 	rect_b.color = fruit::green();
-
+#if 0
 	fruit::Rectangle rect_c;
 	rect_c.width=300;
 	rect_c.height=200;
@@ -248,19 +248,20 @@ int main()
 	rect_d.width=300;
 	rect_d.height=300;
 	rect_d.color = fruit::yellow();
+#endif
 
 	fruit::LineLayout row_a;
 	row_a.push_back(fruit::LayoutBox{std::ref(rect_a), 0.6f});
-	row_a.push_back(fruit::LayoutBox{std::ref(rect_b)});
+	row_a.push_back(fruit::LayoutBox{std::ref(rect_b), 0.4f});
 	row_a.set_width(1.0f);
 
-	fruit::LineLayout row_b;
-	row_b.push_back(fruit::LayoutBox{std::ref(rect_c)});
-	row_b.push_back(fruit::LayoutBox{std::ref(rect_d)});
+//	fruit::LineLayout row_b;
+//	row_b.push_back(fruit::LayoutBox{std::ref(rect_c)});
+//	row_b.push_back(fruit::LayoutBox{std::ref(rect_d)});
 
-	fruit::LineLayout column{fruit::LineLayout::Direction::TopToBottom};
-	column.push_back(fruit::LayoutBox{std::ref(row_a)});
-	column.push_back(fruit::LayoutBox{std::ref(row_b)});
+//	fruit::LineLayout column{fruit::LineLayout::Direction::TopToBottom};
+//	column.push_back(fruit::LayoutBox{std::ref(row_a)});
+//	column.push_back(fruit::LayoutBox{std::ref(row_b)});
 
 	Ui<Texture> ui;
 
@@ -292,9 +293,9 @@ int main()
 
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_a)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_b)}, fruit::DeviceId{-1});
-	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_c)}, fruit::DeviceId{-1});
-	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_d)}, fruit::DeviceId{-1});
-	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(column)}, fruit::DeviceId{-1});
+//	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_c)}, fruit::DeviceId{-1});
+//	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_d)}, fruit::DeviceId{-1});
+	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(row_a)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);
 
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
