@@ -5,19 +5,26 @@
 
 namespace
 {
-	int resulting_size(int value, int)
+	inline auto resulting_size(int value, int)
 	{
 		return value;
 	}
 
-	int resulting_size(float value, int total_size)
+	inline auto resulting_size(float value, int total_size)
 	{
 		return static_cast<int>(value*total_size + 0.5f);
 	}
 
-	int resulting_size(std::variant<int, float> value, int total_size)
+	inline auto resulting_size(std::variant<int, float> value, int total_size)
 	{
 		return std::visit([total_size](auto val){return resulting_size(val, total_size);}, value);
+	}
+
+	inline auto make_viewport_size(std::variant<int, float> width,
+								   std::variant<int, float> height,
+								   fruit::ViewportSize total_size)
+	{
+		return fruit::ViewportSize{resulting_size(width, total_size.width), resulting_size(height, total_size.height)};
 	}
 }
 
@@ -32,10 +39,9 @@ fruit::SizeRequestResult fruit::LineLayout::handle(SizeRequestEvent const& event
 				ViewportSize{a.width + size.width, std::max(a.height, size.height)}
 				:ViewportSize{std::max(a.width, size.width), a.height + size.height};
 		});
-	auto const my_width = resulting_size(m_min_width, event.domain_size.width);
-	auto const my_height = resulting_size(m_min_height, event.domain_size.height);
-	min_size.width = std::max(my_width, min_size.width);
-	min_size.height = std::max(my_height, min_size.height);
+	auto const my_size = make_viewport_size(m_min_width, m_min_height, event.domain_size);
+	min_size.width = std::max(my_size.width, min_size.width);
+	min_size.height = std::max(my_size.height, min_size.height);
 //	printf("LineLayout min_size %d %d\n", min_size.width, min_size.height);
 	return SizeRequestResult{min_size, min_size};
 }
