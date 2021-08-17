@@ -14,6 +14,7 @@ namespace fruit
 	struct SizeRequestEvent
 	{
 		using result_type =  SizeRequestResult;
+		ViewportSize domain_size;
 	};
 }
 
