@@ -119,7 +119,7 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 		if(!completed[k])
 		{
 			auto const& item = content[k];
-			auto const size_req_result = item.event_handler.handle(SizeRequestEvent{});
+			auto const size_req_result = item.event_handler.handle(SizeRequestEvent{event.size});
 			auto const computed_size = static_cast<int>(item.size * size + 0.5f);
 			sizes[k] = fit_viewport(size_req_result.min_size, computed_size, m_direction);
 			printf("Requested size is %s\n", to_string(sizes[k]).c_str());
