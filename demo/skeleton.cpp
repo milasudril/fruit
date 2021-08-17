@@ -250,7 +250,7 @@ int main()
 	rect_d.color = fruit::yellow();
 
 	fruit::LineLayout row_a;
-	row_a.push_back(fruit::LayoutBox{std::ref(rect_a)});
+	row_a.push_back(fruit::LayoutBox{std::ref(rect_a), 0.6f});
 	row_a.push_back(fruit::LayoutBox{std::ref(rect_b)});
 	row_a.set_width(1.0f);
 

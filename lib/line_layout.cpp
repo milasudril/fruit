@@ -3,10 +3,25 @@
 #include "./line_layout.hpp"
 #include "./utils.hpp"
 
-#include <set>
-#include <iterator>
+namespace
+{
+	int resulting_size(int value, int)
+	{
+		return value;
+	}
 
-fruit::SizeRequestResult fruit::LineLayout::handle(SizeRequestEvent const&) const
+	int resulting_size(float value, int total_size)
+	{
+		return static_cast<int>(value*total_size + 0.5f);
+	}
+
+	int resulting_size(std::variant<int, float> value, int total_size)
+	{
+		return std::visit([total_size](auto val){return resulting_size(val, total_size);}, value);
+	}
+}
+
+fruit::SizeRequestResult fruit::LineLayout::handle(SizeRequestEvent const& event) const
 {
 	auto min_size = std::accumulate(std::begin(m_content), std::end(m_content),
 									ViewportSize{0, 0},
@@ -17,6 +32,11 @@ fruit::SizeRequestResult fruit::LineLayout::handle(SizeRequestEvent const&) cons
 				ViewportSize{a.width + size.width, std::max(a.height, size.height)}
 				:ViewportSize{std::max(a.width, size.width), a.height + size.height};
 		});
+	auto const my_width = resulting_size(m_min_width, event.domain_size.width);
+	auto const my_height = resulting_size(m_min_height, event.domain_size.height);
+	min_size.width = std::max(my_width, min_size.width);
+	min_size.height = std::max(my_height, min_size.height);
+//	printf("LineLayout min_size %d %d\n", min_size.width, min_size.height);
 	return SizeRequestResult{min_size, min_size};
 }
 
@@ -49,7 +69,7 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 	auto remaining_boxes = std::size(content);
 	std::vector<ViewportSize> sizes(std::size(content));
 	std::vector<bool> completed(std::size(content));
-	auto size = event.size.height;
+	auto size = extent(event.size, m_direction);
 	while(remaining_boxes != 0)
 	{
 		auto const initial_size = size;
@@ -58,7 +78,7 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 			if(!completed[k])
 			{
 				auto const& item = content[k];
-				auto const size_req_result = item.event_handler.handle(SizeRequestEvent{});
+				auto const size_req_result = item.event_handler.handle(SizeRequestEvent{event.size});
 				auto const desired_size = static_cast<int>(item.size * initial_size + 0.5f);
 				auto const too_small = desired_size < extent(size_req_result.min_size, m_direction);
 				auto const computed_size = std::max(desired_size, extent(size_req_result.min_size, m_direction));

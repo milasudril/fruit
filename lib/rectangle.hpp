@@ -18,8 +18,8 @@ namespace fruit
 
 		void handle(GeometryUpdateEvent const& event)
 		{
-			width = event.size.width;
-			height = event.size.height;
+			current_width = event.size.width;
+			current_height = event.size.height;
 			loc = event.location;
 		}
 
@@ -27,6 +27,8 @@ namespace fruit
 		int width = 0;
 		int height = 0;
 		Pixel color = black();
+		int current_width = 0;
+		int current_height = 0;
 
 		void handle(UpdateEventSw const& event) const
 		{
@@ -35,7 +37,7 @@ namespace fruit
 			auto const h_out = event.height;
 
 			auto const rect_begin = loc;
-			auto const rect_end = loc + Vector{width, height, 0};
+			auto const rect_end = loc + Vector{current_width, current_height, 0};
 
 			for(int k = std::max(0, rect_begin.y()); k < std::min(h_out, rect_end.y()); ++k)
 			{
