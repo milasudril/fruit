@@ -130,3 +130,34 @@ TESTCASE(LineLayoutGeometryUpdatePartialConstraints)
 	EXPECT_EQ(b.size, (fruit::ViewportSize{size_b.width, 2}));
 	EXPECT_EQ(c.size, (fruit::ViewportSize{size_c.width, 1}));
 }
+
+
+TESTCASE(LineLayoutGeometryUpdatePartialConstraintsHorizontal)
+{
+	fruit::LineLayout layout{fruit::LineLayout::Direction::LeftToRight};
+
+	fruit::ViewportSize size_a{0, 2};
+	fruit::ViewportSize size_b{2, 3};
+	fruit::ViewportSize size_c{0, 1};
+
+	Object a{size_a, fruit::Origin<int>};
+	Object b{size_b, fruit::Origin<int>};
+	Object c{size_c, fruit::Origin<int>};
+
+	layout.push_back(fruit::LayoutBox{std::ref(a), 1.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(b), 1.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(c), 1.0f});
+
+	layout.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{4, 3}, fruit::Point{4, 3, 5}});
+	EXPECT_EQ(a.location.y(), 3);
+	EXPECT_EQ(b.location.y(), 3);
+	EXPECT_EQ(c.location.y(), 3);
+
+	EXPECT_EQ(a.location.x(), 4);
+	EXPECT_EQ(b.location.x(), 5);
+	EXPECT_EQ(c.location.x(), 7);
+
+	EXPECT_EQ(a.size, (fruit::ViewportSize{1, size_a.height}));
+	EXPECT_EQ(b.size, (fruit::ViewportSize{2, size_b.height}));
+	EXPECT_EQ(c.size, (fruit::ViewportSize{1, size_c.height}));
+}
