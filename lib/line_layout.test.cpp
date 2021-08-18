@@ -58,7 +58,6 @@ TESTCASE(LineLayoutSizeRequestHorizontal)
 	EXPECT_EQ(size.width, 9);
 }
 
-
 TESTCASE(LineLayoutGeometryUpdate)
 {
 	fruit::LineLayout layout{fruit::LineLayout::Direction::TopToBottom};
@@ -147,6 +146,66 @@ TESTCASE(LineLayoutGeometryUpdatePartialConstraints)
 	EXPECT_EQ(a.size, (fruit::ViewportSize{size_a.width, 1}));
 	EXPECT_EQ(b.size, (fruit::ViewportSize{size_b.width, 2}));
 	EXPECT_EQ(c.size, (fruit::ViewportSize{size_c.width, 1}));
+}
+
+TESTCASE(LineLayoutGeometryUpdateHorizontal)
+{
+	fruit::LineLayout layout{fruit::LineLayout::Direction::LeftToRight};
+
+	fruit::ViewportSize size_a{3, 2};
+	fruit::ViewportSize size_b{2, 3};
+	fruit::ViewportSize size_c{4, 1};
+
+	Object a{size_a, fruit::Origin<int>};
+	Object b{size_b, fruit::Origin<int>};
+	Object c{size_c, fruit::Origin<int>};
+
+	layout.push_back(fruit::LayoutBox{std::ref(a)});
+	layout.push_back(fruit::LayoutBox{std::ref(b)});
+	layout.push_back(fruit::LayoutBox{std::ref(c)});
+
+	layout.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{2, 3}, fruit::Point{4, 3, 5}});
+	EXPECT_EQ(a.location.y(), 3);
+	EXPECT_EQ(b.location.y(), 3);
+	EXPECT_EQ(c.location.y(), 3);
+
+	EXPECT_EQ(a.location.x(), 4);
+	EXPECT_EQ(b.location.x(), 7);
+	EXPECT_EQ(c.location.x(), 9);
+
+	EXPECT_EQ(a.size, size_a);
+	EXPECT_EQ(b.size, size_b);
+	EXPECT_EQ(c.size, size_c);
+}
+
+TESTCASE(LineLayoutGeometryUpdateNoConstraintsHorizontal)
+{
+	fruit::LineLayout layout{fruit::LineLayout::Direction::LeftToRight};
+
+	fruit::ViewportSize size_a{0, 2};
+	fruit::ViewportSize size_b{0, 3};
+	fruit::ViewportSize size_c{0, 1};
+
+	Object a{size_a, fruit::Origin<int>};
+	Object b{size_b, fruit::Origin<int>};
+	Object c{size_c, fruit::Origin<int>};
+
+	layout.push_back(fruit::LayoutBox{std::ref(a), 1.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(b), 1.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(c), 1.0f});
+
+	layout.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{3, 3}, fruit::Point{4, 3, 5}});
+	EXPECT_EQ(a.location.y(), 3);
+	EXPECT_EQ(b.location.y(), 3);
+	EXPECT_EQ(c.location.y(), 3);
+
+	EXPECT_EQ(a.location.x(), 4);
+	EXPECT_EQ(b.location.x(), 5);
+	EXPECT_EQ(c.location.x(), 6);
+
+	EXPECT_EQ(a.size, (fruit::ViewportSize{1, size_a.height}));
+	EXPECT_EQ(b.size, (fruit::ViewportSize{1, size_b.height}));
+	EXPECT_EQ(c.size, (fruit::ViewportSize{1, size_c.height}));
 }
 
 
