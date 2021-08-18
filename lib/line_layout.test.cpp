@@ -41,6 +41,24 @@ TESTCASE(LineLayoutSizeRequest)
 	EXPECT_EQ(size.height, 9);
 }
 
+TESTCASE(LineLayoutSizeRequestHorizontal)
+{
+	fruit::LineLayout layout{fruit::LineLayout::Direction::LeftToRight};
+
+	Object a{fruit::ViewportSize{3, 2}, fruit::Origin<int>};
+	Object b{fruit::ViewportSize{2, 3}, fruit::Origin<int>};
+	Object c{fruit::ViewportSize{4, 1}, fruit::Origin<int>};
+
+	layout.push_back(fruit::LayoutBox{std::ref(a)});
+	layout.push_back(fruit::LayoutBox{std::ref(b)});
+	layout.push_back(fruit::LayoutBox{std::ref(c)});
+
+	auto size = layout.handle(fruit::SizeRequestEvent{}).min_size;
+	EXPECT_EQ(size.height, 3);
+	EXPECT_EQ(size.width, 9);
+}
+
+
 TESTCASE(LineLayoutGeometryUpdate)
 {
 	fruit::LineLayout layout{fruit::LineLayout::Direction::TopToBottom};
