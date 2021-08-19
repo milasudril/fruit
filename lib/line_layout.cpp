@@ -75,7 +75,8 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 	auto remaining_boxes = std::size(content);
 	std::vector<ViewportSize> sizes(std::size(content));
 	std::vector<bool> completed(std::size(content));
-	auto size = extent(event.size, m_direction);
+	auto const my_size = make_viewport_size(m_min_width, m_min_height, event.size);
+	auto size = extent(my_size, m_direction);
 	while(remaining_boxes != 0)
 	{
 		auto const initial_size = size;
@@ -84,7 +85,7 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 			if(!completed[k])
 			{
 				auto const& item = content[k];
-				auto const size_req_result = item.event_handler.handle(SizeRequestEvent{event.size});
+				auto const size_req_result = item.event_handler.handle(SizeRequestEvent{my_size});
 				auto const desired_size = static_cast<int>(item.size * initial_size + 0.5f);
 				auto const too_small = desired_size < extent(size_req_result.min_size, m_direction);
 				auto const computed_size = std::max(desired_size, extent(size_req_result.min_size, m_direction));
@@ -92,14 +93,9 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 				if(too_small)
 				{
 					sizes[k] = fit_viewport(size_req_result.min_size, computed_size, m_direction);
-					printf("Too small box adjusted to %s\n", to_string(sizes[k]).c_str());
 					completed[k] = true;
 					content[k].size = 0.0f;
 					--remaining_boxes;
-				}
-				else
-				{
-					printf("%zu deffered\n", k);
 				}
 			}
 		}
@@ -119,10 +115,9 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 		if(!completed[k])
 		{
 			auto const& item = content[k];
-			auto const size_req_result = item.event_handler.handle(SizeRequestEvent{event.size});
+			auto const size_req_result = item.event_handler.handle(SizeRequestEvent{my_size});
 			auto const computed_size = static_cast<int>(item.size * size + 0.5f);
 			sizes[k] = fit_viewport(size_req_result.min_size, computed_size, m_direction);
-			printf("Requested size is %s\n", to_string(sizes[k]).c_str());
 			completed[k] = true;
 		}
 	}
@@ -134,5 +129,5 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 		origin += make_offset_vector(sizes[k], m_direction);
 	}
 
-	puts("=====================");
+//	puts("=====================");
 }
