@@ -110,6 +110,8 @@ private:
 	int m_height;
 };
 
+char output[16*2048*1024];
+
 class Texture
 {
 public:
@@ -145,6 +147,13 @@ public:
 		glTextureStorage2D(handle, 1, GL_RGBA32F, width, height);
 		if(glGetError() != GL_NO_ERROR)
 		{ throw std::runtime_error{"Failed to allocate storage for current texture"}; }
+
+		int format{};
+		int type{};
+		glGetInternalformativ(GL_TEXTURE_2D, GL_RGBA32F, GL_TEXTURE_IMAGE_FORMAT, 1, &format);
+		glGetInternalformativ(GL_TEXTURE_2D, GL_RGBA32F, GL_TEXTURE_IMAGE_TYPE, 1, &type);
+
+		printf("%d %d\n", format, type);
 
 		glDeleteTextures(1, &m_handle);
 		m_handle = handle;

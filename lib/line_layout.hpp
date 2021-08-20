@@ -14,12 +14,14 @@ namespace fruit
 	class LineLayout
 	{
 	public:
+		struct Minimize{};
+
 		enum class Direction:int{LeftToRight, TopToBottom};
 
 		explicit LineLayout(Direction dir = Direction::LeftToRight):
 			m_direction{dir},
-			m_min_width{1.0f},
-			m_min_height{1.0f}
+			m_min_width{Minimize{}},
+			m_min_height{Minimize{}}
 		{}
 
 		void push_back(LayoutBox const& box)
@@ -51,11 +53,13 @@ namespace fruit
 		void set_height(T&& value)
 		{ m_min_height = std::forward<T>(value);}
 
+		ViewportSize compute_min_size(ViewportSize domain_size) const;
+
 	private:
 		Direction m_direction;
 		std::vector<LayoutBox> m_content;
-		std::variant<int, float> m_min_width;
-		std::variant<int, float> m_min_height;
+		std::variant<Minimize, int, float> m_min_width;
+		std::variant<Minimize, int, float> m_min_height;
 	};
 }
 

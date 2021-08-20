@@ -15,25 +15,76 @@ namespace
 		return static_cast<int>(value*total_size + 0.5f);
 	}
 
-	inline auto resulting_size(std::variant<int, float> value, int total_size)
+	inline auto resulting_size(fruit::LineLayout::Minimize, int total_size)
+	{
+		return total_size;
+	}
+
+	inline auto resulting_size(std::variant<fruit::LineLayout::Minimize, int, float> value, int total_size)
 	{
 		return std::visit([total_size](auto val){return resulting_size(val, total_size);}, value);
 	}
 
-	inline auto make_viewport_size(std::variant<int, float> width,
-								   std::variant<int, float> height,
+	inline auto make_viewport_size(std::variant<fruit::LineLayout::Minimize, int, float> width,
+								   std::variant<fruit::LineLayout::Minimize, int, float> height,
 								   fruit::ViewportSize total_size)
 	{
 		return fruit::ViewportSize{resulting_size(width, total_size.width), resulting_size(height, total_size.height)};
 	}
+
+	inline auto extent(fruit::ViewportSize viewport, fruit::LineLayout::Direction dir)
+	{
+		return dir == fruit::LineLayout::Direction::LeftToRight? viewport.width: viewport.height;
+	}
+}
+
+fruit::ViewportSize fruit::LineLayout::compute_min_size(ViewportSize domain_size) const
+{
+	domain_size.width = resulting_size(m_min_width, domain_size.width);
+	domain_size.height = resulting_size(m_min_height, domain_size.height);
+	printf("Size request %p\n", this);
+	auto content = m_content;
+	normalize_sum(std::span{std::data(content), std::size(content)}, [](auto&& item) -> float& {
+		return item.size;
+	});
+
+	auto min_size = std::accumulate(std::begin(content), std::end(content),
+									ViewportSize{0, 0},
+									[dir = m_direction,
+									domain_extent = extent(domain_size, m_direction)
+									](auto a, auto item) {
+			auto const res = item.event_handler.handle(SizeRequestEvent{});
+			// TODO: Need to consider item.size
+			auto const size = res.min_size;
+			auto const desired_size = static_cast<int>(domain_extent*item.size + 0.5f);
+			auto const computed_size = std::max(extent(size, dir), desired_size);
+
+			printf("%d ", computed_size);
+
+			return dir == Direction::LeftToRight ?
+				ViewportSize{a.width + computed_size, std::max(a.height, size.height)}
+				:ViewportSize{std::max(a.width, size.width), a.height + computed_size};
+		});
+	puts("---------");
+
+	auto const my_size = make_viewport_size(m_min_width, m_min_height, domain_size);
+	min_size.width = std::max(my_size.width, min_size.width);
+	min_size.height = std::max(my_size.height, min_size.height);
+//	printf("LineLayout min_size %d %d\n", min_size.width, min_size.height);
+	return min_size;
 }
 
 fruit::SizeRequestResult fruit::LineLayout::handle(SizeRequestEvent const& event) const
 {
+#if 1
+	auto const min_size = compute_min_size(event.domain_size);
+	return SizeRequestResult{min_size, min_size};
+#else
 	auto min_size = std::accumulate(std::begin(m_content), std::end(m_content),
 									ViewportSize{0, 0},
 									[dir = m_direction](auto a, auto item) {
 			auto const res = item.event_handler.handle(SizeRequestEvent{});
+			// TODO: Need to consider item.size
 			auto const size = res.min_size;
 			return dir == Direction::LeftToRight ?
 				ViewportSize{a.width + size.width, std::max(a.height, size.height)}
@@ -44,14 +95,11 @@ fruit::SizeRequestResult fruit::LineLayout::handle(SizeRequestEvent const& event
 	min_size.height = std::max(my_size.height, min_size.height);
 //	printf("LineLayout min_size %d %d\n", min_size.width, min_size.height);
 	return SizeRequestResult{min_size, min_size};
+#endif
 }
 
 namespace
 {
-	inline auto extent(fruit::ViewportSize viewport, fruit::LineLayout::Direction dir)
-	{
-		return dir == fruit::LineLayout::Direction::LeftToRight? viewport.width: viewport.height;
-	}
 
 	inline auto fit_viewport(fruit::ViewportSize viewport, int size, fruit::LineLayout::Direction dir)
 	{
@@ -75,7 +123,9 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 	auto remaining_boxes = std::size(content);
 	std::vector<ViewportSize> sizes(std::size(content));
 	std::vector<bool> completed(std::size(content));
-	auto const my_size = make_viewport_size(m_min_width, m_min_height, event.size);
+	auto const my_size = handle(SizeRequestEvent{event.size}).min_size;
+//	auto const my_size = make_viewport_size(m_min_width, m_min_height, event.size);
+	printf("My size: %s %p\n", to_string(my_size).c_str(), this);
 	auto size = extent(my_size, m_direction);
 	while(remaining_boxes != 0)
 	{
@@ -87,12 +137,14 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 				auto const& item = content[k];
 				auto const size_req_result = item.event_handler.handle(SizeRequestEvent{my_size});
 				auto const desired_size = static_cast<int>(item.size * initial_size + 0.5f);
-				auto const too_small = desired_size < extent(size_req_result.min_size, m_direction);
-				auto const computed_size = std::max(desired_size, extent(size_req_result.min_size, m_direction));
-				size -= too_small? extent(size_req_result.min_size, m_direction) : 0;
+				auto const min_size = extent(size_req_result.min_size, m_direction);
+				auto const too_small = desired_size < min_size;
+				auto const computed_size = std::max(desired_size, min_size);
+				size -= too_small? min_size : 0;
 				if(too_small)
 				{
 					sizes[k] = fit_viewport(size_req_result.min_size, computed_size, m_direction);
+					printf("sizes %s\n", to_string(sizes[k]).c_str());
 					completed[k] = true;
 					content[k].size = 0.0f;
 					--remaining_boxes;

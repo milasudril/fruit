@@ -243,6 +243,9 @@ TESTCASE(LineLayoutGeometryUpdateLineLayoutInLineLayout1)
 {
 	fruit::LineLayout outer{fruit::LineLayout::Direction::LeftToRight};
 	fruit::LineLayout inner{fruit::LineLayout::Direction::LeftToRight};
+
+	printf("Outer: %p\nInner: %p\n", &outer, &inner);
+
 	outer.set_width(0.5f);
 	inner.set_width(0.5f);
 
