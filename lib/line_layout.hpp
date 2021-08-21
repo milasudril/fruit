@@ -14,8 +14,8 @@ namespace fruit
 	/**
 	 * \brief Positions its member in a straight line
 	 *
-	 * A LineLayout positions its member in a straight line. A LinieLayout can organize its member
-	 * either horizontally or vertically. Repositioning is triggered as a response to a
+	 * A LineLayout locations its member in a straight line. A LinieLayout can organize its member
+	 * either horizontally or vertically. Relocationing is triggered as a response to a
 	 * GeometryUpdateEvent.
 	 *
 	*/
@@ -27,17 +27,19 @@ namespace fruit
 		/**
 		 * \brief Determines the layout direction
 		 *
-		 * The direction determines the positioning scheme of the LineLayout
+		 * The direction determines the location scheme of the LineLayout
 		 *
 		*/
 		enum class Direction:int
 		{
-			LeftToRight,  /**< Use left-to-right or horizontal positioning scheme*/
-			TopToBottom   /**< Use top-to-bottom or vertical positioning scheme*/
+			LeftToRight,  /**< Use left-to-right or horizontal location scheme*/
+			TopToBottom   /**< Use top-to-bottom or vertical location scheme*/
 		};
 
 		/**
 		 * \brief Constructs a new LineLayout, and sets the direction to dir
+		 *
+		 * This constructor sets the dierection to dir.
 		*/
 		explicit LineLayout(Direction dir = Direction::LeftToRight):
 			m_direction{dir},
@@ -45,34 +47,87 @@ namespace fruit
 			m_min_height{Minimize{}}
 		{}
 
+		/**
+		 * \brief Places box at the end of the line
+		 *
+		 * This function places box at the end of the line.
+		*/
 		void push_back(LayoutBox const& box)
 		{
 			m_content.push_back(box);
 		}
 
-		SizeRequestResult handle(SizeRequestEvent const&) const;
+		/**
+		 * \brief Wrapper function that exists so that a LineLayout can respond to
+		 *        \ref SizeRequestEvent "SizeRequestEvents"
+		 *
+		 * This function is wrapper function that exists so that LineLayout can respond to
+		 * \ref SizeRequestEvent "SizeRequestEvents". This makes it possible to nest LineLayout
+		 * objects.
+		 *
+		 * \return a SizeRequestResult where min_size is the return value of compute_min_size(ViewportSize) const
+		 *
+		 * \see compute_min_size
+		*/
+		SizeRequestResult handle(SizeRequestEvent const& event) const
+		{
+			auto const min_size = compute_min_size(event.domain_size);
+			return SizeRequestResult{min_size, min_size};
+		}
 
+		/**
+		 * \brief Processes \ref GeometryUpdateEvent "GeometryUpdateEvents"
+		 *
+		 * This function will update the location and size of all members of this LineLayout, given
+		 * min_width, min_height, and the ViewportSize specified in event. Also, the constraints
+		 * givien by \ref LayoutBox "LayoutBoxes" within this LineLayout.
+		 *
+		 * \todo Describe algorithm
+		*/
 		void handle(GeometryUpdateEvent const& event);
 
+		/**
+		 * \brief Sets the Direction of this LineLayout
+		 *
+		 * This function sets the direction of this LineLayout.
+		*/
 		void set_direction(Direction dir)
 		{
 			m_direction = dir;
 		}
 
-		Direction get_direction() const
+		/**
+		 * \brief Retrieves the current Direction of this LineLayout
+		 *
+		 * This function retrieves the direction of this LineLayout.
+		 *
+		 * \return The Direction of this LineLayout
+		*/
+		Direction direction() const
 		{
 			return m_direction;
 		}
 
+		/**
+		 * \brief Retrieves the number of members in this LineLayout
+		 *
+		 * This function retrieves the number of members in this LineLayout
+		 *
+		 * \return The number of members in this LineLayout
+		*/
 		size_t widget_count() const { return std::size(m_content); }
 
-		template<class T>
-		void set_width(T&& value)
-		{  m_min_width = std::forward<T>(value);}
+		void set_width(float value)
+		{  m_min_width = value;}
 
-		template<class T>
-		void set_height(T&& value)
-		{ m_min_height = std::forward<T>(value);}
+		void set_width(int value)
+		{  m_min_width = value;}
+
+		void set_height(float value)
+		{ m_min_height = value;}
+
+		void set_height(int value)
+		{ m_min_height = value;}
 
 		ViewportSize compute_min_size(ViewportSize domain_size) const;
 

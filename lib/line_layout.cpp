@@ -74,30 +74,6 @@ fruit::ViewportSize fruit::LineLayout::compute_min_size(ViewportSize domain_size
 	return min_size;
 }
 
-fruit::SizeRequestResult fruit::LineLayout::handle(SizeRequestEvent const& event) const
-{
-#if 1
-	auto const min_size = compute_min_size(event.domain_size);
-	return SizeRequestResult{min_size, min_size};
-#else
-	auto min_size = std::accumulate(std::begin(m_content), std::end(m_content),
-									ViewportSize{0, 0},
-									[dir = m_direction](auto a, auto item) {
-			auto const res = item.event_handler.handle(SizeRequestEvent{});
-			// TODO: Need to consider item.size
-			auto const size = res.min_size;
-			return dir == Direction::LeftToRight ?
-				ViewportSize{a.width + size.width, std::max(a.height, size.height)}
-				:ViewportSize{std::max(a.width, size.width), a.height + size.height};
-		});
-	auto const my_size = make_viewport_size(m_min_width, m_min_height, event.domain_size);
-	min_size.width = std::max(my_size.width, min_size.width);
-	min_size.height = std::max(my_size.height, min_size.height);
-//	printf("LineLayout min_size %d %d\n", min_size.width, min_size.height);
-	return SizeRequestResult{min_size, min_size};
-#endif
-}
-
 namespace
 {
 
