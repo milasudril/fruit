@@ -11,13 +11,34 @@
 
 namespace fruit
 {
+	/**
+	 * \brief Positions its member in a straight line
+	 *
+	 * A LineLayout positions its member in a straight line. A LinieLayout can organize its member
+	 * either horizontally or vertically. Repositioning is triggered as a response to a
+	 * GeometryUpdateEvent.
+	 *
+	*/
 	class LineLayout
 	{
 	public:
 		struct Minimize{};
 
-		enum class Direction:int{LeftToRight, TopToBottom};
+		/**
+		 * \brief Determines the layout direction
+		 *
+		 * The direction determines the positioning scheme of the LineLayout
+		 *
+		*/
+		enum class Direction:int
+		{
+			LeftToRight,  /**< Use left-to-right or horizontal positioning scheme*/
+			TopToBottom   /**< Use top-to-bottom or vertical positioning scheme*/
+		};
 
+		/**
+		 * \brief Constructs a new LineLayout, and sets the direction to dir
+		*/
 		explicit LineLayout(Direction dir = Direction::LeftToRight):
 			m_direction{dir},
 			m_min_width{Minimize{}},
