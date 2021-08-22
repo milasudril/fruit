@@ -15,6 +15,7 @@
 #MSearchSelectWindow,
 #nav-path,
 #nav-path ul
+.SelectItem,
 a.SelectItem,
 a.SelectItem:focus,
 a.SelectItem:hover,
@@ -34,3 +35,7 @@ td.memSeparator{display:none}
 body{margin:0px; padding:0px; height:100%;}
 #nav-path{display:none;margin:0px; padding:0px}
 #nav-path ul{display:none;margin:0px; padding:0px}
+
+#projectname{font-size:5ex;}
+div.title{font-size:3ex; }
+h2{font-size:2.5ex}
