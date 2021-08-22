@@ -37,6 +37,7 @@ body{margin:0px; padding:0px; height:100%;}
 #nav-path{display:none;margin:0px; padding:0px}
 #nav-path ul{display:none;margin:0px; padding:0px}
 td[style]{padding-left:0px!important}
+table{border-collapse:collapse; width:calc(100% - 1em)}
 
 /* Font sizes */
 #projectname{font-size:5ex;}
@@ -50,7 +51,6 @@ h2{font-size:2.5ex}
 #titlearea{padding-right:1em}
 
 /*Member table*/
-table{border-collapse: collapse;border-bottom:1px solid; border-color:black}
-td{border-bottom:1px solid;border-bottom-color: black}
-td.memItemLeft{border-bottom:0px solid;}
-td.memItemRight{border-bottom:0px solid}
+table.memberdecls{border-bottom:3px double; border-color:black}
+td.memItemLeft, td.memItemRight{padding-top: 1ex;border-top:1px solid}
+td.mdescLeft, td.mdescRight{padding-bottom: 1ex}
