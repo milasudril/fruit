@@ -1500,7 +1500,7 @@ DISABLE_INDEX          = YES
 
 GENERATE_TREEVIEW      = YES
 
-# FULL_SIDEBAR           = YES
+#FULL_SIDEBAR           = YES
 
 # The ENUM_VALUES_PER_LINE tag can be used to set the number of enum values that
 # doxygen will group on one line in the generated HTML documentation.
@@ -1571,7 +1571,7 @@ USE_MATHJAX            = YES
 # The default value is: HTML-CSS.
 # This tag requires that the tag USE_MATHJAX is set to YES.
 
-MATHJAX_FORMAT         =
+MATHJAX_FORMAT         = NativeMML
 
 # When MathJax is enabled you need to specify the location relative to the HTML
 # output directory using the MATHJAX_RELPATH option. The destination directory
