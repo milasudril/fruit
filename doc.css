@@ -37,7 +37,8 @@ body{margin:0px; padding:0px; height:100%;}
 #nav-path{display:none;margin:0px; padding:0px}
 #nav-path ul{display:none;margin:0px; padding:0px}
 td[style]{padding-left:0px!important}
-table{border-collapse:collapse; width:calc(100% - 1em)}
+table{border-collapse:collapse; width:calc(100% - 1em); margin-bottom:1ex}
+p{margin:0px; padding:0px}
 
 /* Font sizes */
 #projectname{font-size:5ex;}
@@ -54,3 +55,7 @@ h2{font-size:2.5ex}
 table.memberdecls{border-bottom:3px double; border-color:black}
 td.memItemLeft, td.memItemRight{padding-top: 1ex;border-top:1px solid}
 td.mdescLeft, td.mdescRight{padding-bottom: 1ex}
+
+/*Member documentation*/
+.mlabel{font-weight:bold; padding-left:0.5em}
+table.mlabels *, table.memname *{display:inline}
