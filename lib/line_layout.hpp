@@ -117,18 +117,59 @@ namespace fruit
 		*/
 		size_t widget_count() const { return std::size(m_content); }
 
+		/**
+		 * \brief Sets the width of this LineLayout, relative to the size passed to
+		 * compute_min_size(ViewportSize) const
+		 *
+		 * This function sets the width of this LineLayout, relative to the size passed to
+		 * compute_min_size(ViewportSize) const.
+		 *
+		 * \note The actual width may be larger, if required by any of the members
+		 */
 		void set_width(float value)
 		{  m_min_width = value;}
 
+		/**
+		 * \brief Sets the width in pixels of this LineLayout
+		 *
+		 * This function sets the width in pixels of this LineLayout.
+		 *
+		 * \note The actual width may be larger, if required by any of the members
+		 */
 		void set_width(int value)
 		{  m_min_width = value;}
 
+		/**
+		 * \brief Sets the height of this LineLayout, relative to the size passed to
+		 * compute_min_size(ViewportSize) const
+		 *
+		 * This function sets the height of this LineLayout, relative to the size passed to
+		 * compute_min_size(ViewportSize) const.
+		 *
+		 * \note The actual height may be larger, if required by any of the members
+		 */
 		void set_height(float value)
 		{ m_min_height = value;}
 
+		/**
+		 * \brief Sets the height in pixels of this LineLayout
+		 *
+		 * This function sets the height in pixels of this LineLayout.
+		 *
+		 * \note The actual height may be larger, if required by any of the members
+		 */
 		void set_height(int value)
 		{ m_min_height = value;}
 
+		/**
+		 * \brief Computes the minimum space that this LineLayout will require, given domain_size
+		 *
+		 * Given domain_size, this funciton computes the minimum space this LineLayout will require.
+		 * In addition to domain_size, the space requried depends on min_width, min_height, and the
+		 * space requirements for the members.
+		 *
+		 * \todo Describe algorithm
+		 */
 		ViewportSize compute_min_size(ViewportSize domain_size) const;
 
 	private:
