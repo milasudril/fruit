@@ -15,7 +15,7 @@
 #MSearchBox .right,
 #MSearchSelectWindow,
 #nav-path,
-#nav-path ul
+#nav-path ul,
 .SelectItem,
 a.SelectItem,
 a.SelectItem:focus,
@@ -24,11 +24,11 @@ a.SelectItem:active
 {
 	font-family:Andika, sans-serif;
 	box-sizing:border-box!important;
-	color:initial;
+	color:black;
 	background-color:initial;
 	background-image:none;
 	font-size:16px;
-	text-shadow: initial;
+	text-shadow: none;
 	border:0px solid;
 	box-shadow:none;
 }
@@ -39,6 +39,7 @@ body{margin:0px; padding:0px; height:100%; overflow:hidden}
 td[style]{padding-left:0px!important}
 table{border-collapse:collapse; width:calc(100% - 1em); margin-bottom:1ex}
 p{margin:0px; padding:0px;}
+div,#MSearchSelectWindow,#MSearchBox{background-color:white}
 p:not(p:first-of-type){text-indent: 2em}
 
 /* Font sizes */
@@ -47,13 +48,14 @@ div.title{font-size:3ex; margin-bottom:1ex;margin-top:2ex}
 h2{font-size:2.5ex; margin-bottom:1ex;margin-top:2ex}
 
 /*Search box*/
-#MSearchBox{border:1px solid; border-color:black; border-radius:4px;margin-right:1em}
+#MSearchBox{border:1px solid; border-radius:4px;margin-right:1em}
+#MSearchSelectWindow{border:1px solid; border-top:0px; border-radius:0px 0px 4px 4px}
 
 /*title area*/
 #titlearea{padding-right:1em}
 
 /*Member table*/
-table.memberdecls{border-bottom:3px double; border-color:black}
+table.memberdecls{border-bottom:3px double}
 td.memItemLeft, td.memItemRight{padding-top: 1ex;border-top:1px solid}
 td.mdescLeft, td.mdescRight{padding-bottom: 1ex}
 
