@@ -1,3 +1,4 @@
+/*Set sane defaults*/
 *,
 #MSearchField,
 .item,
@@ -24,18 +25,32 @@ a.SelectItem:active
 	font-family:Andika, sans-serif;
 	box-sizing:border-box!important;
 	color:initial;
-	background-color:initial;background-image:none;
+	background-color:initial;
+	background-image:none;
 	font-size:16px;
 	text-shadow: initial;
 	border:0px solid;
 	box-shadow:none;
 }
-
 td.memSeparator{display:none}
 body{margin:0px; padding:0px; height:100%;}
 #nav-path{display:none;margin:0px; padding:0px}
 #nav-path ul{display:none;margin:0px; padding:0px}
+td[style]{padding-left:0px!important}
 
+/* Font sizes */
 #projectname{font-size:5ex;}
 div.title{font-size:3ex; }
 h2{font-size:2.5ex}
+
+/*Search box*/
+#MSearchBox{border:1px solid; border-color:black; border-radius:4px;margin-right:1em}
+
+/*title area*/
+#titlearea{padding-right:1em}
+
+/*Member table*/
+table{border-collapse: collapse;border-bottom:1px solid; border-color:black}
+td{border-bottom:1px solid;border-bottom-color: black}
+td.memItemLeft{border-bottom:0px solid;}
+td.memItemRight{border-bottom:0px solid}
