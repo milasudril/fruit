@@ -168,7 +168,13 @@ namespace fruit
 		 * In addition to domain_size, the space requried depends on min_width, min_height, and the
 		 * space requirements for the members.
 		 *
-		 * \todo Describe algorithm
+		 * The size is computed using the following algorithm:
+		 *
+		 * 1. Let s be the required ViewportSize, initialized to {0, 0}
+		 * 2.  For each member:
+		 *   1. Let s' be the min_size returned by SizeRequestEvent{domain_size}
+		 *   2. Update s to max(s, max(s', requested_size(member, domain_size)))
+		 * 3. Return max(s, requested_size(*this, domain_size))
 		 */
 		ViewportSize compute_min_size(ViewportSize domain_size) const;
 

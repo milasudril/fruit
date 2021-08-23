@@ -1500,7 +1500,7 @@ DISABLE_INDEX          = YES
 
 GENERATE_TREEVIEW      = YES
 
-#FULL_SIDEBAR           = YES
+FULL_SIDEBAR           = NO
 
 # The ENUM_VALUES_PER_LINE tag can be used to set the number of enum values that
 # doxygen will group on one line in the generated HTML documentation.
