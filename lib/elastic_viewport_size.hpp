@@ -15,14 +15,14 @@ namespace fruit
 			return  ViewportSize{value.first, value.second};
 		}
 
-		inline ViewportSize scale(ViewportSize size, std::pair<float, int> value)
-		{
-			return  ViewportSize{static_cast<int>(size.width*value.first + 0.5f), value.second};
-		}
-
 		inline ViewportSize scale(ViewportSize size, std::pair<int, float> value)
 		{
 			return ViewportSize{value.first, static_cast<int>(size.height*value.second + 0.5f)};
+		}
+
+		inline ViewportSize scale(ViewportSize size, std::pair<float, int> value)
+		{
+			return  ViewportSize{static_cast<int>(size.width*value.first + 0.5f), value.second};
 		}
 
 		inline ViewportSize scale(ViewportSize size, std::pair<float, float> value)
@@ -46,38 +46,40 @@ namespace fruit
 
 		void set_width(int value)
 		{
-			std::visit([width = value](auto& value) {
-				value.first = width;
+			std::visit([width = value, this](auto value) {
+				m_value = StorageType{std::pair{width, value.second}};
 			}, m_value);
 		};
 
 		void set_width(float value)
 		{
-			std::visit([width = value](auto& value) {
-				value.first = width;
+			std::visit([width = value, this](auto value) {
+				m_value = StorageType{std::pair{width, value.second}};
 			}, m_value);
 		};
 
 		void set_height(int value)
 		{
-			std::visit([height = value](auto& value) {
-				value.second = height;
+			std::visit([height = value, this](auto value) {
+				m_value = StorageType{std::pair{value.first, height}};
 			}, m_value);
 		};
 
 		void set_height(float value)
 		{
-			std::visit([height = value](auto& value) {
-				value.second = height;
+			std::visit([height = value, this](auto value) {
+				m_value = StorageType{std::pair{value.first, height}};
 			}, m_value);
 		};
 
 		void set_value(StorageType value)
 		{ m_value = value; }
 
+		bool operator==(ElasticViewportSize const&) const = default;
+		bool operator!=(ElasticViewportSize const&) const = default;
+
 	private:
 		StorageType m_value;
 	};
-
 }
 #endif

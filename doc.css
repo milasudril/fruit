@@ -63,3 +63,8 @@ td.mdescLeft, td.mdescRight{padding-bottom: 1ex}
 .mlabel{font-weight:bold; padding-left:0.5em}
 table.mlabels *, table.memname *{display:inline}
 .memproto{margin-left: 3em}
+
+/* Colors */
+h1, h2, .title, #projectname {color: #649F85; }
+
+a[href] { color: #CF8299; }
