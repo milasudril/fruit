@@ -10,8 +10,8 @@ namespace fruit
 {
 	struct LayoutBox
 	{
-		template<class T>
-		explicit LayoutBox(T obj, ElasticViewportSize s): event_handler{obj}, size{s}
+		template<class T, class ... Sizes>
+		explicit LayoutBox(T obj, Sizes&&...  s): event_handler{obj}, size{std::forward<Sizes>(s)...}
 		{}
 
 		EventHandler<SizeRequestEvent, GeometryUpdateEvent> event_handler;
