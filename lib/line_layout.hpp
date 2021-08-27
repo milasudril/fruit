@@ -23,8 +23,6 @@ namespace fruit
 	class LineLayout
 	{
 	public:
-		struct Minimize{};
-
 		/**
 		 * \brief Determines the layout direction
 		 *
@@ -43,9 +41,7 @@ namespace fruit
 		 * This constructor sets the dierection to dir.
 		*/
 		explicit LineLayout(Direction dir = Direction::LeftToRight):
-			m_direction{dir},
-			m_min_width{Minimize{}},
-			m_min_height{Minimize{}}
+			m_direction{dir}
 		{}
 
 		/**
@@ -128,7 +124,7 @@ namespace fruit
 		 * \note The actual width may be larger, if required by any of the members
 		 */
 		void set_width(float value)
-		{  m_min_width = value;}
+		{ m_min_size.set_width(value);}
 
 		/**
 		 * \brief Sets the width in pixels of this LineLayout
@@ -138,7 +134,7 @@ namespace fruit
 		 * \note The actual width may be larger, if required by any of the members
 		 */
 		void set_width(int value)
-		{  m_min_width = value;}
+		{ m_min_size.set_width(value);}
 
 		/**
 		 * \brief Sets the height of this LineLayout, relative to the size passed to
@@ -150,7 +146,7 @@ namespace fruit
 		 * \note The actual height may be larger, if required by any of the members
 		 */
 		void set_height(float value)
-		{ m_min_height = value;}
+		{ m_min_size.set_height(value);}
 
 		/**
 		 * \brief Sets the height in pixels of this LineLayout
@@ -160,7 +156,7 @@ namespace fruit
 		 * \note The actual height may be larger, if required by any of the members
 		 */
 		void set_height(int value)
-		{ m_min_height = value;}
+		{ m_min_size.set_height(value);}
 
 		/**
 		 * \brief Computes the minimum space that this LineLayout will require, given domain_size
