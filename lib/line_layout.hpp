@@ -5,6 +5,7 @@
 
 #include "./layout_manager.hpp"
 #include "./error_message.hpp"
+#include "./elastic_viewport_size.hpp"
 
 #include <vector>
 #include <variant>
@@ -172,18 +173,30 @@ namespace fruit
 		 *
 		 * 1. Let s be the required ViewportSize, initialized to {0, 0}
 		 * 2.  For each member:
-		 *   1. Let s' be the min_size returned by SizeRequestEvent{domain_size}
-		 *   2. Update s to max(s, max(s', requested_size(member, domain_size)))
+		 *   1. Let s' = min_size returned by member . SizeRequestEvent{domain_size}
+		 *   2. Let s_req = max(s', requested_size(member, domain_size))
+		 *   3. If
+		 *     1. m_direction equals LeftToRight:
+		 *        1. let s.width = s.width + s_req.width
+		 *        2. let s.height = max(s.height, s_req).height
+		 *     2. otherwise:
+		 *        1. let s.width = max(s.width, s_req).width
+		 *        2. let s.height = s.height + s_req.height
 		 * 3. Return max(s, requested_size(*this, domain_size))
 		 */
 		ViewportSize compute_min_size(ViewportSize domain_size) const;
 
+		ElasticViewportSize min_size() const
+		{ return m_min_size; }
+
 	private:
 		Direction m_direction;
 		std::vector<LayoutBox> m_content;
-		std::variant<Minimize, int, float> m_min_width;
-		std::variant<Minimize, int, float> m_min_height;
+		ElasticViewportSize m_min_size;
 	};
+
+	ViewportSize requested_size(LineLayout const& layout, ViewportSize domain_size)
+	{ return layout.min_size().viewportSize(domain_size); }
 }
 
 #endif
