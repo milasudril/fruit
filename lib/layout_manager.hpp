@@ -4,18 +4,22 @@
 #include "./event_handler.hpp"
 #include "./size_request_event.hpp"
 #include "./geometry_update_event.hpp"
+#include "./elastic_viewport_size.hpp"
 
 namespace fruit
 {
 	struct LayoutBox
 	{
 		template<class T>
-		explicit LayoutBox(T obj, float s = 0.0f): event_handler{obj}, size{s}
+		explicit LayoutBox(T obj, ElasticViewportSize s): event_handler{obj}, size{s}
 		{}
 
 		EventHandler<SizeRequestEvent, GeometryUpdateEvent> event_handler;
-		float size;
+		ElasticViewportSize size;
 	};
+
+	ViewportSize requested_size(LayoutBox const& box, ViewportSize domain_size)
+	{ return box.size.viewportSize(domain_size); }
 }
 
 #endif

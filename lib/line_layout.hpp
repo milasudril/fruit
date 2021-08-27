@@ -8,7 +8,6 @@
 #include "./elastic_viewport_size.hpp"
 
 #include <vector>
-#include <variant>
 
 namespace fruit
 {
