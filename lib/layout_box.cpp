@@ -1,7 +1,9 @@
 //@	{"target":{"name":"layout_box.o"}}
 
 #include "./layout_box.hpp"
+
 #include <numeric>
+#include <limits>
 
 namespace
 {
@@ -11,7 +13,10 @@ namespace
 
 	void scale(int&, float){}
 
-	void scale(float& x, float factor){ x *= factor; }
+	void scale(float& x, float factor)
+	{
+		x *= factor;
+	}
 
 	float sum_ltr(float a, fruit::LayoutBox const& item)
 	{
@@ -28,6 +33,11 @@ void fruit::normalize_sum(std::span<LayoutBox> sizes, LayoutDirection direction)
 {
 	auto const sum = std::accumulate(std::begin(sizes), std::end(sizes), 0.0f,
 									(direction == LayoutDirection::LeftToRight) ? ::sum_ltr : ::sum_ttb );
+
+	if(sum < static_cast<float>(std::size(sizes)) * std::numeric_limits<float>::epsilon())
+	{
+		return;
+	}
 
 	auto const scale_ltr = [factor = 1.0f/sum](auto& item) {
 		std::visit([factor](auto& value){ ::scale(value.first, factor);}, item.size.value());

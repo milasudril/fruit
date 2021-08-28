@@ -57,9 +57,8 @@ TESTCASE(LineLayoutSizeRequestHorizontal)
 	EXPECT_EQ(size.height, 3);
 	EXPECT_EQ(size.width, 9);
 }
-#if 0
 
-TESTCASE(LineLayoutGeometryUpdate)
+TESTCASE(LineLayoutGeometryUpdateVertical)
 {
 	fruit::LineLayout layout{fruit::LineLayout::Direction::TopToBottom};
 
@@ -89,7 +88,7 @@ TESTCASE(LineLayoutGeometryUpdate)
 	EXPECT_EQ(c.size, size_c);
 }
 
-TESTCASE(LineLayoutGeometryUpdateNoConstraints)
+TESTCASE(LineLayoutGeometryUpdateVerticalNoConstraints)
 {
 	fruit::LineLayout layout{fruit::LineLayout::Direction::TopToBottom};
 
@@ -101,9 +100,11 @@ TESTCASE(LineLayoutGeometryUpdateNoConstraints)
 	Object b{size_b, fruit::Origin<int>};
 	Object c{size_c, fruit::Origin<int>};
 
-	layout.push_back(fruit::LayoutBox{std::ref(a), 1.0f});
-	layout.push_back(fruit::LayoutBox{std::ref(b), 1.0f});
-	layout.push_back(fruit::LayoutBox{std::ref(c), 1.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(a), fruit::ElasticViewportSize{0.0f, 1.0f}});
+	layout.push_back(fruit::LayoutBox{std::ref(b), fruit::ElasticViewportSize{0.0f, 1.0f}});
+	layout.push_back(fruit::LayoutBox{std::ref(c), fruit::ElasticViewportSize{0.0f, 1.0f}});
+	layout.set_height(1.0f);
+	layout.set_width(1.0f);
 
 	layout.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{3, 3}, fruit::Point{3, 4, 5}});
 	EXPECT_EQ(a.location.x(), 3);
@@ -119,6 +120,7 @@ TESTCASE(LineLayoutGeometryUpdateNoConstraints)
 	EXPECT_EQ(c.size, (fruit::ViewportSize{size_c.width, 1}));
 }
 
+#if 0
 TESTCASE(LineLayoutGeometryUpdatePartialConstraints)
 {
 	fruit::LineLayout layout{fruit::LineLayout::Direction::TopToBottom};

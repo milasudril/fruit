@@ -37,9 +37,11 @@ namespace fruit
 	public:
 		using StorageType = std::variant<std::pair<int, int>, std::pair<int, float>, std::pair<float, int>, std::pair<float, float>>;
 
-		ElasticViewportSize() = default;
+		explicit ElasticViewportSize(ViewportSize size = ViewportSize{0, 0}):m_value{std::pair{size.width, size.height}}
+		{}
 
-		explicit ElasticViewportSize(ViewportSize size):m_value{std::pair{size.width, size.height}}
+		template<class A, class B>
+		explicit ElasticViewportSize(A width, B height):m_value{std::pair{width, height}}
 		{}
 
 		ViewportSize viewportSize(ViewportSize size) const
@@ -96,5 +98,16 @@ namespace fruit
 	private:
 		StorageType m_value;
 	};
+
+	inline auto to_string(ElasticViewportSize const& obj)
+	{
+		return std::visit([](auto const item){
+			return std::string{"("}
+				.append(std::to_string(item.first))
+				.append(" x ")
+				.append(std::to_string(item.second))
+				.append(")");
+		}, obj.value());
+	}
 }
 #endif

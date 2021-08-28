@@ -42,7 +42,9 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 				auto const min_size = item.compute_min_size();
 				auto const item_req_size = requested_size(item, current_size);
 				auto const sel_size = max(min_size, item_req_size);
-				if(sel_size == min_size)
+				auto const failed = (m_direction == Direction::LeftToRight)?
+					sel_size.width != item_req_size.width : sel_size.height != item_req_size.height;
+				if(failed)
 				{
 					completed[k] = true;
 					sizes[k] = sel_size;
@@ -72,7 +74,10 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 	{
 		if(!completed[k])
 		{
-			sizes[k] = requested_size(content[k], current_size);
+			auto const& item = content[k];
+			auto const min_size = item.compute_min_size();
+			auto const item_req_size = requested_size(item, current_size);
+			sizes[k] =  max(min_size, item_req_size);
 		}
 	}
 
