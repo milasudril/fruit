@@ -40,7 +40,6 @@ TESTCASE(LineLayoutSizeRequest)
 	EXPECT_EQ(size.width, 3);
 	EXPECT_EQ(size.height, 9);
 }
-#if 0
 
 TESTCASE(LineLayoutSizeRequestHorizontal)
 {
@@ -58,6 +57,7 @@ TESTCASE(LineLayoutSizeRequestHorizontal)
 	EXPECT_EQ(size.height, 3);
 	EXPECT_EQ(size.width, 9);
 }
+#if 0
 
 TESTCASE(LineLayoutGeometryUpdate)
 {

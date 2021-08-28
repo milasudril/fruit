@@ -11,7 +11,7 @@ fruit::ViewportSize fruit::LineLayout::compute_min_size() const
 		if(direction == Direction::LeftToRight)
 		{
 			s.width += size_member.width;
-			s.height = std::max(s.height, s.height);
+			s.height = std::max(size_member.height, s.height);
 		}
 		else
 		{
