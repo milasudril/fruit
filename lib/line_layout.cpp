@@ -3,6 +3,7 @@
 #include "./line_layout.hpp"
 #include "./utils.hpp"
 
+#if 0
 namespace
 {
 	inline auto resulting_size(int value, int)
@@ -159,3 +160,4 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 
 //	puts("=====================");
 }
+#endif

@@ -4,6 +4,7 @@
 
 #include "testfwk/testfwk.hpp"
 
+#if 0
 namespace
 {
 	struct Object
@@ -257,3 +258,5 @@ TESTCASE(LineLayoutGeometryUpdateLineLayoutInLineLayout1)
 	outer.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{8, 8}, fruit::Origin<int>});
 	EXPECT_EQ(a.size, (fruit::ViewportSize{2, 3}));
 }
+
+#endif

@@ -13,7 +13,6 @@
 #include "lib/update.hpp"
 #include "lib/event_dispatcher.hpp"
 #include "lib/rectangle.hpp"
-#include "lib/line_layout.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -238,6 +237,7 @@ constexpr std::array<std::pair<float, float>, 6> texture_uvs{
 
 int main()
 {
+#if 0
 	fruit::Rectangle rect_a;
 	rect_a.width=300;
 	rect_a.height=200;
@@ -247,7 +247,6 @@ int main()
 	rect_b.width=300;
 	rect_b.height=200;
 	rect_b.color = fruit::green();
-#if 1
 	fruit::Rectangle rect_c;
 	rect_c.width=300;
 	rect_c.height=200;
@@ -257,7 +256,6 @@ int main()
 	rect_d.width=300;
 	rect_d.height=300;
 	rect_d.color = fruit::yellow();
-#endif
 
 	fruit::LineLayout row_a;
 	row_a.push_back(fruit::LayoutBox{std::ref(rect_a), 0.6f});
@@ -280,6 +278,7 @@ int main()
 	fruit::LineLayout column_outer_outer{fruit::LineLayout::Direction::TopToBottom};
 	column_outer_outer.push_back(fruit::LayoutBox{std::ref(column_outer)});
 	column_outer_outer.set_width(1.0f);
+#endif
 
 	Ui<Texture> ui;
 
@@ -308,13 +307,14 @@ int main()
 
 	GLuint va{};
 	glCreateVertexArrays(1, &va);
-
+#if 0
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_a)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_b)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_c)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_d)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(column_outer)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);
+#endif
 
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
 		glViewport(0, 0, w, h);
@@ -325,7 +325,7 @@ int main()
 	while(!glfwWindowShouldClose(window.get()))
 	{
 		glfwPollEvents();
-		ui.update();
+//		ui.update();
 
 		glBindVertexArray(va);
 		ui.display().bind();

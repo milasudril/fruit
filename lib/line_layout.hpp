@@ -192,7 +192,7 @@ namespace fruit
 		ElasticViewportSize m_min_size;
 	};
 
-	ViewportSize requested_size(LineLayout const& layout, ViewportSize domain_size)
+	inline ViewportSize requested_size(LineLayout const& layout, ViewportSize domain_size)
 	{ return layout.min_size().viewportSize(domain_size); }
 }
 
