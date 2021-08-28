@@ -4,7 +4,6 @@
 
 #include "testfwk/testfwk.hpp"
 
-#if 0
 namespace
 {
 	struct Object
@@ -41,6 +40,7 @@ TESTCASE(LineLayoutSizeRequest)
 	EXPECT_EQ(size.width, 3);
 	EXPECT_EQ(size.height, 9);
 }
+#if 0
 
 TESTCASE(LineLayoutSizeRequestHorizontal)
 {

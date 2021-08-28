@@ -16,7 +16,7 @@ fruit::ViewportSize fruit::LineLayout::compute_min_size() const
 		else
 		{
 			s.width = std::max(size_member.width, s.width);
-			s.height += s.height;
+			s.height += size_member.height;
 		}
 	});
 	return max(s, requested_size(*this, ViewportSize{0, 0}));
