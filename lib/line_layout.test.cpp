@@ -100,11 +100,10 @@ TESTCASE(LineLayoutGeometryUpdateVerticalNoConstraints)
 	Object b{size_b, fruit::Origin<int>};
 	Object c{size_c, fruit::Origin<int>};
 
-	layout.push_back(fruit::LayoutBox{std::ref(a), fruit::ElasticViewportSize{0.0f, 1.0f}});
-	layout.push_back(fruit::LayoutBox{std::ref(b), fruit::ElasticViewportSize{0.0f, 1.0f}});
-	layout.push_back(fruit::LayoutBox{std::ref(c), fruit::ElasticViewportSize{0.0f, 1.0f}});
+	layout.push_back(fruit::LayoutBox{std::ref(a), 0.0f, 1.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(b), 0.0f, 1.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(c), 0.0f, 1.0f});
 	layout.set_height(1.0f);
-	layout.set_width(1.0f);
 
 	layout.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{3, 3}, fruit::Point{3, 4, 5}});
 	EXPECT_EQ(a.location.x(), 3);
@@ -120,8 +119,7 @@ TESTCASE(LineLayoutGeometryUpdateVerticalNoConstraints)
 	EXPECT_EQ(c.size, (fruit::ViewportSize{size_c.width, 1}));
 }
 
-#if 0
-TESTCASE(LineLayoutGeometryUpdatePartialConstraints)
+TESTCASE(LineLayoutGeometryUpdateVerticalPartialConstraints)
 {
 	fruit::LineLayout layout{fruit::LineLayout::Direction::TopToBottom};
 
@@ -133,9 +131,10 @@ TESTCASE(LineLayoutGeometryUpdatePartialConstraints)
 	Object b{size_b, fruit::Origin<int>};
 	Object c{size_c, fruit::Origin<int>};
 
-	layout.push_back(fruit::LayoutBox{std::ref(a), 1.0f});
-	layout.push_back(fruit::LayoutBox{std::ref(b), 1.0f});
-	layout.push_back(fruit::LayoutBox{std::ref(c), 1.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(a), 0.0f, 1.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(b), 0.0f, 1.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(c), 0.0f, 1.0f});
+	layout.set_height(1.0f);
 
 	layout.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{3, 4}, fruit::Point{3, 4, 5}});
 	EXPECT_EQ(a.location.x(), 3);
@@ -193,9 +192,10 @@ TESTCASE(LineLayoutGeometryUpdateNoConstraintsHorizontal)
 	Object b{size_b, fruit::Origin<int>};
 	Object c{size_c, fruit::Origin<int>};
 
-	layout.push_back(fruit::LayoutBox{std::ref(a), 1.0f});
-	layout.push_back(fruit::LayoutBox{std::ref(b), 1.0f});
-	layout.push_back(fruit::LayoutBox{std::ref(c), 1.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(a), 1.0f, 0.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(b), 1.0f, 0.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(c), 1.0f, 0.0f});
+	layout.set_width(1.0f);
 
 	layout.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{3, 3}, fruit::Point{4, 3, 5}});
 	EXPECT_EQ(a.location.y(), 3);
@@ -211,7 +211,6 @@ TESTCASE(LineLayoutGeometryUpdateNoConstraintsHorizontal)
 	EXPECT_EQ(c.size, (fruit::ViewportSize{1, size_c.height}));
 }
 
-
 TESTCASE(LineLayoutGeometryUpdatePartialConstraintsHorizontal)
 {
 	fruit::LineLayout layout{fruit::LineLayout::Direction::LeftToRight};
@@ -224,9 +223,10 @@ TESTCASE(LineLayoutGeometryUpdatePartialConstraintsHorizontal)
 	Object b{size_b, fruit::Origin<int>};
 	Object c{size_c, fruit::Origin<int>};
 
-	layout.push_back(fruit::LayoutBox{std::ref(a), 1.0f});
-	layout.push_back(fruit::LayoutBox{std::ref(b), 1.0f});
-	layout.push_back(fruit::LayoutBox{std::ref(c), 1.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(a), 1.0f, 0.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(b), 1.0f, 0.0f});
+	layout.push_back(fruit::LayoutBox{std::ref(c), 1.0f, 0.0f});
+	layout.set_width(1.0f);
 
 	layout.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{4, 3}, fruit::Point{4, 3, 5}});
 	EXPECT_EQ(a.location.y(), 3);
@@ -242,6 +242,7 @@ TESTCASE(LineLayoutGeometryUpdatePartialConstraintsHorizontal)
 	EXPECT_EQ(c.size, (fruit::ViewportSize{1, size_c.height}));
 }
 
+#if 0
 TESTCASE(LineLayoutGeometryUpdateLineLayoutInLineLayout1)
 {
 	fruit::LineLayout outer{fruit::LineLayout::Direction::LeftToRight};
