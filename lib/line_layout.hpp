@@ -167,7 +167,9 @@ namespace fruit
 		 * The size is computed using the following algorithm:
 		 *
 		 * 1. Let s be the required ViewportSize, initialized to {0, 0}
-		 * 2.  For each member:
+		 * 2. Normalize member sizes for members that have a relative size such the sizes sums
+		 *    to 1.0f
+		 * 3.  For each member:
 		 *   1. Let s' = min_size returned by member . SizeRequestEvent{domain_size}
 		 *   2. Let s_req = max(s', requested_size(member, domain_size))
 		 *   3. If
