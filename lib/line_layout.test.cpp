@@ -252,8 +252,10 @@ TESTCASE(LineLayoutGeometryUpdateLineLayoutInLineLayout1)
 
 	fruit::ViewportSize size{0, 3};
 	Object a{size, fruit::Origin<int>};
-	inner.push_back(fruit::LayoutBox{std::ref(a), 1.0f, 0.0f});
-	outer.push_back(fruit::LayoutBox{std::ref(inner), 1.0f, 0.0f});
+
+	// Scaling here does not affect the result due to normailzation
+	inner.push_back(fruit::LayoutBox{std::ref(a), 0.5f, 0.0f});
+	outer.push_back(fruit::LayoutBox{std::ref(inner), 0.5f, 0.0f});
 
 	outer.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{8, 8}, fruit::Origin<int>});
 	EXPECT_EQ(a.size, (fruit::ViewportSize{2, 3}));
