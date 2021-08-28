@@ -9,9 +9,9 @@ namespace
 
 	float relative_size(float value) { return value; }
 
-	void scale_value(int&, float){}
+	void scale(int&, float){}
 
-	void scale_value(float& x, float factor){ x *= factor; }
+	void scale(float& x, float factor){ x *= factor; }
 
 	float sum_ltr(float a, fruit::LayoutBox const& item)
 	{
@@ -27,14 +27,14 @@ namespace
 void fruit::normalize_sum(std::span<LayoutBox> sizes, LayoutDirection direction)
 {
 	auto const sum = std::accumulate(std::begin(sizes), std::end(sizes), 0.0f,
-									(direction == LayoutDirection::LeftToRight) ? sum_ltr : sum_ttb );
+									(direction == LayoutDirection::LeftToRight) ? ::sum_ltr : ::sum_ttb );
 
 	auto const scale_ltr = [factor = 1.0f/sum](auto& item) {
-		std::visit([factor](auto& value){ scale_value(value.first, factor);}, item.size.value());
+		std::visit([factor](auto& value){ ::scale(value.first, factor);}, item.size.value());
 	};
 
 	auto const scale_ttb = [factor = 1.0f/sum](auto& item) {
-		std::visit([factor](auto& value){ scale_value(value.second, factor);}, item.size.value());
+		std::visit([factor](auto& value){ ::scale(value.second, factor);}, item.size.value());
 	};
 
 	if(direction == LayoutDirection::LeftToRight)

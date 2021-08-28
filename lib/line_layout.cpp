@@ -22,10 +22,102 @@ fruit::ViewportSize fruit::LineLayout::compute_min_size() const
 	return max(s, requested_size(*this, ViewportSize{0, 0}));
 }
 
-void fruit::LineLayout::handle(GeometryUpdateEvent const&)
+void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 {
 	auto content = m_content;
 	normalize_sum(std::span{std::data(content), std::size(content)}, m_direction);
+	auto num_remaining_boxes = std::size(content);
+	auto const my_size = requested_size(*this, event.size);
+	auto size = m_direction == Direction::LeftToRight ? my_size.width : my_size.height;
+	std::vector<ViewportSize> sizes(std::size(content));
+	std::vector<bool> completed(std::size(content));
+	while(num_remaining_boxes != 0)
+	{
+		auto const initial_size = size;
+		for(size_t k = 0; k != std::size(content); ++k)
+		{
+			if(!completed[k])
+			{
+#if 0
+				auto const& item = content[k];
+				auto const size_req_result = item.event_handler.handle(SizeRequestEvent{my_size});
+				auto const desired_size = static_cast<int>(item.size * initial_size + 0.5f);
+				auto const min_size = extent(size_req_result.min_size, m_direction);
+				auto const too_small = desired_size < min_size;
+				auto const computed_size = std::max(desired_size, min_size);
+				size -= too_small? min_size : 0;
+#endif
+				if(true)
+				{
+				//	sizes[k] = fit_viewport(size_req_result.min_size, computed_size, m_direction);
+				//	printf("sizes %s\n", to_string(sizes[k]).c_str());
+					completed[k] = true;
+					content[k].size = 0.0f;
+					--num_remaining_boxes;
+				}
+			}
+		}
+
+		normalize_sum(std::span{std::data(content), std::size(content)}, m_direction);
+
+		if(size == initial_size)
+		{
+			break;
+		}
+	}
+
+
+#if 0
+
+	auto remaining_boxes = std::size(content);
+	std::vector<ViewportSize> sizes(std::size(content));
+	std::vector<bool> completed(std::size(content));
+	auto const my_size = handle(SizeRequestEvent{event.size}).min_size;
+//	auto const my_size = make_viewport_size(m_min_width, m_min_height, event.size);
+	printf("My size: %s %p\n", to_string(my_size).c_str(), this);
+	auto size = extent(my_size, m_direction);
+	while(remaining_boxes != 0)
+	{
+		auto const initial_size = size;
+		for(size_t k = 0 ; k != std::size(content); ++k)
+		{
+			if(!completed[k])
+			{
+
+			}
+		}
+
+		normalize_sum(std::span{std::data(content), std::size(content)}, [](auto&& item) -> float& {
+			return item.size;
+		});
+
+		if(size == initial_size)
+		{
+			break;
+		}
+	}
+
+	for(size_t k = 0; k != std::size(content); ++k)
+	{
+		if(!completed[k])
+		{
+			auto const& item = content[k];
+			auto const size_req_result = item.event_handler.handle(SizeRequestEvent{my_size});
+			auto const computed_size = static_cast<int>(item.size * size + 0.5f);
+			sizes[k] = fit_viewport(size_req_result.min_size, computed_size, m_direction);
+			completed[k] = true;
+		}
+	}
+
+	auto origin = event.location;
+	for(size_t k = 0; k != std::size(content); ++k)
+	{
+		content[k].event_handler.handle(GeometryUpdateEvent{sizes[k], origin});
+		origin += make_offset_vector(sizes[k], m_direction);
+	}
+
+//	puts("=====================");
+#endif
 }
 
 
@@ -116,76 +208,5 @@ namespace
 	{
 		return dir == fruit::LineLayout::Direction::TopToBottom? fruit::Vector{0, size.height, 0} : fruit::Vector{size.width, 0, 0};
 	}
-}
-
-void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
-{
-	auto content = m_content;
-	normalize_sum(std::span{std::data(content), std::size(content)}, [](auto&& item) -> float& {
-		return item.size;
-	});
-
-	auto remaining_boxes = std::size(content);
-	std::vector<ViewportSize> sizes(std::size(content));
-	std::vector<bool> completed(std::size(content));
-	auto const my_size = handle(SizeRequestEvent{event.size}).min_size;
-//	auto const my_size = make_viewport_size(m_min_width, m_min_height, event.size);
-	printf("My size: %s %p\n", to_string(my_size).c_str(), this);
-	auto size = extent(my_size, m_direction);
-	while(remaining_boxes != 0)
-	{
-		auto const initial_size = size;
-		for(size_t k = 0 ; k != std::size(content); ++k)
-		{
-			if(!completed[k])
-			{
-				auto const& item = content[k];
-				auto const size_req_result = item.event_handler.handle(SizeRequestEvent{my_size});
-				auto const desired_size = static_cast<int>(item.size * initial_size + 0.5f);
-				auto const min_size = extent(size_req_result.min_size, m_direction);
-				auto const too_small = desired_size < min_size;
-				auto const computed_size = std::max(desired_size, min_size);
-				size -= too_small? min_size : 0;
-				if(too_small)
-				{
-					sizes[k] = fit_viewport(size_req_result.min_size, computed_size, m_direction);
-					printf("sizes %s\n", to_string(sizes[k]).c_str());
-					completed[k] = true;
-					content[k].size = 0.0f;
-					--remaining_boxes;
-				}
-			}
-		}
-
-		normalize_sum(std::span{std::data(content), std::size(content)}, [](auto&& item) -> float& {
-			return item.size;
-		});
-
-		if(size == initial_size)
-		{
-			break;
-		}
-	}
-
-	for(size_t k = 0; k != std::size(content); ++k)
-	{
-		if(!completed[k])
-		{
-			auto const& item = content[k];
-			auto const size_req_result = item.event_handler.handle(SizeRequestEvent{my_size});
-			auto const computed_size = static_cast<int>(item.size * size + 0.5f);
-			sizes[k] = fit_viewport(size_req_result.min_size, computed_size, m_direction);
-			completed[k] = true;
-		}
-	}
-
-	auto origin = event.location;
-	for(size_t k = 0; k != std::size(content); ++k)
-	{
-		content[k].event_handler.handle(GeometryUpdateEvent{sizes[k], origin});
-		origin += make_offset_vector(sizes[k], m_direction);
-	}
-
-//	puts("=====================");
 }
 #endif
