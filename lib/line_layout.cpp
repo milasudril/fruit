@@ -3,6 +3,26 @@
 #include "./line_layout.hpp"
 #include "./utils.hpp"
 
+fruit::ViewportSize fruit::LineLayout::compute_min_size() const
+{
+	ViewportSize s{0, 0};
+	std::ranges::for_each(m_content, [&s, direction = m_direction](auto const& item) {
+		auto const size_member = item.compute_min_size();
+		if(direction == Direction::LeftToRight)
+		{
+			s.width += size_member.width;
+			s.height = std::max(s.height, s.height);
+		}
+		else
+		{
+			s.width = std::max(size_member.width, s.width);
+			s.height += s.height;
+		}
+	});
+	return max(s, requested_size(*this, ViewportSize{0, 0}));
+}
+
+
 #if 0
 namespace
 {

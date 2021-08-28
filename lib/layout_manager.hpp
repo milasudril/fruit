@@ -16,6 +16,12 @@ namespace fruit
 
 		EventHandler<SizeRequestEvent, GeometryUpdateEvent> event_handler;
 		ElasticViewportSize size;
+
+		ViewportSize compute_min_size() const
+		{
+			return max(size.viewportSize(ViewportSize{0, 0}),
+				event_handler.handle(SizeRequestEvent{ViewportSize{0, 0}}).min_size);
+		}
 	};
 
 	inline ViewportSize requested_size(LayoutBox const& box, ViewportSize domain_size)

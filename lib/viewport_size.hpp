@@ -2,6 +2,7 @@
 #define FRUIT_VIEWPORTSIZE_HPP
 
 #include <string>
+#include <algorithm>
 
 namespace fruit
 {
@@ -14,7 +15,18 @@ namespace fruit
 		constexpr bool operator!=(ViewportSize const& other) const = default;
 	};
 
-	inline std::string to_string(ViewportSize const& viewport)
+	inline ViewportSize max(ViewportSize a, ViewportSize b)
+	{
+		return ViewportSize{std::max(a.width, b.width), std::max(a.height, b.height)};
+	}
+
+	inline ViewportSize min(ViewportSize a, ViewportSize b)
+	{
+		return ViewportSize{std::min(a.width, b.width), std::min(a.height, b.height)};
+	}
+
+
+	inline std::string to_string(ViewportSize viewport)
 	{
 		std::string ret{"("};
 		ret += std::to_string(viewport.width);

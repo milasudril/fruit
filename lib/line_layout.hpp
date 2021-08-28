@@ -65,9 +65,9 @@ namespace fruit
 		 *
 		 * \see compute_min_size
 		*/
-		SizeRequestResult handle(SizeRequestEvent const& event) const
+		SizeRequestResult handle(SizeRequestEvent const&) const
 		{
-			auto const min_size = compute_min_size(event.domain_size);
+			auto const min_size = compute_min_size();
 			return SizeRequestResult{min_size, min_size};
 		}
 
@@ -158,7 +158,7 @@ namespace fruit
 		{ m_min_size.set_height(value);}
 
 		/**
-		 * \brief Computes the minimum space that this LineLayout will require, given domain_size
+		 * \brief Computes the minimum space that this LineLayout will require
 		 *
 		 * Given domain_size, this funciton computes the minimum space this LineLayout will require.
 		 * In addition to domain_size, the space requried depends on min_width, min_height, and the
@@ -167,21 +167,18 @@ namespace fruit
 		 * The size is computed using the following algorithm:
 		 *
 		 * 1. Let s be the required ViewportSize, initialized to {0, 0}
-		 * 2. Normalize member sizes for members that have a relative size such the sizes sums
-		 *    to 1.0f
-		 * 3.  For each member:
-		 *   1. Let s' = min_size returned by member . SizeRequestEvent{domain_size}
-		 *   2. Let s_req = max(s', requested_size(member, domain_size))
-		 *   3. If
+		 * 2.  For each member:
+		 *   1. Let s_req = member.compute_min_size()
+		 *   2. If
 		 *     1. m_direction equals LeftToRight:
 		 *        1. let s.width = s.width + s_req.width
 		 *        2. let s.height = max(s.height, s_req).height
 		 *     2. otherwise:
 		 *        1. let s.width = max(s.width, s_req).width
 		 *        2. let s.height = s.height + s_req.height
-		 * 3. Return max(s, requested_size(*this, domain_size))
+		 * 3. Return max(s, requested_size(*this, ViewportSize{0, 0}))
 		 */
-		ViewportSize compute_min_size(ViewportSize domain_size) const;
+		ViewportSize compute_min_size() const;
 
 		ElasticViewportSize min_size() const
 		{ return m_min_size; }
