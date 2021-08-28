@@ -242,24 +242,19 @@ TESTCASE(LineLayoutGeometryUpdatePartialConstraintsHorizontal)
 	EXPECT_EQ(c.size, (fruit::ViewportSize{1, size_c.height}));
 }
 
-#if 0
 TESTCASE(LineLayoutGeometryUpdateLineLayoutInLineLayout1)
 {
 	fruit::LineLayout outer{fruit::LineLayout::Direction::LeftToRight};
 	fruit::LineLayout inner{fruit::LineLayout::Direction::LeftToRight};
-
-	printf("Outer: %p\nInner: %p\n", &outer, &inner);
 
 	outer.set_width(0.5f);
 	inner.set_width(0.5f);
 
 	fruit::ViewportSize size{0, 3};
 	Object a{size, fruit::Origin<int>};
-	inner.push_back(fruit::LayoutBox{std::ref(a), 1.0f});
-	outer.push_back(fruit::LayoutBox{std::ref(inner), 1.0f});
+	inner.push_back(fruit::LayoutBox{std::ref(a), 1.0f, 0.0f});
+	outer.push_back(fruit::LayoutBox{std::ref(inner), 1.0f, 0.0f});
 
 	outer.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{8, 8}, fruit::Origin<int>});
 	EXPECT_EQ(a.size, (fruit::ViewportSize{2, 3}));
 }
-
-#endif
