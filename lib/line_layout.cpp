@@ -22,6 +22,14 @@ fruit::ViewportSize fruit::LineLayout::compute_min_size() const
 	return max(s, requested_size(*this, ViewportSize{0, 0}));
 }
 
+void fruit::LineLayout::handle(GeometryUpdateEvent const&)
+{
+	auto content = m_content;
+	normalize_sum(std::span{std::data(content), std::size(content)}, m_direction);
+}
+
+
+
 
 #if 0
 namespace

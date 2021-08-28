@@ -3,7 +3,7 @@
 #ifndef FRUIT_COLUMNLAYOUT_HPP
 #define FRUIT_COLUMNLAYOUT_HPP
 
-#include "./layout_manager.hpp"
+#include "./layout_box.hpp"
 #include "./error_message.hpp"
 #include "./elastic_viewport_size.hpp"
 
@@ -22,17 +22,7 @@ namespace fruit
 	class LineLayout
 	{
 	public:
-		/**
-		 * \brief Determines the layout direction
-		 *
-		 * The direction determines the location scheme of the LineLayout
-		 *
-		*/
-		enum class Direction:int
-		{
-			LeftToRight,  /**< Use left-to-right or horizontal location scheme*/
-			TopToBottom   /**< Use top-to-bottom or vertical location scheme*/
-		};
+		using Direction = LayoutDirection;
 
 		/**
 		 * \brief Constructs a new LineLayout, and sets the direction to dir

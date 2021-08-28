@@ -78,6 +78,16 @@ namespace fruit
 		bool operator==(ElasticViewportSize const&) const = default;
 		bool operator!=(ElasticViewportSize const&) const = default;
 
+		StorageType const& value() const
+		{
+			return m_value;
+		}
+
+		StorageType& value()
+		{
+			return m_value;
+		}
+
 	private:
 		StorageType m_value;
 	};

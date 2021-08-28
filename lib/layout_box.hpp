@@ -1,13 +1,29 @@
-#ifndef FRUITL_LAYOUTMANAGER_HPP
-#define FRUITL_LAYOUTMANAGER_HPP
+//@	{"dependencies_extra":[{"ref":"./layout_box.o", "rel":"implementation"}]}
+
+#ifndef FRUITL_LAYOUTBOX_HPP
+#define FRUITL_LAYOUTBOX_HPP
 
 #include "./event_handler.hpp"
 #include "./size_request_event.hpp"
 #include "./geometry_update_event.hpp"
 #include "./elastic_viewport_size.hpp"
 
+#include <span>
+
 namespace fruit
 {
+	/**
+	* \brief Determines the layout direction
+	*
+	* The direction determines the location scheme of the LineLayout
+	*
+	*/
+	enum class LayoutDirection:int
+	{
+		LeftToRight,  /**< Use left-to-right or horizontal location scheme*/
+		TopToBottom   /**< Use top-to-bottom or vertical location scheme*/
+	};
+
 	struct LayoutBox
 	{
 		template<class T, class ... Sizes>
@@ -26,6 +42,8 @@ namespace fruit
 
 	inline ViewportSize requested_size(LayoutBox const& box, ViewportSize domain_size)
 	{ return box.size.viewportSize(domain_size); }
+
+	void normalize_sum(std::span<LayoutBox> sizes, LayoutDirection direction);
 }
 
 #endif
