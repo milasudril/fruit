@@ -117,19 +117,34 @@ namespace fruit
 			return m_handle.get();
 		}
 
-		TextSegment& text(std::basic_string_view<char8_t> buffer)
+		TextSegment& text(std::basic_string_view<char8_t> buffer) &
 		{
 			FRUIT_ASSERT(valid());
 			text_impl(buffer);
 			return *this;
 		}
 
-		TextSegment& direction(TextDirection val)
+		TextSegment&& text(std::basic_string_view<char8_t> buffer) &&
+		{
+			FRUIT_ASSERT(valid());
+			text_impl(buffer);
+			return std::move(*this);
+		}
+
+		TextSegment& direction(TextDirection val) &
 		{
 			FRUIT_ASSERT(valid());
 			hb_buffer_set_direction(native_handle(), static_cast<hb_direction_t>(val));
 			return *this;
 		}
+
+		TextSegment&& direction(TextDirection val) &&
+		{
+			FRUIT_ASSERT(valid());
+			hb_buffer_set_direction(native_handle(), static_cast<hb_direction_t>(val));
+			return std::move(*this);
+		}
+
 
 		TextDirection direction() const
 		{
@@ -137,11 +152,18 @@ namespace fruit
 			return static_cast<TextDirection>(hb_buffer_get_direction(native_handle()));
 		}
 
-		TextSegment& language(LanguageTag const& lang)
+		TextSegment& language(LanguageTag const& lang) &
 		{
 			FRUIT_ASSERT(valid());
 			hb_buffer_set_language(native_handle(), hb_language_from_string(lang.c_str(), -1));
 			return *this;
+		}
+
+		TextSegment&& language(LanguageTag const& lang) &&
+		{
+			FRUIT_ASSERT(valid());
+			hb_buffer_set_language(native_handle(), hb_language_from_string(lang.c_str(), -1));
+			return std::move(*this);
 		}
 
 		LanguageTag language() const
@@ -150,10 +172,16 @@ namespace fruit
 			return LanguageTag{hb_language_to_string(hb_buffer_get_language(native_handle()))};
 		}
 
-		TextSegment& script(WritingSystem val)
+		TextSegment& script(WritingSystem val) &
 		{
 			hb_buffer_set_script(native_handle(), static_cast<hb_script_t>(val));
 			return *this;
+		}
+
+		TextSegment&& script(WritingSystem val) &&
+		{
+			hb_buffer_set_script(native_handle(), static_cast<hb_script_t>(val));
+			return std::move(*this);
 		}
 
 		WritingSystem script() const
@@ -162,7 +190,7 @@ namespace fruit
 			return static_cast<WritingSystem>(hb_buffer_get_script(native_handle()));
 		}
 
-		TextShapeResult shape(TextShaper const& shaper) const
+		TextShapeResult shape(TextShaper const& shaper) const &
 		{
 			FRUIT_ASSERT(valid());
 			FRUIT_ASSERT(shaper.valid());
