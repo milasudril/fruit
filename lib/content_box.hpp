@@ -7,6 +7,10 @@ namespace fruit
 {
 	struct ContentBox
 	{
+		Point<int> locaction;
+		int current_width;
+		int current_height;
+
 		int padding_left;
 		int padding_right;
 		int padding_top;
@@ -18,11 +22,17 @@ namespace fruit
 		int margin_bottom;
 
 		Pixel bg_color;
-		int border_width;
 		Pixel border_color;
+		int border_width;
 
 		TextComposingStick content;
 		Pixel text_color;
+
+		SizeRequestResult handle(SizeRequestEvent const&) const;
+
+		void handle(GeometryUpdateEvent const& event);
+
+		void handle(UpdateEventSw const& event) const;
 	};
 }
 
