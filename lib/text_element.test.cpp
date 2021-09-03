@@ -1,13 +1,13 @@
-//@	{"target":{"name":"text_composing_stick_test"}}
+//@	{"target":{"name":"text_element_test"}}
 
-#include "./text_composing_stick.hpp"
+#include "./text_element.hpp"
 
 #include "testfwk/testfwk.hpp"
 
-TESTCASE(TextComposingStickCreateObj)
+TESTCASE(TextElementCreateObj)
 {
 	fruit::FontFace face;
-	fruit::TextComposingStick obj{
+	fruit::TextElement obj{
 		fruit::TextSegment{}.text(u8"Hello, World"),
 		16,
 		face

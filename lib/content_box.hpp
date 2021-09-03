@@ -1,7 +1,7 @@
 #ifndef FRUIT_CONTENTBOX_HPP
 #define FRUIT_CONTENTBOX_HPP
 
-#include "./text_composing_stick.hpp"
+#include "./text_element.hpp"
 
 namespace fruit
 {
@@ -25,7 +25,7 @@ namespace fruit
 		Pixel border_color;
 		int border_width;
 
-		TextComposingStick content;
+		TextElement content;
 		Pixel text_color;
 
 		SizeRequestResult handle(SizeRequestEvent const&) const;

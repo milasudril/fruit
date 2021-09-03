@@ -1,5 +1,5 @@
-#ifndef FRUIT_TEXTCOMPOSINGSTIC_HPP
-#define FRUIT_TEXTCOMPOSINGSTIC_HPP
+#ifndef FRUIT_TEXTELEMENT_HPP
+#define FRUIT_TEXTELEMENT_HPP
 
 #include "./text_segment.hpp"
 #include "./font_face.hpp"
@@ -8,7 +8,7 @@
 
 namespace fruit
 {
-	struct TextComposingStick
+	struct TextElement
 	{
 		TextSegment text;
 		int size;
