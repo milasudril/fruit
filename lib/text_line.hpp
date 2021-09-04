@@ -1,9 +1,12 @@
+//@	{"dependencies_extra":[{"ref":"./text_line.o", "rel":"implementation"}]}
+
 #ifndef FRUIT_TEXTELEMENT_HPP
 #define FRUIT_TEXTELEMENT_HPP
 
 #include "./text_segment.hpp"
 #include "./font_face.hpp"
 #include "./size_request_event.hpp"
+#include "./pixel.hpp"
 
 #include <functional>
 
@@ -104,15 +107,9 @@ namespace fruit
 
 		SizeRequestResult handle(SizeRequestEvent const&) const
 		{
-			if(!m_render_result)
+			if(!m_render_result) [[unlikely]]
 			{
-				do_render();
-				if(!m_render_result)
-				{
-					auto const min_size = is_horizontal(m_text.direction())?
-					ViewportSize{0, m_char_height} : ViewportSize{m_char_height, 0};
-					return SizeRequestResult{min_size, min_size};
-				}
+				return handle_no_result(SizeRequestEvent{});
 			}
 
 			auto const& img = m_render_result->second;
@@ -120,35 +117,16 @@ namespace fruit
 			return SizeRequestResult{min_size, min_size};
 		}
 
-#if 0
-		void compose(Image<float>& output_buffer, Vector<int> origin)
-		{
-			if(!m_render_result)
-			{
-				m_render_result = render();
-				if(!m_render_result)
-				{ return; }
-			}
-		}
-#endif
+		void compose(Image<Pixel>& output_buffer, Point<int> origin, Pixel color) const;
 
 	private:
 		TextSegment m_text;
 		int m_char_height;
 		std::reference_wrapper<FontFace const> m_font;
 
-		void do_render() const
-		{
-			auto shape_res = m_text.shape(TextShaper{m_font, m_char_height});
-			if(shape_res.glyph_count() == 0)
-			{
-				m_render_result = {};
-				return;
-			}
+		SizeRequestResult handle_no_result(SizeRequestEvent const&) const;
 
-			auto res = render(shape_res);
-			m_render_result = std::optional{std::pair{std::move(shape_res), std::move(res)}};
-		}
+		void do_render() const;
 		mutable std::optional<std::pair<TextShapeResult, Image<uint8_t>>> m_render_result;
 	};
 }

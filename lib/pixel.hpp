@@ -118,6 +118,11 @@ namespace fruit
 		return a * c;
 	}
 
+	constexpr auto operator+(Pixel a, Pixel b)
+	{
+		return a += b;
+	}
+
 	constexpr Pixel black() { return Pixel{0.0f, 0.0f, 0.0f}; }
 
 	constexpr Pixel red() { return Pixel{1.0f, 0.0f, 0.0f}; }
