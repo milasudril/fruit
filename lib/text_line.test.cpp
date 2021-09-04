@@ -1,13 +1,13 @@
-//@	{"target":{"name":"text_element_test"}}
+//@	{"target":{"name":"text_line_test"}}
 
-#include "./text_element.hpp"
+#include "./text_line.hpp"
 
 #include "testfwk/testfwk.hpp"
 
-TESTCASE(TextElementCreateObj)
+TESTCASE(TextLineCreateObj)
 {
 	fruit::FontFace face;
-	fruit::TextElement obj{
+	fruit::TextLine obj{
 		fruit::TextSegment{}.text(u8"Hello, World"),
 		16,
 		face

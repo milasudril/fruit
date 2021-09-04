@@ -8,7 +8,7 @@
 
 namespace fruit
 {
-	struct TextElement
+	struct TextLine
 	{
 		TextSegment text;
 		int size;

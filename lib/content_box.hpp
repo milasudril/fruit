@@ -1,7 +1,7 @@
 #ifndef FRUIT_CONTENTBOX_HPP
 #define FRUIT_CONTENTBOX_HPP
 
-#include "./text_element.hpp"
+#include "./text_line.hpp"
 
 namespace fruit
 {
@@ -25,7 +25,7 @@ namespace fruit
 		Pixel border_color;
 		int border_width;
 
-		TextElement content;
+		TextLine content;
 		Pixel text_color;
 
 		SizeRequestResult handle(SizeRequestEvent const&) const;
