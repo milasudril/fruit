@@ -2,10 +2,15 @@
 
 #include "./text_line.hpp"
 
+#include "./io_utils.hpp"
+
 #include "testfwk/testfwk.hpp"
 
 TESTCASE(TextLineCreateObj)
 {
-	fruit::FontFace face;
+	fruit::FontfaceLoader loader;
+	fruit::FontFace face{loader, fruit::io_utils::load("testdata/DejaVuSans.ttf")};
 	fruit::TextLine obj{face};
+
+	(void)obj.handle(fruit::SizeRequestEvent{});
 }

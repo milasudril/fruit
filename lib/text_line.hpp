@@ -3,6 +3,7 @@
 
 #include "./text_segment.hpp"
 #include "./font_face.hpp"
+#include "./size_request_event.hpp"
 
 #include <functional>
 
@@ -87,6 +88,13 @@ namespace fruit
 		{
 			m_font = font;
 			return std::move(*this);
+		}
+
+		SizeRequestResult handle(SizeRequestEvent const&) const
+		{
+			SizeRequestResult res{};
+
+			return res;
 		}
 
 	private:
