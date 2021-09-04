@@ -83,6 +83,8 @@ namespace fruit
 			return m_direction;
 		}
 
+		size_t glyph_count() const { return m_glyph_count; }
+
 	private:
 		size_t m_glyph_count;
 		std::unique_ptr<GlyphInfo[]> m_glyph_info;
