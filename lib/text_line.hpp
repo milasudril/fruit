@@ -106,25 +106,50 @@ namespace fruit
 		{
 			if(!m_render_result)
 			{
-				auto shape_res = m_text.shape(TextShaper{m_font, m_char_height});
-				if(shape_res.glyph_count() == 0)
+				do_render();
+				if(!m_render_result)
 				{
-					auto const min_size = is_horizontal(shape_res.direction())?
-						ViewportSize{0, shape_res.char_height()} : ViewportSize{shape_res.char_height(), 0};
+					auto const min_size = is_horizontal(m_text.direction())?
+					ViewportSize{0, m_char_height} : ViewportSize{m_char_height, 0};
 					return SizeRequestResult{min_size, min_size};
 				}
-				m_render_result = render(shape_res);
 			}
-			auto const min_size = ViewportSize{m_render_result->width(), m_render_result->height()};
+
+			auto const& img = m_render_result->second;
+			auto const min_size = ViewportSize{img.width(), img.height()};
 			return SizeRequestResult{min_size, min_size};
 		}
+
+#if 0
+		void compose(Image<float>& output_buffer, Vector<int> origin)
+		{
+			if(!m_render_result)
+			{
+				m_render_result = render();
+				if(!m_render_result)
+				{ return; }
+			}
+		}
+#endif
 
 	private:
 		TextSegment m_text;
 		int m_char_height;
 		std::reference_wrapper<FontFace const> m_font;
 
-		mutable std::optional<Image<uint8_t>> m_render_result;
+		void do_render() const
+		{
+			auto shape_res = m_text.shape(TextShaper{m_font, m_char_height});
+			if(shape_res.glyph_count() == 0)
+			{
+				m_render_result = {};
+				return;
+			}
+
+			auto res = render(shape_res);
+			m_render_result = std::optional{std::pair{std::move(shape_res), std::move(res)}};
+		}
+		mutable std::optional<std::pair<TextShapeResult, Image<uint8_t>>> m_render_result;
 	};
 }
 
