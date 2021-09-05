@@ -244,8 +244,6 @@ constexpr std::array<std::pair<float, float>, 6> texture_uvs{
 
 int main()
 {
-
-
 	Ui<Texture> ui;
 
 	auto window = createWindow();
@@ -274,6 +272,8 @@ int main()
 	GLuint va{};
 	glCreateVertexArrays(1, &va);
 	fruit::ContentBox box;
+	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(box)}, fruit::DeviceId{-1});
+	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(box)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);
 
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
