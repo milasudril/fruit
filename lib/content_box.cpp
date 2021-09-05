@@ -36,7 +36,7 @@ fruit::SizeRequestResult fruit::ContentBox::handle(SizeRequestEvent const& event
 
 void fruit::ContentBox::handle(UpdateEventSw const& event) const
 {
-	auto const size_vec = Vector{m_size.width, m_size.width, 0};
+	auto const size_vec = Vector{m_size.width, m_size.height, 0};
 	{
 		// render background
 		auto const rect_begin = m_location;

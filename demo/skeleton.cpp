@@ -92,7 +92,7 @@ public:
 		{
 			auto fb = fruit::ImageView{m_framebuffer.get(), m_width, m_height};
 			memset(m_framebuffer.get(), 0, size(fb));
-			send(fruit::DeviceId{-1}, fruit::UpdateEventSw{});
+			send(fruit::DeviceId{-1}, fruit::UpdateEventSw{fb});
 			m_display(fb);
 		}
 	}
