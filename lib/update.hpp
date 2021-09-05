@@ -10,9 +10,9 @@
 namespace fruit
 {
 	template<class T>
-	concept DisplayFunction = requires(T x, Pixel const* source, int width, int height)
+	concept DisplayFunction = requires(T x, ImageView<Pixel const> source)
 	{
-		{x(source, width, height)} -> std::same_as<void>;
+		{x(source)} -> std::same_as<void>;
 	};
 
 	template<class UiUpdater, DisplayFunction Display>
@@ -22,7 +22,7 @@ namespace fruit
 	void update(UiUpdater const& updater, DeviceId id, UpdateEventSw const& event, Display&& display)
 	{
 		updater.send(id, event);
-		display(event.buffer, event.width, event.height);
+		display(event.buffer);
 	}
 }
 

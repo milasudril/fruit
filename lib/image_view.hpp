@@ -10,6 +10,8 @@ namespace fruit
 	class ImageView
 	{
 	public:
+		ImageView():ImageView{nullptr, 0, 0}{}
+
 		constexpr explicit ImageView(T* data, int width, int height):
 			m_data{data},
 			m_width{width},
@@ -39,6 +41,11 @@ namespace fruit
 		constexpr T* data() const
 		{
 			return m_data;
+		}
+
+		constexpr operator ImageView<std::add_const_t<T>>() const
+		{
+			return ImageView{std::as_const(m_data), m_width, m_height};
 		}
 
 	private:

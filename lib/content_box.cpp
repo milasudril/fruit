@@ -19,11 +19,12 @@ fruit::SizeRequestResult fruit::ContentBox::handle(SizeRequestEvent const& event
 
 void fruit::ContentBox::handle(UpdateEventSw const& event) const
 {
+	auto const size_vec = Vector{m_size.width, m_size.width, 0};
 	auto const buffer = event.buffer;
 	{
 		// render background
 		auto const rect_begin = m_location;
-		auto const rect_end = m_location + Vector{m_width, m_height, 0};
+		auto const rect_end = m_location + size_vec;
 		fill_rect(buffer, rect_begin, rect_end, m_bg_color);
 	}
 
@@ -39,7 +40,7 @@ void fruit::ContentBox::handle(UpdateEventSw const& event) const
 	{
 		// render bottom border
 		auto const rect_begin = m_location + Vector{0, -m_border_width_near.y(), 0};
-		auto const rect_end = m_location + Vector{m_width, m_height, 0};
+		auto const rect_end = m_location + size_vec;
 		fill_rect(buffer, rect_begin, rect_end, m_border_color);
 	}
 
@@ -53,7 +54,7 @@ void fruit::ContentBox::handle(UpdateEventSw const& event) const
 	{
 		// render right border
 		auto const rect_begin = m_location  + Vector{-m_border_width_near.x(), 0, 0};
-		auto const rect_end = m_location + Vector{m_width, m_height, 0};
+		auto const rect_end = m_location + size_vec;
 		fill_rect(buffer, rect_begin, rect_end, m_border_color);
 	}
 

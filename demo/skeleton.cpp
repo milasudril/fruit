@@ -12,7 +12,7 @@
 
 #include "lib/update.hpp"
 #include "lib/event_dispatcher.hpp"
-#include "lib/rectangle.hpp"
+#include "lib/geometry_update_event.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -86,9 +86,10 @@ public:
 
 	void update()
 	{
-		memset(m_framebuffer.get(), 0, m_width*m_height);
-		send(fruit::DeviceId{-1}, fruit::UpdateEventSw{m_framebuffer.get(), m_width, m_height});
-		m_display(m_framebuffer.get(), m_width, m_height);
+		auto fb = fruit::ImageView{m_framebuffer.get(), m_width, m_height};
+		memset(m_framebuffer.get(), 0, size(fb));
+		send(fruit::DeviceId{-1}, fruit::UpdateEventSw{});
+		m_display(fb);
 	}
 
 	void set_display(UiUpdater&& display)
@@ -124,16 +125,17 @@ public:
 		}
 	}
 
-	void operator()(fruit::Pixel const* buffer, int width, int height)
+	void operator()(fruit::ImageView<fruit::Pixel const> buffer)
 	{
+		auto width = buffer.width();
+		auto height = buffer.height();
 		if(m_handle == 0 || width != m_width || height != m_height)
 		{
 			allocate(width, height);
 			glTextureParameteri(m_handle, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTextureParameteri(m_handle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		}
-
-		glTextureSubImage2D(m_handle, 0, 0, 0, width, height, GL_RGBA, GL_FLOAT, buffer);
+		glTextureSubImage2D(m_handle, 0, 0, 0, width, height, GL_RGBA, GL_FLOAT, buffer.data());
 	}
 
 	void allocate(int width, int height)

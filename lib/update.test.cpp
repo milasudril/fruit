@@ -25,16 +25,15 @@ TESTCASE(updateUi)
 {
 	UiUpdater updater;
 	auto buffer = std::make_unique<fruit::Pixel[]>(6);
-	fruit::UpdateEventSw event{};
-	event.buffer = buffer.get();
-	event.width = 3;
-	event.height = 2;
-	update(updater, fruit::DeviceId{1}, event, [&event](fruit::Pixel const* buffer, int w, int h){
-		EXPECT_EQ(buffer, event.buffer);
-		EXPECT_EQ(w, event.width);
-		EXPECT_EQ(h, event.height);
+	fruit::UpdateEventSw event{fruit::ImageView{buffer.get(), 3, 2}};
+	update(updater, fruit::DeviceId{1}, event, [&event](fruit::ImageView<fruit::Pixel const> source){
+		EXPECT_EQ(source.data(), event.buffer.data());
+		EXPECT_EQ(source.width(), event.buffer.width());
+		EXPECT_EQ(source.height(), event.buffer.height());
 	});
 
 	EXPECT_EQ(id_sent, fruit::DeviceId{1});
-	EXPECT_EQ(event_sent, event);
+	EXPECT_EQ(event_sent.buffer.data(),   event.buffer.data());
+	EXPECT_EQ(event_sent.buffer.width(),  event.buffer.width());
+	EXPECT_EQ(event_sent.buffer.height(), event.buffer.height());
 }
