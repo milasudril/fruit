@@ -23,7 +23,8 @@ namespace fruit
 			m_text_color{0.0f, 0.0f, 0.0f, 1.0f},
 			m_size{0, 0},
 			m_location{Origin<int>},
-			m_bg_color{1.0, 1.0, 1.0, 1.0}
+			m_bg_color{1.0, 1.0, 1.0, 1.0},
+			m_border_color{0, 0, 0, 0}
 		{}
 
 		SizeRequestResult handle(SizeRequestEvent const& event) const;
