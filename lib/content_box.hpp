@@ -37,6 +37,13 @@ namespace fruit
 
 		void handle(UpdateEventSw const& event) const;
 
+		template<class T>
+		ContentBox& content(T&& value)
+		{
+			m_content = std::forward<T>(value);
+			return *this;
+		}
+
 	private:
 		Vector<int> m_padding_near;
 		Vector<int> m_padding_far;
