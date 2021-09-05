@@ -18,17 +18,16 @@ fruit::SizeRequestResult fruit::ContentBox::handle(SizeRequestEvent const& event
 	return SizeRequestResult{res, res};
 }
 
-void fruit::ContentBox::handle(UpdateEventSw const& ) const
+void fruit::ContentBox::handle(UpdateEventSw const& event) const
 {
-#if 0
 	auto const size_vec = Vector{m_size.width, m_size.width, 0};
-	auto const buffer = event.buffer;
 	{
 		// render background
 		auto const rect_begin = m_location;
 		auto const rect_end = m_location + size_vec;
-		source_over(buffer, rect_begin, rect_end, m_bg_color);
+		fill_ops::source_over(event.buffer, rect_begin, rect_end, m_bg_color);
 	}
+#if 0
 
 	m_content.compose(buffer, m_text_color);
 
