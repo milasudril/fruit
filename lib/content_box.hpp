@@ -8,11 +8,24 @@
 #include "./geometry_update_event.hpp"
 #include "./update_event.hpp"
 
+#include <variant>
+
 namespace fruit
 {
 	class ContentBox
 	{
 	public:
+		ContentBox():
+			m_padding_near{0, 0, 0},
+			m_padding_far{0, 0, 0},
+			m_border_width_near{0, 0, 0},
+			m_border_width_far{0, 0, 0},
+			m_text_color{0.0f, 0.0f, 0.0f, 1.0f},
+			m_size{0, 0},
+			m_location{Origin<int>},
+			m_bg_color{1.0, 1.0, 1.0, 1.0}
+		{}
+
 		SizeRequestResult handle(SizeRequestEvent const& event) const;
 
 		void handle(GeometryUpdateEvent const& event)
@@ -29,7 +42,7 @@ namespace fruit
 		Vector<int> m_border_width_near;
 		Vector<int> m_border_width_far;
 
-		TextLine m_content;
+		std::variant<std::monostate, TextLine> m_content;
 		Pixel m_text_color;
 
 		ViewportSize m_size;

@@ -3,6 +3,20 @@
 #include "./content_box.hpp"
 #include "./fill_ops.hpp"
 
+namespace
+{
+	template<class T>
+	decltype(auto) handle(const fruit::SizeRequestEvent& event, T const& item)
+	{
+		return item.handle(event).min_size;
+	}
+
+	decltype(auto) handle(const fruit::SizeRequestEvent&, std::monostate)
+	{
+		return fruit::SizeRequestResult{}.min_size;
+	}
+}
+
 fruit::SizeRequestResult fruit::ContentBox::handle(SizeRequestEvent const& event) const
 {
 	auto size = m_padding_near
@@ -10,7 +24,9 @@ fruit::SizeRequestResult fruit::ContentBox::handle(SizeRequestEvent const& event
 		+ m_border_width_near
 		+ m_border_width_far;
 
-	auto res = m_content.handle(event).min_size;
+	auto res = std::visit([&event](auto const& item){
+		return ::handle(event, item);
+	}, m_content);
 	size += Vector{res.width, res.height, 0};
 
 	res = ViewportSize{size.x(), size.y()};

@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <span>
 
+#include <cstdio>
+
 namespace fruit
 {
 	template<class T>
@@ -45,7 +47,7 @@ namespace fruit
 
 		constexpr operator ImageView<std::add_const_t<T>>() const
 		{
-			return ImageView{std::as_const(m_data), m_width, m_height};
+			return ImageView<std::add_const_t<T>>{m_data, m_width, m_height};
 		}
 
 	private:

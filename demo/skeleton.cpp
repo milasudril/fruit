@@ -13,6 +13,7 @@
 #include "lib/update.hpp"
 #include "lib/event_dispatcher.hpp"
 #include "lib/geometry_update_event.hpp"
+#include "lib/content_box.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -77,6 +78,7 @@ class Ui : public fruit::EventDispatcher<fruit::UpdateEventSw, fruit::GeometryUp
 public:
 	void set_viewport_size(int width, int height)
 	{
+		printf("set viewport size: %d %d\n", width, height);
 		m_framebuffer = std::make_unique<fruit::Pixel[]>(width * height);
 		m_width = width;
 		m_height = height;
@@ -86,10 +88,13 @@ public:
 
 	void update()
 	{
-		auto fb = fruit::ImageView{m_framebuffer.get(), m_width, m_height};
-		memset(m_framebuffer.get(), 0, size(fb));
-		send(fruit::DeviceId{-1}, fruit::UpdateEventSw{});
-		m_display(fb);
+		if(m_framebuffer.get() != nullptr)
+		{
+			auto fb = fruit::ImageView{m_framebuffer.get(), m_width, m_height};
+			memset(m_framebuffer.get(), 0, size(fb));
+			send(fruit::DeviceId{-1}, fruit::UpdateEventSw{});
+			m_display(fb);
+		}
 	}
 
 	void set_display(UiUpdater&& display)
@@ -148,13 +153,13 @@ public:
 		glTextureStorage2D(handle, 1, GL_RGBA32F, width, height);
 		if(glGetError() != GL_NO_ERROR)
 		{ throw std::runtime_error{"Failed to allocate storage for current texture"}; }
-
+#if 0
 		int format{};
 		int type{};
 		glGetInternalformativ(GL_TEXTURE_2D, GL_RGBA32F, GL_TEXTURE_IMAGE_FORMAT, 1, &format);
 		glGetInternalformativ(GL_TEXTURE_2D, GL_RGBA32F, GL_TEXTURE_IMAGE_TYPE, 1, &type);
-
 		printf("%d %d\n", format, type);
+#endif
 
 		glDeleteTextures(1, &m_handle);
 		m_handle = handle;
@@ -239,48 +244,7 @@ constexpr std::array<std::pair<float, float>, 6> texture_uvs{
 
 int main()
 {
-#if 0
-	fruit::Rectangle rect_a;
-	rect_a.width=300;
-	rect_a.height=200;
-	rect_a.color = fruit::red();
 
-	fruit::Rectangle rect_b;
-	rect_b.width=300;
-	rect_b.height=200;
-	rect_b.color = fruit::green();
-	fruit::Rectangle rect_c;
-	rect_c.width=300;
-	rect_c.height=200;
-	rect_c.color = fruit::blue();
-
-	fruit::Rectangle rect_d;
-	rect_d.width=300;
-	rect_d.height=300;
-	rect_d.color = fruit::yellow();
-
-	fruit::LineLayout row_a;
-	row_a.push_back(fruit::LayoutBox{std::ref(rect_a), 0.6f});
-	row_a.push_back(fruit::LayoutBox{std::ref(rect_b), 0.4f});
-	row_a.set_width(1.0f);
-
-	fruit::LineLayout row_b;
-	row_b.push_back(fruit::LayoutBox{std::ref(rect_c)});
-	row_b.push_back(fruit::LayoutBox{std::ref(rect_d)});
-
-	fruit::LineLayout column{fruit::LineLayout::Direction::TopToBottom};
-	column.push_back(fruit::LayoutBox{std::ref(row_a)});
-	column.push_back(fruit::LayoutBox{std::ref(row_b)});
-	column.set_width(0.75f);
-
-	fruit::LineLayout column_outer{fruit::LineLayout::Direction::TopToBottom};
-	column_outer.push_back(fruit::LayoutBox{std::ref(column)});
-	column_outer.set_width(0.75f);
-
-	fruit::LineLayout column_outer_outer{fruit::LineLayout::Direction::TopToBottom};
-	column_outer_outer.push_back(fruit::LayoutBox{std::ref(column_outer)});
-	column_outer_outer.set_width(1.0f);
-#endif
 
 	Ui<Texture> ui;
 
@@ -309,14 +273,8 @@ int main()
 
 	GLuint va{};
 	glCreateVertexArrays(1, &va);
-#if 0
-	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_a)}, fruit::DeviceId{-1});
-	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_b)}, fruit::DeviceId{-1});
-	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_c)}, fruit::DeviceId{-1});
-	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(rect_d)}, fruit::DeviceId{-1});
-	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(column_outer)}, fruit::DeviceId{-1});
+	fruit::ContentBox box;
 	ui.set_viewport_size(800, 500);
-#endif
 
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
 		glViewport(0, 0, w, h);
@@ -327,7 +285,7 @@ int main()
 	while(!glfwWindowShouldClose(window.get()))
 	{
 		glfwPollEvents();
-//		ui.update();
+		ui.update();
 
 		glBindVertexArray(va);
 		ui.display().bind();
