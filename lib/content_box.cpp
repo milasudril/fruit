@@ -6,8 +6,6 @@ fruit::SizeRequestResult fruit::ContentBox::handle(SizeRequestEvent const& event
 {
 	auto size = m_padding_near
 		+ m_padding_far
-		+ m_margin_near
-		+ m_margin_far
 		+ m_border_width_near
 		+ m_border_width_far;
 

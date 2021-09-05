@@ -26,8 +26,6 @@ namespace fruit
 	private:
 		Vector<int> m_padding_near;
 		Vector<int> m_padding_far;
-		Vector<int> m_margin_near;
-		Vector<int> m_margin_far;
 		Vector<int> m_border_width_near;
 		Vector<int> m_border_width_far;
 
