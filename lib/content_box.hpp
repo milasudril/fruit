@@ -15,12 +15,15 @@ namespace fruit
 	public:
 		SizeRequestResult handle(SizeRequestEvent const& event) const;
 
-		void handle(GeometryUpdateEvent const& event);
+		void handle(GeometryUpdateEvent const& event)
+		{
+			m_size = event.size;
+			m_location = event.location;
+		}
 
 		void handle(UpdateEventSw const& event) const;
 
 	private:
-		Point<int> m_loc;
 		Vector<int> m_padding_near;
 		Vector<int> m_padding_far;
 		Vector<int> m_margin_near;
@@ -31,8 +34,8 @@ namespace fruit
 		TextLine m_content;
 		Pixel m_text_color;
 
-		int m_current_width;
-		int m_current_height;
+		ViewportSize m_size;
+		Point<int> m_location;
 
 		Pixel m_bg_color;
 		Pixel m_border_color;
