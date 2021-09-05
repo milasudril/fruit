@@ -1,6 +1,7 @@
 //@	{"target":{"name":"content_box.o"}}
 
 #include "./content_box.hpp"
+#include "./fill_ops.hpp"
 
 fruit::SizeRequestResult fruit::ContentBox::handle(SizeRequestEvent const& event) const
 {
@@ -17,15 +18,16 @@ fruit::SizeRequestResult fruit::ContentBox::handle(SizeRequestEvent const& event
 	return SizeRequestResult{res, res};
 }
 
-void fruit::ContentBox::handle(UpdateEventSw const& event) const
+void fruit::ContentBox::handle(UpdateEventSw const& ) const
 {
+#if 0
 	auto const size_vec = Vector{m_size.width, m_size.width, 0};
 	auto const buffer = event.buffer;
 	{
 		// render background
 		auto const rect_begin = m_location;
 		auto const rect_end = m_location + size_vec;
-		fill_rect(buffer, rect_begin, rect_end, m_bg_color);
+		source_over(buffer, rect_begin, rect_end, m_bg_color);
 	}
 
 	m_content.compose(buffer, m_text_color);
@@ -34,28 +36,28 @@ void fruit::ContentBox::handle(UpdateEventSw const& event) const
 		// render top border
 		auto const rect_begin = m_location;
 		auto const rect_end = m_location + Vector{m_width, m_border_width_near.y(), 0};
-		fill_rect(buffer, rect_begin, rect_end, m_border_color);
+		source_over(buffer, rect_begin, rect_end, m_border_color);
 	}
 
 	{
 		// render bottom border
 		auto const rect_begin = m_location + Vector{0, -m_border_width_near.y(), 0};
 		auto const rect_end = m_location + size_vec;
-		fill_rect(buffer, rect_begin, rect_end, m_border_color);
+		source_over(buffer, rect_begin, rect_end, m_border_color);
 	}
 
 	{
 		// render left border
 		auto const rect_begin = m_location
 		auto const rect_end = m_location + Vector{m_border_width_near.x(), m_height, 0};
-		fill_rect(buffer, rect_begin, rect_end, m_border_color);
+		source_over(buffer, rect_begin, rect_end, m_border_color);
 	}
 
 	{
 		// render right border
 		auto const rect_begin = m_location  + Vector{-m_border_width_near.x(), 0, 0};
 		auto const rect_end = m_location + size_vec;
-		fill_rect(buffer, rect_begin, rect_end, m_border_color);
+		source_over(buffer, rect_begin, rect_end, m_border_color);
 	}
-
+#endif
 }

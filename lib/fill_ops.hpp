@@ -1,0 +1,15 @@
+//@	{"dependencies_extra":[{"ref":"./fill_ops.o", "rel":"implementation"}]}
+
+#ifndef FRUIT_FILLOPS_HPP
+#define FRUIT_FILLOPS_HPP
+
+#include "./image_view.hpp"
+#include "./pixel.hpp"
+#include "./point.hpp"
+
+namespace fruit::fill_ops
+{
+	void source_over(ImageView<Pixel> target_buffer, Point<int> begin, Point<int> end, Pixel source);
+}
+
+#endif
