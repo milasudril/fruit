@@ -117,7 +117,7 @@ namespace fruit
 			return SizeRequestResult{min_size, min_size};
 		}
 
-		void compose(Image<Pixel>& output_buffer, Point<int> origin, Pixel color) const;
+		void compose(ImageView<Pixel> output_buffer, Point<int> origin, Pixel color) const;
 
 	private:
 		TextSegment m_text;

@@ -14,6 +14,7 @@
 #include "lib/event_dispatcher.hpp"
 #include "lib/geometry_update_event.hpp"
 #include "lib/content_box.hpp"
+#include "lib/font_store.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -272,11 +273,18 @@ int main()
 	GLuint va{};
 	glCreateVertexArrays(1, &va);
 	fruit::ContentBox box;
+
+	fruit::FontMapper font_mapper;
+	fruit::FontStore fonts;
+
 	box.border_width_top(16)
 		.border_width_right(8)
 		.border_width_bottom(4)
 		.border_width_left(2)
-		.border_color(fruit::Pixel{0.0f, 0.71f, 0.0f, 1.0f});
+		.border_color(fruit::Pixel{0.0f, 0.2f, 0.0f, 0.8f})
+		.content(fruit::TextLine{*fonts.load_and_replace("Andika", font_mapper).font}
+			.text(u8"Hello, World")
+			.char_height(32));
 	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(box)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(box)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);

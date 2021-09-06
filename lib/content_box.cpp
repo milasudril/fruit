@@ -15,6 +15,16 @@ namespace
 	{
 		return fruit::SizeRequestResult{}.min_size;
 	}
+
+	void compose(fruit::ImageView<fruit::Pixel>, std::monostate, fruit::Pixel)
+	{
+	}
+
+	template<class T>
+	void compose(fruit::ImageView<fruit::Pixel> buffer, T const& item, fruit::Pixel color)
+	{
+		item.compose(buffer, fruit::Origin<int>, color);
+	}
 }
 
 fruit::SizeRequestResult fruit::ContentBox::handle(SizeRequestEvent const& event) const
@@ -45,7 +55,10 @@ void fruit::ContentBox::handle(UpdateEventSw const& event) const
 		fill_ops::source_over(event.buffer, rect_begin, rect_end, m_bg_color);
 	}
 
-	// TODO: m_content.compose(buffer, m_text_color);
+
+	std::visit([color = m_text_color, buffer = event.buffer](auto const& item) {
+		compose(buffer, item, color);
+	}, m_content);
 
 	{
 		// Border top

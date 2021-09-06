@@ -30,7 +30,7 @@ void fruit::TextLine::do_render() const
 	m_render_result = std::optional{std::pair{std::move(shape_res), std::move(res)}};
 }
 
-void fruit::TextLine::compose(Image<Pixel>& output_buffer, Point<int> origin, Pixel color) const
+void fruit::TextLine::compose(ImageView<Pixel> target_buffer, Point<int> origin, Pixel color) const
 {
 	if(!m_render_result)
 	{
@@ -41,12 +41,12 @@ void fruit::TextLine::compose(Image<Pixel>& output_buffer, Point<int> origin, Pi
 
 	auto const& img = m_render_result->second;
 	auto const end = origin + Vector{img.width(), img.height(), 0};
-	for(int y = origin.y(); y < std::min(end.y(), output_buffer.height()); ++y)
+	for(int y = origin.y(); y < std::min(end.y(), target_buffer.height()); ++y)
 	{
-		for(int x = origin.x(); x < std::min(end.x(), output_buffer.width()); ++x)
+		for(int x = origin.x(); x < std::min(end.x(), target_buffer.width()); ++x)
 		{
-			auto const factor = static_cast<float>(img(x, y)/255.0f);
-			output_buffer(x, y) = factor * color + (1.0f - factor) * color;
+			auto const factor = static_cast<float>(img(x, y))/255.0f;
+			target_buffer(x, y) = color + target_buffer(x, y)*(1.0f - factor);
 		}
 	}
 }
