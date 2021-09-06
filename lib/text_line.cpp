@@ -45,7 +45,7 @@ void fruit::TextLine::compose(ImageView<Pixel> target_buffer, Point<int> origin,
 	{
 		for(int x = origin.x(); x < std::min(end.x(), target_buffer.width()); ++x)
 		{
-			auto const factor = static_cast<float>(img(x, y))/255.0f;
+			auto const factor = static_cast<float>(img(x - origin.x(), y - origin.y()))/255.0f;
 			target_buffer(x, y) = color + target_buffer(x, y)*(1.0f - factor);
 		}
 	}
