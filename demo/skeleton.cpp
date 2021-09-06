@@ -272,6 +272,11 @@ int main()
 	GLuint va{};
 	glCreateVertexArrays(1, &va);
 	fruit::ContentBox box;
+	box.border_width_top(16)
+		.border_width_right(8)
+		.border_width_bottom(4)
+		.border_width_left(2)
+		.border_color(fruit::Pixel{0.0f, 0.71f, 0.0f, 1.0f});
 	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(box)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(box)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);

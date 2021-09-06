@@ -27,6 +27,16 @@ namespace fruit
 		constexpr T z() const
 		{ return m_value[2]; }
 
+		constexpr T& x()
+		{ return m_value[0]; }
+
+		constexpr T& y()
+		{ return m_value[1]; }
+
+		constexpr T& z()
+		{ return m_value[2]; }
+
+
 		constexpr vec4_t<T> value() const
 		{ return m_value; }
 

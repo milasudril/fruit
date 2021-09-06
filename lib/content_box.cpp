@@ -37,42 +37,41 @@ fruit::SizeRequestResult fruit::ContentBox::handle(SizeRequestEvent const& event
 void fruit::ContentBox::handle(UpdateEventSw const& event) const
 {
 	auto const size_vec = Vector{m_size.width, m_size.height, 0};
+
 	{
-		// render background
+		// Background
 		auto const rect_begin = m_location;
 		auto const rect_end = m_location + size_vec;
 		fill_ops::source_over(event.buffer, rect_begin, rect_end, m_bg_color);
 	}
-#if 0
 
-	m_content.compose(buffer, m_text_color);
+	// TODO: m_content.compose(buffer, m_text_color);
 
 	{
-		// render top border
+		// Border top
 		auto const rect_begin = m_location;
-		auto const rect_end = m_location + Vector{m_width, m_border_width_near.y(), 0};
-		source_over(buffer, rect_begin, rect_end, m_border_color);
+		auto const rect_end = m_location + Vector{size_vec.x(), m_border_width_near.y(), 0};
+		fill_ops::source_over(event.buffer, rect_begin, rect_end, m_border_color);
 	}
 
 	{
-		// render bottom border
-		auto const rect_begin = m_location + Vector{0, -m_border_width_near.y(), 0};
+		// Border bottom
+		auto const rect_begin = m_location + Vector{0, size_vec.y() - m_border_width_far.y(), 0};
 		auto const rect_end = m_location + size_vec;
-		source_over(buffer, rect_begin, rect_end, m_border_color);
+		fill_ops::source_over(event.buffer, rect_begin, rect_end, m_border_color);
 	}
 
 	{
-		// render left border
-		auto const rect_begin = m_location
-		auto const rect_end = m_location + Vector{m_border_width_near.x(), m_height, 0};
-		source_over(buffer, rect_begin, rect_end, m_border_color);
+		// Border left
+		auto const rect_begin = m_location + Vector{0, m_border_width_near.y(), 0};
+		auto const rect_end = m_location + Vector{m_border_width_near.x(), size_vec.y() - m_border_width_far.y(), 0};
+		fill_ops::source_over(event.buffer, rect_begin, rect_end, m_border_color);
 	}
 
 	{
-		// render right border
-		auto const rect_begin = m_location  + Vector{-m_border_width_near.x(), 0, 0};
-		auto const rect_end = m_location + size_vec;
-		source_over(buffer, rect_begin, rect_end, m_border_color);
+		// Border right
+		auto const rect_begin = m_location + Vector{size_vec.x() - m_border_width_far.x(), m_border_width_near.y(), 0};
+		auto const rect_end = m_location + Vector{size_vec.x(), size_vec.y() - m_border_width_far.y(), 0};
+		fill_ops::source_over(event.buffer, rect_begin, rect_end, m_border_color);
 	}
-#endif
 }

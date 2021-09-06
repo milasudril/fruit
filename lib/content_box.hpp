@@ -44,6 +44,36 @@ namespace fruit
 			return *this;
 		}
 
+		ContentBox& border_width_left(int value)
+		{
+			m_border_width_near.x() = value;
+			return *this;
+		}
+
+		ContentBox& border_width_right(int value)
+		{
+			m_border_width_far.x() = value;
+			return *this;
+		}
+
+		ContentBox& border_width_top(int value)
+		{
+			m_border_width_near.y() = value;
+			return *this;
+		}
+
+		ContentBox& border_width_bottom(int value)
+		{
+			m_border_width_far.y() = value;
+			return *this;
+		}
+
+		ContentBox& border_color(Pixel value)
+		{
+			m_border_color = value;
+			return *this;
+		}
+
 	private:
 		Vector<int> m_padding_near;
 		Vector<int> m_padding_far;
