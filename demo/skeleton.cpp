@@ -15,6 +15,7 @@
 #include "lib/geometry_update_event.hpp"
 #include "lib/content_box.hpp"
 #include "lib/font_store.hpp"
+#include "lib/line_layout.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -281,11 +282,15 @@ int main()
 		.border_width_right(8)
 		.border_width_bottom(4)
 		.border_width_left(2)
+		.padding_left(4)
 		.border_color(fruit::Pixel{0.0f, 0.2f, 0.0f, 0.8f})
 		.content(fruit::TextLine{*fonts.load_and_replace("Andika", font_mapper).font}
 			.text(u8"Hello, World")
 			.char_height(32));
-	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(box)}, fruit::DeviceId{-1});
+
+	fruit::LineLayout line;
+	line.push_back(fruit::LayoutBox{std::ref(box), 0, 0});
+	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(line)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(box)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);
 
