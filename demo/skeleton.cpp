@@ -330,6 +330,10 @@ int main()
 			fruit::ButtonState::up});
 	});
 
+	glfwSetMouseButtonCallback(window.get(), [](GLFWwindow*, int button, int, int) {
+		printf("%d\n", button);
+	});
+
 	while(!glfwWindowShouldClose(window.get()))
 	{
 		glfwPollEvents();
