@@ -57,7 +57,7 @@ void fruit::ContentBox::handle(UpdateEventSw const& event) const
 
 	std::visit([color = m_text_color,
 			    buffer = event.buffer,
-				origin = Origin<int> + m_padding_near + m_border_width_near
+				origin = m_location + m_padding_near + m_border_width_near
    			](auto const& item) {
 		compose(buffer, item, origin, color);
 	}, m_content);
