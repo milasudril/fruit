@@ -41,10 +41,10 @@ namespace fruit
 			m_border_color{0, 0, 0, 0}
 		{}
 
-		template<auto ControlId>
-		ContentBox& event_handler(EventHandler<LocationEvent> eh)
+		template<class Callback, class Tag>
+		ContentBox& event_handler(std::reference_wrapper<Callback> cb, Tag)
 		{
-			m_event_handler = eh;
+			m_event_handler = EventHandler<LocationEvent>{cb, Tag{}};
 			return *this;
 		}
 

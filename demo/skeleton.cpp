@@ -252,6 +252,14 @@ constexpr std::array<std::pair<float, float>, 6> texture_uvs{
 	std::pair<float, float>{0.0f, 1.0f}
 };
 
+struct MyEventHandler
+{
+	void handle(fruit::LocationEvent const& e, std::integral_constant<int, 0>)
+	{
+		printf("%.8e %.8e\n", e.loc.x(), e.loc.y());
+	}
+};
+
 int main()
 {
 	Ui<Texture> ui;
@@ -285,6 +293,7 @@ int main()
 
 	fruit::FontMapper font_mapper;
 	fruit::FontStore fonts;
+	MyEventHandler eh;
 
 	box.border_width_top(16)
 		.border_width_right(8)
@@ -297,7 +306,8 @@ int main()
 		.border_color(fruit::Pixel{0.0f, 0.2f, 0.0f, 0.8f})
 		.content(fruit::TextLine{*fonts.load_and_replace("Andika", font_mapper).font}
 			.text(u8"Button 1")
-			.char_height(32));
+			.char_height(32))
+			.event_handler(std::ref(eh), std::integral_constant<int, 0>{});
 
 	fruit::LineLayout line;
 	line.push_back(fruit::LayoutBox{std::ref(box), 0, 0});

@@ -36,6 +36,13 @@ namespace fruit
 		}}
 		{}
 
+		template<class Widget, class Tag>
+		explicit EventHandler(std::reference_wrapper<Widget> widget, Tag):Base{widget},
+		m_func{[](void* self, Event const& event){
+			return static_cast<Widget*>(self)->handle(event, Tag{});
+		}}
+		{}
+
 		decltype(auto) handle(Event const& event) const
 		{
 			return m_func(object(), event);
@@ -71,6 +78,13 @@ namespace fruit
 		explicit EventHandler(std::reference_wrapper<Widget> widget):m_obj{&widget.get()},
 		m_func{[](void* self, Event const& event){
 			return static_cast<Widget*>(self)->handle(event);
+		}}
+		{}
+
+		template<class Widget, class Tag>
+		explicit EventHandler(std::reference_wrapper<Widget> widget, Tag):m_obj{&widget.get()},
+		m_func{[](void* self, Event const& event){
+			return static_cast<Widget*>(self)->handle(event, Tag{});
 		}}
 		{}
 
