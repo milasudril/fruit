@@ -1,16 +1,16 @@
 #ifndef FRUIT_LOCATIONEVENT_HPP
 #define FRUIT_LOCATIONEVENT_HPP
 
-#include "./button_state.hpp"
 #include "./point.hpp"
+
+#include <optional>
 
 namespace fruit
 {
 	struct LocationEvent
 	{
 		Point<float> loc;
-		int button;
-		ButtonState state;
+		std::optional<uint64_t> btn_state_chg_mask;
 	};
 }
 

@@ -257,7 +257,8 @@ struct MyEventHandler
 {
 	void handle(fruit::LocationEvent const& e, std::integral_constant<int, 0>)
 	{
-		printf("%.8e %.8e\n", e.loc.x(), e.loc.y());
+		if(e.btn_state_chg_mask)
+		{ printf("%.8e %.8e %016lx\n", e.loc.x(), e.loc.y(), *e.btn_state_chg_mask); }
 	}
 };
 
@@ -325,14 +326,12 @@ int main()
 
 	glfwSetCursorPosCallback(window.get(), [](GLFWwindow* src, double x, double y){
 		auto& ui = *reinterpret_cast<Ui<Texture>*>(glfwGetWindowUserPointer(src));
-		ui.dispatch(fruit::LocationEvent{
-			fruit::Point{static_cast<float>(x), static_cast<float>(y), 0.0f},
-			0,
-			fruit::ButtonState::up});
+		ui.dispatch(fruit::make_location_event(*src, x, y));
 	});
 
-	glfwSetMouseButtonCallback(window.get(), [](GLFWwindow*, int button, int, int) {
-		printf("%d\n", button);
+	glfwSetMouseButtonCallback(window.get(), [](GLFWwindow* src, int button, int action, int) {
+		auto& ui = *reinterpret_cast<Ui<Texture>*>(glfwGetWindowUserPointer(src));
+		ui.dispatch(fruit::make_location_event(*src, button, action));
 	});
 
 	while(!glfwWindowShouldClose(window.get()))
