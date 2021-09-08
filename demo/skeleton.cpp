@@ -3,13 +3,14 @@
 //@		{
 //@			"name":"skeleton.o",
 //@			"dependencies": [
-//@				{"ref":"glfw3", "origin":"pkg-config"},
+//				{"ref":"glfw3", "origin":"pkg-config"},
 //@				{"ref":"glew", "origin":"pkg-config"},
 //@				{"ref":"GL", "origin":"system", "rel":"external"}
 //@			]
 //@		}
 //@	}
 
+#include "lib/glfw_event_mapper.hpp"
 #include "lib/update.hpp"
 #include "lib/event_dispatcher.hpp"
 #include "lib/geometry_update_event.hpp"
