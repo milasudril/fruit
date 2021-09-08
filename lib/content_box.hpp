@@ -8,15 +8,28 @@
 #include "./geometry_update_event.hpp"
 #include "./update_event.hpp"
 #include "./location_event.hpp"
+#include "./event_handler.hpp"
 
 #include <variant>
 
 namespace fruit
 {
+	namespace content_box_detail
+	{
+		class EmptyEh
+		{
+		public:
+			void handle(LocationEvent const&) const {}
+		};
+
+		inline EmptyEh empty_eh;
+	}
+
 	class ContentBox
 	{
 	public:
 		ContentBox():
+			m_event_handler{std::ref(content_box_detail::empty_eh)},
 			m_padding_near{0, 0, 0},
 			m_padding_far{0, 0, 0},
 			m_border_width_near{0, 0, 0},
@@ -27,6 +40,13 @@ namespace fruit
 			m_bg_color{1.0, 1.0, 1.0, 1.0},
 			m_border_color{0, 0, 0, 0}
 		{}
+
+		template<auto ControlId>
+		ContentBox& event_handler(EventHandler<LocationEvent> eh)
+		{
+			m_event_handler = eh;
+			return *this;
+		}
 
 		SizeRequestResult handle(SizeRequestEvent const& event) const;
 
@@ -45,7 +65,7 @@ namespace fruit
 			if((point.x() > m_location.x() && point.x() < end.x())
 				&& (point.y() > m_location.y() && point.y() < end.y()))
 			{
-				puts("Hej");
+				m_event_handler.handle(event);
 			}
 		}
 
@@ -113,6 +133,8 @@ namespace fruit
 
 
 	private:
+		EventHandler<LocationEvent> m_event_handler;
+
 		Vector<int> m_padding_near;
 		Vector<int> m_padding_far;
 		Vector<int> m_border_width_near;
