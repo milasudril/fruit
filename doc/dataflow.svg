@@ -38,9 +38,9 @@
      inkscape:bbox-nodes="false"
      inkscape:snap-others="true"
      inkscape:bbox-paths="false"
-     inkscape:zoom="0.92648709"
-     inkscape:cx="19.967898"
-     inkscape:cy="337.29558"
+     inkscape:zoom="2.6205012"
+     inkscape:cx="233.54311"
+     inkscape:cy="137.5691"
      inkscape:window-width="1920"
      inkscape:window-height="1143"
      inkscape:window-x="0"
@@ -209,12 +209,12 @@
     <rect
        style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.396876;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect22698-6-2"
-       width="31.449997"
-       height="10.186462"
-       x="69.091667"
-       y="58.208332"
+       width="31.353123"
+       height="10.186455"
+       x="68.990105"
+       y="58.406769"
        rx="1.3650912e-05"
-       ry="1.3650912e-05" />
+       ry="1.3650911e-05" />
     <text
        xml:space="preserve"
        style="font-size:4.9389px;line-height:1.25;font-family:Andika;-inkscape-font-specification:'Andika, Normal';text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.264583"
@@ -239,7 +239,7 @@
        d="m 36.741665,89.958333 h 10.583333 v 0 V 47.625"
        id="path29760" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:0.396875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
+       style="fill:none;stroke:#000000;stroke-width:0.397;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
        d="M 79.368145,31.75 V 57.691569"
        id="path29797" />
     <path

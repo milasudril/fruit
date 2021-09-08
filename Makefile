@@ -1,6 +1,6 @@
 all:
 	maike2
-
+.PHONY: doc
 doc:
 	doxygen
 
