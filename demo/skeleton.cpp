@@ -258,7 +258,13 @@ struct MyEventHandler
 	void handle(fruit::LocationEvent const& e, std::integral_constant<int, 0>)
 	{
 		if(e.btn_state_chg_mask)
-		{ printf("%.8e %.8e %016lx\n", e.loc.x(), e.loc.y(), *e.btn_state_chg_mask); }
+		{ printf("Button 1  %.8e %.8e %016lx\n", e.loc.x(), e.loc.y(), *e.btn_state_chg_mask); }
+	}
+
+	void handle(fruit::LocationEvent const& e, std::integral_constant<int, 1>)
+	{
+		if(e.btn_state_chg_mask)
+		{ printf("Button 2  %.8e %.8e %016lx\n", e.loc.x(), e.loc.y(), *e.btn_state_chg_mask); }
 	}
 };
 
@@ -291,13 +297,13 @@ int main()
 
 	GLuint va{};
 	glCreateVertexArrays(1, &va);
-	fruit::ContentBox box;
 
 	fruit::FontMapper font_mapper;
 	fruit::FontStore fonts;
 	MyEventHandler eh;
 
-	box.border_width_top(16)
+	fruit::ContentBox button_1;
+	button_1.border_width_top(16)
 		.border_width_right(8)
 		.border_width_bottom(4)
 		.border_width_left(2)
@@ -311,11 +317,29 @@ int main()
 			.char_height(32))
 			.event_handler(std::ref(eh), std::integral_constant<int, 0>{});
 
+	fruit::ContentBox button_2;
+	button_2.border_width_top(4)
+		.border_width_right(4)
+		.border_width_bottom(4)
+		.border_width_left(4)
+		.padding_left(4)
+		.padding_top(4)
+		.padding_right(4)
+		.padding_bottom(4)
+		.border_color(fruit::Pixel{0.2f, 0.0f, 0.4f, 0.8f})
+		.content(fruit::TextLine{*fonts.load_and_replace("Andika", font_mapper).font}
+			.text(u8"Button 2")
+			.char_height(32))
+			.event_handler(std::ref(eh), std::integral_constant<int, 1>{});
+
 	fruit::LineLayout line;
-	line.push_back(fruit::LayoutBox{std::ref(box), 0, 0});
+	line.push_back(fruit::LayoutBox{std::ref(button_1), 0, 0});
+	line.push_back(fruit::LayoutBox{std::ref(button_2), 0, 0});
 	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(line)}, fruit::DeviceId{-1});
-	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(box)}, fruit::DeviceId{-1});
-	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(box)}, fruit::DeviceId{-1});
+	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(button_1)}, fruit::DeviceId{-1});
+	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(button_2)}, fruit::DeviceId{-1});
+	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(button_1)}, fruit::DeviceId{-1});
+	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(button_2)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);
 
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
