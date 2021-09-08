@@ -16,6 +16,7 @@
 #include "lib/content_box.hpp"
 #include "lib/font_store.hpp"
 #include "lib/line_layout.hpp"
+#include "lib/location_event.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -75,7 +76,10 @@ bool initOpenGL(GLFWwindow* window)
 }
 
 template<fruit::DisplayFunction UiUpdater>
-class Ui : public fruit::EventDispatcher<fruit::UpdateEventSw, fruit::GeometryUpdateEvent>
+class Ui : public fruit::EventDispatcher<fruit::UpdateEventSw,
+	fruit::GeometryUpdateEvent,
+	fruit::HitTestEvent,
+	fruit::LocationEvent>
 {
 public:
 	void set_viewport_size(int width, int height)
@@ -97,6 +101,11 @@ public:
 			send(fruit::DeviceId{-1}, fruit::UpdateEventSw{fb});
 			m_display(fb);
 		}
+	}
+
+	void dispatch(fruit::LocationEvent const& loc)
+	{
+		send(fruit::DeviceId{-1}, loc);
 	}
 
 	void set_display(UiUpdater&& display)
@@ -283,21 +292,33 @@ int main()
 		.border_width_bottom(4)
 		.border_width_left(2)
 		.padding_left(4)
+		.padding_top(4)
+		.padding_right(4)
+		.padding_bottom(4)
 		.border_color(fruit::Pixel{0.0f, 0.2f, 0.0f, 0.8f})
 		.content(fruit::TextLine{*fonts.load_and_replace("Andika", font_mapper).font}
-			.text(u8"Hello, World")
+			.text(u8"Button 1")
 			.char_height(32));
 
 	fruit::LineLayout line;
 	line.push_back(fruit::LayoutBox{std::ref(box), 0, 0});
 	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(line)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(box)}, fruit::DeviceId{-1});
+	ui.bind(fruit::EventHandler<fruit::HitTestEvent>{std::ref(box)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);
 
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
 		glViewport(0, 0, w, h);
 		auto& ui = *reinterpret_cast<Ui<Texture>*>(glfwGetWindowUserPointer(src));
 		ui.set_viewport_size(w, h);
+	});
+
+	glfwSetCursorPosCallback(window.get(), [](GLFWwindow* src, double x, double y){
+		auto& ui = *reinterpret_cast<Ui<Texture>*>(glfwGetWindowUserPointer(src));
+		ui.dispatch(fruit::LocationEvent{
+			fruit::Point{static_cast<float>(x), static_cast<float>(y), 0.0f},
+			0,
+			fruit::ButtonState::up});
 	});
 
 	while(!glfwWindowShouldClose(window.get()))
