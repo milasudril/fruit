@@ -29,7 +29,20 @@ namespace fruit
 
 			});
 
-			glfwSetMouseButtonCallback(&window, [](GLFWwindow*, int button, int, int) {
+			glfwSetMouseButtonCallback(&window, [](GLFWwindow* src, int button, int action, int) {
+				auto const self = static_cast<GlfwEventMapper*>(glfwGetWindowUserPointer(src));
+				if(action == GLFW_PRESS)
+				{ self->m_mouse_button_state |= (1 << button); }
+				else
+				{ self->m_mouse_button_state &= ~( 1 << button); }
+				double x{};
+				double y{};
+				glfwGetCursorPos(src, &x, &y);
+				self->m_eh.send(m_dev_id,
+								LocationEvent{
+									Point{static_cast<float>(x), static_cast<float>(y), 0},
+									button,
+									action == GLFW_PRESS?ButtonState::pushing:Button::releasing});
 			});
 		}
 
