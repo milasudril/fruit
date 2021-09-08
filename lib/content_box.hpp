@@ -7,7 +7,7 @@
 #include "./size_request_event.hpp"
 #include "./geometry_update_event.hpp"
 #include "./update_event.hpp"
-#include "./hit_test_event.hpp"
+#include "./location_event.hpp"
 
 #include <variant>
 
@@ -38,12 +38,15 @@ namespace fruit
 
 		void handle(UpdateEventSw const& event) const;
 
-		bool handle(HitTestEvent const& event) const
+		void handle(LocationEvent const& event) const
 		{
-			auto point = event.location;
+			auto point = event.loc;
 			auto const end = m_location + Vector{m_size.width, m_size.height, 0};
-			return (point.x() > m_location.x() && point.x() < end.x())
-				&& (point.y() > m_location.y() && point.y() < end.y());
+			if((point.x() > m_location.x() && point.x() < end.x())
+				&& (point.y() > m_location.y() && point.y() < end.y()))
+			{
+				puts("Hej");
+			}
 		}
 
 		template<class T>

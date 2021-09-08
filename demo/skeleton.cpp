@@ -78,7 +78,6 @@ bool initOpenGL(GLFWwindow* window)
 template<fruit::DisplayFunction UiUpdater>
 class Ui : public fruit::EventDispatcher<fruit::UpdateEventSw,
 	fruit::GeometryUpdateEvent,
-	fruit::HitTestEvent,
 	fruit::LocationEvent>
 {
 public:
@@ -304,7 +303,7 @@ int main()
 	line.push_back(fruit::LayoutBox{std::ref(box), 0, 0});
 	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(line)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(box)}, fruit::DeviceId{-1});
-	ui.bind(fruit::EventHandler<fruit::HitTestEvent>{std::ref(box)}, fruit::DeviceId{-1});
+	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(box)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);
 
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
