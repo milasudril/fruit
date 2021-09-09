@@ -255,16 +255,25 @@ constexpr std::array<std::pair<float, float>, 6> texture_uvs{
 
 struct MyEventHandler
 {
-	void handle(fruit::LocationEvent const& e, std::integral_constant<int, 0>)
+	template<int n>
+	void handle(fruit::LocationEvent const& e, std::integral_constant<int, n>)
 	{
 		if(e.btn_state_chg_mask)
-		{ printf("Button 1  %.8e %.8e %016lx\n", e.loc.x(), e.loc.y(), *e.btn_state_chg_mask); }
-	}
-
-	void handle(fruit::LocationEvent const& e, std::integral_constant<int, 1>)
-	{
-		if(e.btn_state_chg_mask)
-		{ printf("Button 2  %.8e %.8e %016lx\n", e.loc.x(), e.loc.y(), *e.btn_state_chg_mask); }
+		{
+			printf("Button %d  (%.8e, %.8e) %016lx (%.8e, %.8e)\n",
+				n,
+				e.loc.x(), e.loc.y(),
+				*e.btn_state_chg_mask,
+				e.ball_offset.x(), e.ball_offset.y()
+				);
+		}
+		else
+		{
+			printf("Button %d  (%.8e, %.8e) (%.8e, %.8e)\n",
+				n,
+				e.loc.x(), e.loc.y(),
+				e.ball_offset.x(), e.ball_offset.y());
+		}
 	}
 };
 
@@ -350,12 +359,17 @@ int main()
 
 	glfwSetCursorPosCallback(window.get(), [](GLFWwindow* src, double x, double y){
 		auto& ui = *reinterpret_cast<Ui<Texture>*>(glfwGetWindowUserPointer(src));
-		ui.dispatch(fruit::make_location_event(*src, x, y));
+		ui.dispatch(fruit::convert(fruit::LocationEvent::MouseMoveTag{}, *src, x, y));
 	});
 
 	glfwSetMouseButtonCallback(window.get(), [](GLFWwindow* src, int button, int action, int) {
 		auto& ui = *reinterpret_cast<Ui<Texture>*>(glfwGetWindowUserPointer(src));
-		ui.dispatch(fruit::make_location_event(*src, button, action));
+		ui.dispatch(fruit::convert(fruit::LocationEvent::MouseButtonTag{}, *src, button, action));
+	});
+
+	glfwSetScrollCallback(window.get(), [](GLFWwindow* src, double dx, double dy) {
+		auto& ui = *reinterpret_cast<Ui<Texture>*>(glfwGetWindowUserPointer(src));
+		ui.dispatch(fruit::convert(fruit::LocationEvent::MouseWheelTag{}, *src, dx, dy));
 	});
 
 	while(!glfwWindowShouldClose(window.get()))

@@ -11,7 +11,7 @@
 
 namespace fruit
 {
-	inline LocationEvent make_location_event(GLFWwindow& src, int button, int action)
+	inline LocationEvent convert(LocationEvent::MouseButtonTag, GLFWwindow& src, int button, int action)
 	{
 		auto change_mask = static_cast<uint64_t>(1) << static_cast<uint64_t>(button);
 
@@ -22,12 +22,31 @@ namespace fruit
 		double y{};
 		glfwGetCursorPos(&src, &x, &y);
 
-		return LocationEvent{Point{static_cast<float>(x), static_cast<float>(y), 0.0f}, change_mask};
+		return LocationEvent{
+			Point{static_cast<float>(x), static_cast<float>(y), 0.0f},
+			change_mask,
+			Vector{0.0f, 0.0f, 0.0f}};
 	}
 
-	inline LocationEvent make_location_event(GLFWwindow&, double x, double y)
+	inline LocationEvent convert(LocationEvent::MouseMoveTag, GLFWwindow&, double x, double y)
 	{
-		return LocationEvent{Point{static_cast<float>(x), static_cast<float>(y), 0.0f}, std::optional<uint64_t>{}};
+		return LocationEvent{
+			Point{static_cast<float>(x), static_cast<float>(y), 0.0f},
+			std::optional<uint64_t>{},
+			Vector{0.0f, 0.0f, 0.0f}
+		};
+	}
+
+	inline LocationEvent convert(LocationEvent::MouseWheelTag, GLFWwindow& src, double dx, double dy)
+	{
+		double x{};
+		double y{};
+		glfwGetCursorPos(&src, &x, &y);
+
+		return LocationEvent{
+			Point{static_cast<float>(x), static_cast<float>(y), 0.0f},
+			std::optional<uint16_t>{},
+			Vector{static_cast<float>(dx), static_cast<float>(dy), 0.0f}};
 	}
 }
 
