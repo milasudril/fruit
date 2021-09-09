@@ -342,8 +342,9 @@ int main()
 			.event_handler(std::ref(eh), std::integral_constant<int, 1>{});
 
 	fruit::LineLayout line;
-	line.push_back(fruit::LayoutBox{std::ref(button_1), 0, 0});
-	line.push_back(fruit::LayoutBox{std::ref(button_2), 0, 0});
+	line.set_width(1.0f);
+	line.push_back(fruit::LayoutBox{std::ref(button_1), 1.0f, 0});
+	line.push_back(fruit::LayoutBox{std::ref(button_2), 1.0f, 0});
 	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(line)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(button_1)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(button_2)}, fruit::DeviceId{-1});
