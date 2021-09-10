@@ -222,9 +222,11 @@ struct MyEventHandler
 	}
 };
 
+struct MyUi:fruit::UiRenderer<Texture>, fruit::EventDispatcher<fruit::LocationEvent>{};
+
 int main()
 {
-	fruit::UiRenderer<Texture> ui;
+	MyUi ui;
 
 	auto window = createWindow();
 	glfwSetWindowUserPointer(window.get(), &ui);
@@ -290,30 +292,31 @@ int main()
 	line.set_width(1.0f);
 	line.push_back(fruit::LayoutBox{std::ref(button_1), 1.0f, 0});
 	line.push_back(fruit::LayoutBox{std::ref(button_2), 1.0f, 0});
-	ui.bind(std::ref(line));
+	ui.bind_all(std::ref(line));
+	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(button_1)}, fruit::DeviceId{-1});
+	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(button_2)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);
 
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
 		glViewport(0, 0, w, h);
-		auto& ui = *reinterpret_cast<fruit::UiRenderer<Texture>*>(glfwGetWindowUserPointer(src));
+		auto& ui = *reinterpret_cast<MyUi*>(glfwGetWindowUserPointer(src));
 		ui.set_viewport_size(w, h);
 	});
-#if 0
+
 	glfwSetCursorPosCallback(window.get(), [](GLFWwindow* src, double x, double y){
-		auto& ui = *reinterpret_cast<fruit::UiRenderer<Texture>*>(glfwGetWindowUserPointer(src));
-		ui.dispatch(fruit::convert(fruit::LocationEvent::MouseMoveTag{}, *src, x, y));
+		auto& ui = *reinterpret_cast<MyUi*>(glfwGetWindowUserPointer(src));
+		ui.send(fruit::DeviceId{-1}, fruit::convert(fruit::LocationEvent::MouseMoveTag{}, *src, x, y));
 	});
 
 	glfwSetMouseButtonCallback(window.get(), [](GLFWwindow* src, int button, int action, int) {
-		auto& ui = *reinterpret_cast<fruit::UiRenderer<Texture>*>(glfwGetWindowUserPointer(src));
-		ui.dispatch(fruit::convert(fruit::LocationEvent::MouseButtonTag{}, *src, button, action));
+		auto& ui = *reinterpret_cast<MyUi*>(glfwGetWindowUserPointer(src));
+		ui.send(fruit::DeviceId{-1}, fruit::convert(fruit::LocationEvent::MouseButtonTag{}, *src, button, action));
 	});
 
 	glfwSetScrollCallback(window.get(), [](GLFWwindow* src, double dx, double dy) {
-		auto& ui = *reinterpret_cast<fruit::UiRenderer<Texture>*>(glfwGetWindowUserPointer(src));
-		ui.dispatch(fruit::convert(fruit::LocationEvent::MouseWheelTag{}, *src, dx, dy));
+		auto& ui = *reinterpret_cast<MyUi*>(glfwGetWindowUserPointer(src));
+		ui.send(fruit::DeviceId{-1}, fruit::convert(fruit::LocationEvent::MouseWheelTag{}, *src, dx, dy));
 	});
-#endif
 
 	while(!glfwWindowShouldClose(window.get()))
 	{

@@ -43,7 +43,7 @@ namespace fruit
 		}
 
 		template<class T>
-		void bind(std::reference_wrapper<T> obj)
+		void bind_all(std::reference_wrapper<T> obj)
 		{
 			m_dispatcher.bind(EventHandler<UpdateEventSw>{obj}, m_dev_id);
 			m_dispatcher.bind(EventHandler<GeometryUpdateEvent>{obj}, m_dev_id);

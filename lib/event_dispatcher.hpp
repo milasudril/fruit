@@ -44,6 +44,9 @@ namespace fruit
 		}
 	}
 
+	/**
+	 * \todo Add bind_to_all_events method
+	*/
 	template<class Event, class ... Events>
 	class EventDispatcher : EventDispatcher<Event>, EventDispatcher<Events...>
 	{
