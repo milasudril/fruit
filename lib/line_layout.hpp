@@ -61,6 +61,11 @@ namespace fruit
 			return SizeRequestResult{min_size, min_size};
 		}
 
+		void handle(UpdateEventSw const& event) const
+		{
+			std::ranges::for_each(m_content, [&event](auto const& item){item.event_handler.handle(event);});
+		}
+
 		/**
 		 * \brief Processes \ref GeometryUpdateEvent "GeometryUpdateEvents"
 		 *

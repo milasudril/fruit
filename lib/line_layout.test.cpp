@@ -21,6 +21,8 @@ namespace
 			size = event.size;
 			location = event.location;
 		}
+
+		void handle(fruit::UpdateEventSw const&) const {}
 	};
 }
 
