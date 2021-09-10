@@ -14,7 +14,7 @@
 #include "lib/font_store.hpp"
 #include "lib/line_layout.hpp"
 #include "lib/location_event.hpp"
-#include "lib/ui_renderer.hpp"
+#include "lib/ui_manager.hpp"
 #include "lib/content_box.hpp"
 
 #include <GL/glew.h>
@@ -222,10 +222,10 @@ struct MyEventHandler
 	}
 };
 
-struct MyUi:fruit::UiRenderer<Texture>, fruit::EventDispatcher<fruit::LocationEvent>{};
-
 int main()
 {
+	using MyUi = fruit::UiManager<Texture, fruit::LocationEvent>;
+
 	MyUi ui;
 
 	auto window = createWindow();
@@ -292,7 +292,7 @@ int main()
 	line.set_width(1.0f);
 	line.push_back(fruit::LayoutBox{std::ref(button_1), 1.0f, 0});
 	line.push_back(fruit::LayoutBox{std::ref(button_2), 1.0f, 0});
-	ui.bind_all(std::ref(line));
+	ui.bind_to_renderer(std::ref(line));
 	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(button_1)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(button_2)}, fruit::DeviceId{-1});
 	ui.set_viewport_size(800, 500);

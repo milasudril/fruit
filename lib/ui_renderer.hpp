@@ -12,10 +12,13 @@ namespace fruit
 	class UiRenderer
 	{
 	public:
-		explicit UiRenderer(DeviceId dev_id = DeviceId{-1}):m_dev_id{dev_id}{}
+		explicit UiRenderer(DeviceId dev_id = DeviceId{-1}):m_dev_id{dev_id}
+		{
+		}
 
 		void set_viewport_size(int width, int height)
 		{
+			printf("UiRenderer set_viewport_size %p %lu\n", this, m_dev_id.value());
 			m_framebuffer = Image<Pixel>{width, height};
 			m_dispatcher.send(m_dev_id, GeometryUpdateEvent{ViewportSize{width, height}, Origin<int>});
 			update();
@@ -43,7 +46,7 @@ namespace fruit
 		}
 
 		template<class T>
-		void bind_all(std::reference_wrapper<T> obj)
+		void bind(std::reference_wrapper<T> obj)
 		{
 			m_dispatcher.bind(EventHandler<UpdateEventSw>{obj}, m_dev_id);
 			m_dispatcher.bind(EventHandler<GeometryUpdateEvent>{obj}, m_dev_id);
