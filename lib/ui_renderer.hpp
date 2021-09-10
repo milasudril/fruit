@@ -12,7 +12,7 @@ namespace fruit
 	class UiRenderer
 	{
 	public:
-		explicit UiRenderer(DeviceId dev_id = DeviceId{}):m_dev_id{dev_id}{}
+		explicit UiRenderer(DeviceId dev_id = DeviceId{-1}):m_dev_id{dev_id}{}
 
 		void set_viewport_size(int width, int height)
 		{
@@ -27,7 +27,7 @@ namespace fruit
 			{
 				memset(m_framebuffer.data(), 0, size(m_framebuffer));
 				m_dispatcher.send(m_dev_id, UpdateEventSw{m_framebuffer});
-				m_display(fb);
+				m_display(m_framebuffer);
 			}
 		}
 
@@ -45,15 +45,15 @@ namespace fruit
 		template<class T>
 		void bind(std::reference_wrapper<T> obj)
 		{
-			m_dispatacher.bind(m_dev_id, EventDispatcher<UpdateEventSw>{obj});
-			m_dispatacher.bind(m_dev_id, EventDispatcher<GeometryUpdateEvent>{obj});
+			m_dispatcher.bind(EventHandler<UpdateEventSw>{obj}, m_dev_id);
+			m_dispatcher.bind(EventHandler<GeometryUpdateEvent>{obj}, m_dev_id);
 		}
 
 	private:
 		UiUpdater m_display;
 		Image<Pixel> m_framebuffer;
 		DeviceId m_dev_id;
-		EventDispatcher<UpdateEventSw, GeometryUpdateEvent> m_dispatacher;
+		EventDispatcher<UpdateEventSw, GeometryUpdateEvent> m_dispatcher;
 	};
 }
 

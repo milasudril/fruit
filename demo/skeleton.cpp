@@ -11,13 +11,11 @@
 //@	}
 
 #include "lib/glfw_event_mapper.hpp"
-#include "lib/update.hpp"
-#include "lib/event_dispatcher.hpp"
-#include "lib/geometry_update_event.hpp"
-#include "lib/content_box.hpp"
 #include "lib/font_store.hpp"
 #include "lib/line_layout.hpp"
 #include "lib/location_event.hpp"
+#include "lib/ui_renderer.hpp"
+#include "lib/content_box.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -75,59 +73,6 @@ bool initOpenGL(GLFWwindow* window)
 	printf("OpenGL version: %s\n", reinterpret_cast<char const*>(gl_version));
 	return true;
 }
-
-template<fruit::DisplayFunction UiUpdater>
-class Ui : public fruit::EventDispatcher<fruit::UpdateEventSw,
-	fruit::GeometryUpdateEvent,
-	fruit::LocationEvent>
-{
-public:
-	void set_viewport_size(int width, int height)
-	{
-		printf("set viewport size: %d %d\n", width, height);
-		m_framebuffer = std::make_unique<fruit::Pixel[]>(width * height);
-		m_width = width;
-		m_height = height;
-		send(fruit::DeviceId{-1}, fruit::GeometryUpdateEvent{fruit::ViewportSize{width, height}, fruit::Origin<int>});
-		update();
-	}
-
-	void update()
-	{
-		if(m_framebuffer.get() != nullptr)
-		{
-			auto fb = fruit::ImageView{m_framebuffer.get(), m_width, m_height};
-			memset(m_framebuffer.get(), 0, size(fb));
-			send(fruit::DeviceId{-1}, fruit::UpdateEventSw{fb});
-			m_display(fb);
-		}
-	}
-
-	void dispatch(fruit::LocationEvent const& loc)
-	{
-		send(fruit::DeviceId{-1}, loc);
-	}
-
-	void set_display(UiUpdater&& display)
-	{
-		m_display = std::move(display);
-		update();
-	}
-
-	UiUpdater const& display() const
-	{
-		return m_display;
-	}
-
-private:
-	UiUpdater m_display;
-	std::unique_ptr<fruit::Pixel[]> m_framebuffer;
-	int m_width;
-	int m_height;
-};
-
-char output[16*2048*1024];
-
 class Texture
 {
 public:
@@ -279,7 +224,7 @@ struct MyEventHandler
 
 int main()
 {
-	Ui<Texture> ui;
+	fruit::UiRenderer<Texture> ui;
 
 	auto window = createWindow();
 	glfwSetWindowUserPointer(window.get(), &ui);
@@ -345,33 +290,30 @@ int main()
 	line.set_width(1.0f);
 	line.push_back(fruit::LayoutBox{std::ref(button_1), 1.0f, 0});
 	line.push_back(fruit::LayoutBox{std::ref(button_2), 1.0f, 0});
-	ui.bind(fruit::EventHandler<fruit::GeometryUpdateEvent>{std::ref(line)}, fruit::DeviceId{-1});
-	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(button_1)}, fruit::DeviceId{-1});
-	ui.bind(fruit::EventHandler<fruit::UpdateEventSw>{std::ref(button_2)}, fruit::DeviceId{-1});
-	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(button_1)}, fruit::DeviceId{-1});
-	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(button_2)}, fruit::DeviceId{-1});
+	ui.bind(std::ref(line));
 	ui.set_viewport_size(800, 500);
 
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
 		glViewport(0, 0, w, h);
-		auto& ui = *reinterpret_cast<Ui<Texture>*>(glfwGetWindowUserPointer(src));
+		auto& ui = *reinterpret_cast<fruit::UiRenderer<Texture>*>(glfwGetWindowUserPointer(src));
 		ui.set_viewport_size(w, h);
 	});
-
+#if 0
 	glfwSetCursorPosCallback(window.get(), [](GLFWwindow* src, double x, double y){
-		auto& ui = *reinterpret_cast<Ui<Texture>*>(glfwGetWindowUserPointer(src));
+		auto& ui = *reinterpret_cast<fruit::UiRenderer<Texture>*>(glfwGetWindowUserPointer(src));
 		ui.dispatch(fruit::convert(fruit::LocationEvent::MouseMoveTag{}, *src, x, y));
 	});
 
 	glfwSetMouseButtonCallback(window.get(), [](GLFWwindow* src, int button, int action, int) {
-		auto& ui = *reinterpret_cast<Ui<Texture>*>(glfwGetWindowUserPointer(src));
+		auto& ui = *reinterpret_cast<fruit::UiRenderer<Texture>*>(glfwGetWindowUserPointer(src));
 		ui.dispatch(fruit::convert(fruit::LocationEvent::MouseButtonTag{}, *src, button, action));
 	});
 
 	glfwSetScrollCallback(window.get(), [](GLFWwindow* src, double dx, double dy) {
-		auto& ui = *reinterpret_cast<Ui<Texture>*>(glfwGetWindowUserPointer(src));
+		auto& ui = *reinterpret_cast<fruit::UiRenderer<Texture>*>(glfwGetWindowUserPointer(src));
 		ui.dispatch(fruit::convert(fruit::LocationEvent::MouseWheelTag{}, *src, dx, dy));
 	});
+#endif
 
 	while(!glfwWindowShouldClose(window.get()))
 	{

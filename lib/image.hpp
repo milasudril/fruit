@@ -11,13 +11,17 @@ namespace fruit
 	class Image
 	{
 	public:
+		Image(): m_data{}, m_width{0}, m_height{0}{}
+
 		explicit Image(ImageView<T> view):Image{view.data(), view.width(), view.height()}{}
 
 		explicit Image(T* data, int width, int height):
 			m_data{std::make_unique<T[]>(width*height)},
 			m_width{width},
 			m_height{height}
-		{}
+		{
+			std::copy(data, data + width*height, m_data.get());
+		}
 
 		explicit Image(int width, int height):
 			m_data{std::make_unique<T[]>(width*height)},
