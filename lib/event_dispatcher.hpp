@@ -60,6 +60,12 @@ namespace fruit
 			EventDispatcher<Event>::unbind(widget);
 			EventDispatcher<Events...>::unbind(widget);
 		}
+
+		void unbind(void const* widget, DeviceId dev_id)
+		{
+			EventDispatcher<Event>::unbind(widget, dev_id);
+			EventDispatcher<Events...>::unbind(widget, dev_id);
+		}
 	};
 
 	template<class Event>
@@ -86,6 +92,15 @@ namespace fruit
 		}
 
 		void unbind(EventHandler<Event> widget, DeviceId device)
+		{
+			auto i = m_sensitive_widgets.find(device);
+			if(i == std::end(m_sensitive_widgets))
+			{ return; }
+
+			event_dispatcher_detail::erase(i->second, widget);
+		}
+
+		void unbind(void const* widget, DeviceId device)
 		{
 			auto i = m_sensitive_widgets.find(device);
 			if(i == std::end(m_sensitive_widgets))

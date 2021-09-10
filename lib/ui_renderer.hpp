@@ -49,6 +49,11 @@ namespace fruit
 			m_dispatcher.bind(EventHandler<GeometryUpdateEvent>{obj}, m_dev_id);
 		}
 
+		void unbind(void const* obj)
+		{
+			m_dispatcher.unbind(obj, m_dev_id);
+		}
+
 	private:
 		UiUpdater m_display;
 		Image<Pixel> m_framebuffer;
