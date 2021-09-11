@@ -2,8 +2,8 @@
 //@	"dependencies":[{"ref":"harfbuzz", "origin":"pkg-config"}]
 //@	}
 
-#ifndef FRUIT_TEXTSHAPER_HPP
-#define FRUIT_TEXTSHAPER_HPP
+#ifndef FRUIT_LIB_TEXTSHAPER_HPP
+#define FRUIT_LIB_TEXTSHAPER_HPP
 
 #include "./font_face.hpp"
 #include "./point.hpp"

@@ -1,5 +1,5 @@
-#ifndef FRUIT_EVENT_SINGLEEVENTDISPATCHER_HPP
-#define FRUIT_EVENT_SINGLEEVENTDISPATCHER_HPP
+#ifndef FRUIT_LIB_EVENTDISPATCHER_HPP
+#define FRUIT_LIB_EVENTDISPATCHER_HPP
 
 #include "./device_id.hpp"
 #include "./event_handler.hpp"

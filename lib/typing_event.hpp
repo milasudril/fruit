@@ -1,5 +1,5 @@
-#ifndef FRUIT_TYPINGEVENT_HPP
-#define FRUIT_TYPINGEVENT_HPP
+#ifndef FRUIT_LIB_TYPINGEVENT_HPP
+#define FRUIT_LIB_TYPINGEVENT_HPP
 
 #include "./scancode.hpp"
 #include "./button_state.hpp"

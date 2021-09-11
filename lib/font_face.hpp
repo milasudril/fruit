@@ -3,8 +3,8 @@
 //@	,"dependencies":[{"ref":"freetype2","origin":"pkg-config"}]
 //@	}
 
-#ifndef FRUIT_FONTFACE_HPP
-#define FRUIT_FONTFACE_HPP
+#ifndef FRUIT_LIB_FONTFACE_HPP
+#define FRUIT_LIB_FONTFACE_HPP
 
 #include "./image_view.hpp"
 #include "./vector.hpp"

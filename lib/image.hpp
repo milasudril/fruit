@@ -1,5 +1,5 @@
-#ifndef FRUIT_IMAGE_HPP
-#define FRUIT_IMAGE_HPP
+#ifndef FRUIT_LIB_IMAGE_HPP
+#define FRUIT_LIB_IMAGE_HPP
 
 #include "./image_view.hpp"
 

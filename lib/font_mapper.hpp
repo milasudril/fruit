@@ -2,8 +2,8 @@
 //@	"dependencies_extra":[{"ref":"./font_mapper.o","rel":"implementation"}]
 //@	}
 
-#ifndef FRUIT_FONTMAPPER_HPP
-#define FRUIT_FONTMAPPER_HPP
+#ifndef FRUIT_LIB_FONTMAPPER_HPP
+#define FRUIT_LIB_FONTMAPPER_HPP
 
 #include "./error_message.hpp"
 

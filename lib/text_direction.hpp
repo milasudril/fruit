@@ -1,7 +1,7 @@
 //@	 {"dependencies":[{"ref":"harfbuzz", "origin":"pkg-config"}]}
 
-#ifndef FRUIT_TEXTDIRECTION_HPP
-#define FRUIT_TEXTDIRECTION_HPP
+#ifndef FRUIT_LIB_TEXTDIRECTION_HPP
+#define FRUIT_LIB_TEXTDIRECTION_HPP
 
 #include <hb.h>
 

@@ -1,5 +1,5 @@
-#ifndef FRUIT_UI_MANAGER_HPP
-#define FRUIT_UI_MANAGER_HPP
+#ifndef FRUIT_LIB_UIMANAGER_HPP
+#define FRUIT_LIB_UIMANAGER_HPP
 
 #include "./ui_renderer.hpp"
 #include "./event_dispatcher.hpp"

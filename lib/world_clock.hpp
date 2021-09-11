@@ -1,5 +1,5 @@
-#ifndef FRUIT_WORLDCLOCK_HPP
-#define FRUIT_WORLDCLOCK_HPP
+#ifndef FRUIT_LIB_WORLDCLOCK_HPP
+#define FRUIT_LIB_WORLDCLOCK_HPP
 
 #include <chrono>
 

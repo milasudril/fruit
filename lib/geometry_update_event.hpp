@@ -1,5 +1,5 @@
-#ifndef FRUIT_GEOMETRYUPDATEEVENT_HPP
-#define FRUIT_GEOMETRYUPDATEEVENT_HPP
+#ifndef FRUIT_LIB_GEOMETRYUPDATEEVENT_HPP
+#define FRUIT_LIB_GEOMETRYUPDATEEVENT_HPP
 
 #include "./viewport_size.hpp"
 #include "./point.hpp"

@@ -2,8 +2,8 @@
 //@	"dependencies_extra":[{"ref":"./font_store.o","rel":"implementation"}]
 //@	}
 
-#ifndef FRUIT_FONTSTORE_HPP
-#define FRUIT_FONTSTORE_HPP
+#ifndef FRUIT_LIB_FONTSTORE_HPP
+#define FRUIT_LIB_FONTSTORE_HPP
 
 #include "./io_utils.hpp"
 #include "./font_face.hpp"

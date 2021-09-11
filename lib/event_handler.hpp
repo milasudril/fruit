@@ -1,5 +1,5 @@
-#ifndef FRUIT_EVENTHANDLER_HPP
-#define FRUIT_EVENTHANDLER_HPP
+#ifndef FRUIT_LIB_EVENTHANDLER_HPP
+#define FRUIT_LIB_EVENTHANDLER_HPP
 
 #include "./device_id.hpp"
 

@@ -1,5 +1,5 @@
-#ifndef FRUIT_BALLEVENT_HPP
-#define FRUIT_BALLEVENT_HPP
+#ifndef FRUIT_LIB_BALLEVENT_HPP
+#define FRUIT_LIB_BALLEVENT_HPP
 
 #include "./vector.hpp"
 

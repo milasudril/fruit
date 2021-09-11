@@ -1,5 +1,5 @@
-#ifndef FRUIT_CHARTYPES_HPP
-#define FRUIT_CHARTYPES_HPP
+#ifndef FRUIT_LIB_CHARTYPES_HPP
+#define FRUIT_LIB_CHARTYPES_HPP
 
 #include <cstdint>
 

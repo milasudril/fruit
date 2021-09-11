@@ -1,7 +1,7 @@
 //@	 {"dependencies":[{"ref":"harfbuzz", "origin":"pkg-config"}]}
 
-#ifndef FRUIT_WRITINGSYSTEM_HPP
-#define FRUIT_WRITINGSYSTEM_HPP
+#ifndef FRUIT_LIB_WRITINGSYSTEM_HPP
+#define FRUIT_LIB_WRITINGSYSTEM_HPP
 
 #include <hb.h>
 

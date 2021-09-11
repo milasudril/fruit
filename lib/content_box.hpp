@@ -1,7 +1,7 @@
 //@	{"dependencies_extra":[{"ref":"./content_box.o", "rel":"implementation"}]}
 
-#ifndef FRUIT_CONTENTBOX_HPP
-#define FRUIT_CONTENTBOX_HPP
+#ifndef FRUIT_LIB_CONTENTBOX_HPP
+#define FRUIT_LIB_CONTENTBOX_HPP
 
 #include "./text_line.hpp"
 #include "./size_request_event.hpp"

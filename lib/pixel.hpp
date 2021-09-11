@@ -1,5 +1,5 @@
-#ifndef FRUIT_PIXEL_HPP
-#define FRUIT_PIXEL_HPP
+#ifndef FRUIT_LIB_PIXEL_HPP
+#define FRUIT_LIB_PIXEL_HPP
 
 #include "./vec_t.hpp"
 

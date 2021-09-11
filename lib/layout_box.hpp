@@ -1,7 +1,7 @@
 //@	{"dependencies_extra":[{"ref":"./layout_box.o", "rel":"implementation"}]}
 
-#ifndef FRUITL_LAYOUTBOX_HPP
-#define FRUITL_LAYOUTBOX_HPP
+#ifndef FRUIT_LIB_LAYOUTBOX_HPP
+#define FRUIT_LIB_LAYOUTBOX_HPP
 
 #include "./event_handler.hpp"
 #include "./size_request_event.hpp"

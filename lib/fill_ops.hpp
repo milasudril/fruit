@@ -1,7 +1,7 @@
 //@	{"dependencies_extra":[{"ref":"./fill_ops.o", "rel":"implementation"}]}
 
-#ifndef FRUIT_FILLOPS_HPP
-#define FRUIT_FILLOPS_HPP
+#ifndef FRUIT_LIB_FILLOPS_HPP
+#define FRUIT_LIB_FILLOPS_HPP
 
 #include "./image_view.hpp"
 #include "./pixel.hpp"

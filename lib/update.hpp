@@ -1,5 +1,5 @@
-#ifndef FRUIT_UPDATE_HPP
-#define FRUIT_UPDATE_HPP
+#ifndef FRUIT_LIB_UPDATE_HPP
+#define FRUIT_LIB_UPDATE_HPP
 
 #include "./update_event.hpp"
 #include "./device_id.hpp"

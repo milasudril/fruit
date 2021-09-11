@@ -1,5 +1,5 @@
-#ifndef FRUIT_UPDATE_EVENT_HPP
-#define FRUIT_UPDATE_EVENT_HPP
+#ifndef FRUIT_LIB_UPDATEEVENT_HPP
+#define FRUIT_LIB_UPDATEEVENT_HPP
 
 #include "./pixel.hpp"
 #include "./image_view.hpp"

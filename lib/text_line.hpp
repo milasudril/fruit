@@ -1,7 +1,7 @@
 //@	{"dependencies_extra":[{"ref":"./text_line.o", "rel":"implementation"}]}
 
-#ifndef FRUIT_TEXTELEMENT_HPP
-#define FRUIT_TEXTELEMENT_HPP
+#ifndef FRUIT_LIB_TEXTLINE_HPP
+#define FRUIT_LIB_TEXTLINE_HPP
 
 #include "./text_segment.hpp"
 #include "./font_face.hpp"

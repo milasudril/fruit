@@ -1,5 +1,5 @@
-#ifndef FRUIT_SCANCODE_HPP
-#define FRUIT_SCANCODE_HPP
+#ifndef FRUIT_LIB_SCANCODE_HPP
+#define FRUIT_LIB_SCANCODE_HPP
 
 namespace fruit
 {

@@ -1,5 +1,5 @@
-#ifndef FRUIT_UTILS_HPP
-#define FRUIT_UTILS_HPP
+#ifndef FRUIT_LIB_UTILS_HPP
+#define FRUIT_LIB_UTILS_HPP
 
 #include <span>
 #include <numeric>

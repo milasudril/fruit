@@ -1,5 +1,5 @@
-#ifndef FRUIT_DEVICE_ID_HPP
-#define FRUIT_DEVICE_ID_HPP
+#ifndef FRUIT_LIB_DEVICEID_HPP
+#define FRUIT_LIB_DEVICEID_HPP
 
 #include <cstdint>
 #include <string>

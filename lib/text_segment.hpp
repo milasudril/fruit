@@ -3,8 +3,8 @@
 //@		"dependencies": [{"ref":"harfbuzz", "origin":"pkg-config"}]
 //@	}
 
-#ifndef FRUIT_TEXTSEGMENT_HPP
-#define FRUIT_TEXTSEGMENT_HPP
+#ifndef FRUIT_LIB_TEXTSEGMENT_HPP
+#define FRUIT_LIB_TEXTSEGMENT_HPP
 
 #include "./text_direction.hpp"
 #include "./writing_system.hpp"

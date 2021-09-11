@@ -1,5 +1,5 @@
-#ifndef FRUIT_IMAGEVIEW_HPP
-#define FRUIT_IMAGEVIEW_HPP
+#ifndef FRUIT_LIB_IMAGEVIEW_HPP
+#define FRUIT_LIB_IMAGEVIEW_HPP
 
 #include <cstddef>
 #include <span>

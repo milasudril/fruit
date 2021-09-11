@@ -1,5 +1,5 @@
-#ifndef FRUIT_VECTOR_HPP
-#define FRUIT_VECTOR_HPP
+#ifndef FRUIT_LIB_VECTOR_HPP
+#define FRUIT_LIB_VECTOR_HPP
 
 #include "./vec_t.hpp"
 

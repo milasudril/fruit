@@ -1,5 +1,5 @@
-#ifndef FRUIT_VIEWPORTSIZE_HPP
-#define FRUIT_VIEWPORTSIZE_HPP
+#ifndef FRUIT_LIB_VIEWPORTSIZE_HPP
+#define FRUIT_LIB_VIEWPORTSIZE_HPP
 
 #include <string>
 #include <algorithm>

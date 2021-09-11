@@ -1,5 +1,5 @@
-#ifndef FRUIT_VECT_HPP
-#define FRUIT_VECT_HPP
+#ifndef FRUIT_LIB_VECT_HPP
+#define FRUIT_LIB_VECT_HPP
 
 #include <type_traits>
 

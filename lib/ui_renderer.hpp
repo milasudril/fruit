@@ -1,5 +1,5 @@
-#ifndef FRUIT_UIRENDERER_HPP
-#define FRUIT_UIRENDERER_HPP
+#ifndef FRUIT_LIB_UIRENDERER_HPP
+#define FRUIT_LIB_UIRENDERER_HPP
 
 #include "./update.hpp"
 #include "./event_dispatcher.hpp"

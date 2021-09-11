@@ -1,7 +1,7 @@
 //@	{"dependencies_extra":[{"ref":"./line_layout.o", "rel":"implementation"}]}
 
-#ifndef FRUIT_COLUMNLAYOUT_HPP
-#define FRUIT_COLUMNLAYOUT_HPP
+#ifndef FRUIT_LIB_LINELAYOUT_HPP
+#define FRUIT_LIB_LINELAYOUT_HPP
 
 #include "./layout_box.hpp"
 #include "./error_message.hpp"

@@ -4,8 +4,8 @@
 //@		{"ref":"fmt", "rel":"implementation", "origin":"pkg-config"}]
 //@	}
 
-#ifndef FRUIT_ERRORMESSAGE_HPP
-#define FRUIT_ERRORMESSAGE_HPP
+#ifndef FRUIT_LIB_ERRORMESSAGE_HPP
+#define FRUIT_LIB_ERRORMESSAGE_HPP
 
 #include <fmt/core.h>
 #include <fmt/format.h>

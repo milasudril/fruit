@@ -1,7 +1,7 @@
 //@	{"dependencies_extra":[{"ref":"glfw3", "origin":"pkg-config"}]}
 
-#ifndef FRUIT_GLFW_EVENT_MAPPER_HPP
-#define FRUIT_GLFW_EVENT_MAPPER_HPP
+#ifndef FRUIT_LIB_GLFWEVENTMAPPER_HPP
+#define FRUIT_LIB_GLFWEVENTMAPPER_HPP
 
 #include "./event_dispatcher.hpp"
 #include "./location_event.hpp"
