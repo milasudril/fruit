@@ -110,13 +110,6 @@ public:
 		glTextureStorage2D(handle, 1, GL_RGBA32F, width, height);
 		if(glGetError() != GL_NO_ERROR)
 		{ throw std::runtime_error{"Failed to allocate storage for current texture"}; }
-#if 0
-		int format{};
-		int type{};
-		glGetInternalformativ(GL_TEXTURE_2D, GL_RGBA32F, GL_TEXTURE_IMAGE_FORMAT, 1, &format);
-		glGetInternalformativ(GL_TEXTURE_2D, GL_RGBA32F, GL_TEXTURE_IMAGE_TYPE, 1, &type);
-		printf("%d %d\n", format, type);
-#endif
 
 		glDeleteTextures(1, &m_handle);
 		m_handle = handle;
@@ -221,12 +214,18 @@ struct MyEventHandler
 				e.direction);
 	}
 
+	void handle(fruit::DeviceId, fruit::FbUpdateEvent const& e, std::integral_constant<int, 0>)
+	{
+		texture(e.buffer);
+	}
+
+	std::reference_wrapper<Texture> texture;
 };
 
 int main()
 {
-	using MyUi = fruit::UiManager<Texture, fruit::LocationEvent, fruit::BallEvent>;
-
+	using MyUi = fruit::UiManager<fruit::LocationEvent, fruit::BallEvent>;
+	Texture texture;
 	MyUi ui;
 
 	auto window = createWindow();
@@ -257,8 +256,8 @@ int main()
 
 	fruit::FontMapper font_mapper;
 	fruit::FontStore fonts;
-	MyEventHandler eh;
-
+	MyEventHandler eh{std::ref(texture)};
+	ui.set_display_handler(std::ref(eh), std::integral_constant<int, 0>{});
 	fruit::ContentBox button_1;
 	button_1.border_width_top(16)
 		.border_width_right(8)
@@ -325,7 +324,7 @@ int main()
 		ui.update();
 
 		glBindVertexArray(va);
-		ui.display().bind();
+		texture.bind();
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(fruit::Point<float>), nullptr);
 		glBindBuffer(GL_ARRAY_BUFFER, uvs);

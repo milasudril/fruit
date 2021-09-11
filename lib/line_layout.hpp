@@ -61,7 +61,7 @@ namespace fruit
 			return SizeRequestResult{min_size, min_size};
 		}
 
-		void handle(DeviceId sender, UpdateEventSw const& event) const
+		void handle(DeviceId sender, RedrawEvent const& event) const
 		{
 			std::ranges::for_each(m_content, [sender, &event](auto const& item){item.event_handler.handle(sender, event);});
 		}

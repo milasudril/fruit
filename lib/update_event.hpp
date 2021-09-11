@@ -14,9 +14,19 @@ namespace fruit
 	 *
 	 * \ingroup Events
 	 */
-	struct UpdateEventSw
+	struct RedrawEvent
 	{
 		ImageView<Pixel> buffer;
+	};
+
+	/**
+	 * \brief Describes a notification that a framebuffer has been updated
+	 *
+	 * \ingroup Events
+	 */
+	struct FbUpdateEvent
+	{
+		ImageView<Pixel const> buffer;
 	};
 }
 

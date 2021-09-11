@@ -59,7 +59,7 @@ namespace fruit
 			m_location = event.location;
 		}
 
-		void handle(DeviceId sender, UpdateEventSw const& event) const;
+		void handle(DeviceId sender, RedrawEvent const& event) const;
 
 		void handle(DeviceId sender, LocationEvent const& event);
 

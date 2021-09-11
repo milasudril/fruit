@@ -6,7 +6,7 @@
 
 namespace fruit
 {
-	template<DisplayFunction UiUpdater, class ... DispatchedEvents>
+	template<class ... DispatchedEvents>
 	class UiManager: public EventDispatcher<DispatchedEvents...>
 	{
 	public:
@@ -18,13 +18,13 @@ namespace fruit
 
 		void set_viewport_size(int width, int height)
 		{
-			printf("%d %d\n", width, height);
 			m_renderer.set_viewport_size(width, height);
 		}
 
-		decltype(auto) display()
+		template<class Callback, class Tag>
+		void set_display_handler(std::reference_wrapper<Callback> cb, Tag)
 		{
-			return m_renderer.display();
+			m_renderer.event_handler(cb, Tag{});
 		}
 
 		void update()
@@ -33,7 +33,7 @@ namespace fruit
 		}
 
 	private:
-		UiRenderer<UiUpdater> m_renderer;
+		UiRenderer m_renderer;
 	};
 }
 

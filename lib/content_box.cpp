@@ -68,7 +68,7 @@ void fruit::ContentBox::handle(DeviceId sender, LocationEvent const& event)
 	}
 }
 
-void fruit::ContentBox::handle(DeviceId, UpdateEventSw const& event) const
+void fruit::ContentBox::handle(DeviceId, RedrawEvent const& event) const
 {
 	auto const size_vec = Vector{m_size.width, m_size.height, 0};
 

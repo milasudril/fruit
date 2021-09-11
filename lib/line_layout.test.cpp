@@ -22,7 +22,7 @@ namespace
 			location = event.location;
 		}
 
-		void handle(fruit::DeviceId, fruit::UpdateEventSw const&) const {}
+		void handle(fruit::DeviceId, fruit::RedrawEvent const&) const {}
 	};
 }
 

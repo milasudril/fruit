@@ -7,7 +7,7 @@
 #include "./size_request_event.hpp"
 #include "./geometry_update_event.hpp"
 #include "./elastic_viewport_size.hpp"
-#include "./update.hpp"
+#include "./update_event.hpp"
 
 #include <span>
 
@@ -31,7 +31,7 @@ namespace fruit
 		explicit LayoutBox(T obj, Sizes&&...  s): event_handler{obj}, size{std::forward<Sizes>(s)...}
 		{}
 
-		EventHandler<SizeRequestEvent, GeometryUpdateEvent, UpdateEventSw> event_handler;
+		EventHandler<SizeRequestEvent, GeometryUpdateEvent, RedrawEvent> event_handler;
 		ElasticViewportSize size;
 
 		ViewportSize compute_min_size(DeviceId sender) const
