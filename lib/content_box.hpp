@@ -19,7 +19,7 @@ namespace fruit
 		class EmptyEh
 		{
 		public:
-			void handle(LocationEvent const&) const {}
+			void handle(DeviceId, LocationEvent const&) const {}
 		};
 
 		inline EmptyEh empty_eh;
@@ -48,24 +48,24 @@ namespace fruit
 			return *this;
 		}
 
-		SizeRequestResult handle(SizeRequestEvent const& event) const;
+		SizeRequestResult handle(DeviceId, SizeRequestEvent const& event) const;
 
-		void handle(GeometryUpdateEvent const& event)
+		void handle(DeviceId, GeometryUpdateEvent const& event)
 		{
 			m_size = event.size;
 			m_location = event.location;
 		}
 
-		void handle(UpdateEventSw const& event) const;
+		void handle(DeviceId sender, UpdateEventSw const& event) const;
 
-		void handle(LocationEvent const& event) const
+		void handle(DeviceId sender, LocationEvent const& event) const
 		{
 			auto point = event.loc;
 			auto const end = m_location + Vector{m_size.width, m_size.height, 0};
 			if((point.x() > m_location.x() && point.x() < end.x())
 				&& (point.y() > m_location.y() && point.y() < end.y()))
 			{
-				m_event_handler.handle(event);
+				m_event_handler.handle(sender, event);
 			}
 		}
 

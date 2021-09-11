@@ -55,15 +55,15 @@ namespace fruit
 		 *
 		 * \see compute_min_size
 		*/
-		SizeRequestResult handle(SizeRequestEvent const&) const
+		SizeRequestResult handle(DeviceId sender, SizeRequestEvent const&) const
 		{
-			auto const min_size = compute_min_size();
+			auto const min_size = compute_min_size(sender);
 			return SizeRequestResult{min_size, min_size};
 		}
 
-		void handle(UpdateEventSw const& event) const
+		void handle(DeviceId sender, UpdateEventSw const& event) const
 		{
-			std::ranges::for_each(m_content, [&event](auto const& item){item.event_handler.handle(event);});
+			std::ranges::for_each(m_content, [sender, &event](auto const& item){item.event_handler.handle(sender, event);});
 		}
 
 		/**
@@ -75,7 +75,7 @@ namespace fruit
 		 *
 		 * \todo Describe algorithm
 		*/
-		void handle(GeometryUpdateEvent const& event);
+		void handle(DeviceId, GeometryUpdateEvent const& event);
 
 		/**
 		 * \brief Sets the Direction of this LineLayout
@@ -163,7 +163,7 @@ namespace fruit
 		 *
 		 * 1. Let s be the required ViewportSize, initialized to {0, 0}
 		 * 2.  For each member:
-		 *   1. Let s_req = member.compute_min_size()
+		 *   1. Let s_req = member.compute_min_size(sender)
 		 *   2. If
 		 *     1. m_direction equals LeftToRight:
 		 *        1. let s.width = s.width + s_req.width
@@ -173,7 +173,7 @@ namespace fruit
 		 *        2. let s.height = s.height + s_req.height
 		 * 3. Return max(s, requested_size(*this, ViewportSize{0, 0}))
 		 */
-		ViewportSize compute_min_size() const;
+		ViewportSize compute_min_size(DeviceId sender) const;
 
 		ElasticViewportSize min_size() const
 		{ return m_min_size; }

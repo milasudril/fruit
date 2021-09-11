@@ -34,10 +34,10 @@ namespace fruit
 		EventHandler<SizeRequestEvent, GeometryUpdateEvent, UpdateEventSw> event_handler;
 		ElasticViewportSize size;
 
-		ViewportSize compute_min_size() const
+		ViewportSize compute_min_size(DeviceId sender) const
 		{
 			return max(size.viewportSize(ViewportSize{0, 0}),
-				event_handler.handle(SizeRequestEvent{ViewportSize{0, 0}}).min_size);
+				event_handler.handle(sender, SizeRequestEvent{ViewportSize{0, 0}}).min_size);
 		}
 	};
 

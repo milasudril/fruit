@@ -1,6 +1,8 @@
 #ifndef FRUIT_EVENTHANDLER_HPP
 #define FRUIT_EVENTHANDLER_HPP
 
+#include "./device_id.hpp"
+
 #include <type_traits>
 #include <string>
 
@@ -31,8 +33,8 @@ namespace fruit
 
 		template<class Widget>
 		explicit EventHandler(std::reference_wrapper<Widget> widget):Base{widget},
-		m_func{[](void* self, Event const& event){
-			return static_cast<Widget*>(self)->handle(event);
+		m_func{[](void* self, DeviceId sender, Event const& event){
+			return static_cast<Widget*>(self)->handle(sender, event);
 		}}
 		{}
 
@@ -43,9 +45,9 @@ namespace fruit
 		}}
 		{}
 
-		decltype(auto) handle(Event const& event) const
+		decltype(auto) handle(DeviceId sender, Event const& event) const
 		{
-			return m_func(object(), event);
+			return m_func(object(), sender, event);
 		}
 
 		bool operator==(EventHandler const& other) const
@@ -61,7 +63,7 @@ namespace fruit
 	private:
 		using result_type = typename event_handler_detail::ResultType<Event>::type;
 
-		result_type (*m_func)(void* self, Event const& event);
+		result_type (*m_func)(void* self, DeviceId sender, Event const& event);
 	};
 
 	template<class Event, class ... Events>
@@ -76,23 +78,23 @@ namespace fruit
 	public:
 		template<class Widget>
 		explicit EventHandler(std::reference_wrapper<Widget> widget):m_obj{&widget.get()},
-		m_func{[](void* self, Event const& event){
-			return static_cast<Widget*>(self)->handle(event);
+		m_func{[](void* self, DeviceId sender, Event const& event){
+			return static_cast<Widget*>(self)->handle(sender, event);
 		}}
 		{}
 
 		template<class Widget, class Tag>
 		explicit EventHandler(std::reference_wrapper<Widget> widget, Tag):m_obj{&widget.get()},
-		m_func{[](void* self, Event const& event){
-			return static_cast<Widget*>(self)->handle(event, Tag{});
+		m_func{[](void* self, DeviceId sender, Event const& event){
+			return static_cast<Widget*>(self)->handle(sender, event, Tag{});
 		}}
 		{}
 
 		using result_type = typename event_handler_detail::ResultType<Event>::type;
 
-		decltype(auto) handle(Event const& event) const
+		decltype(auto) handle(DeviceId sender, Event const& event) const
 		{
-			return m_func(m_obj, event);
+			return m_func(m_obj, sender, event);
 		}
 
 		void* object() const
@@ -102,7 +104,7 @@ namespace fruit
 
 	private:
 		void* m_obj;
-		result_type (*m_func)(void* self, Event const& event);
+		result_type (*m_func)(void* self, DeviceId sender, Event const& event);
 	};
 
 	template<class Event>

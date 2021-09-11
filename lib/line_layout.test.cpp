@@ -11,18 +11,18 @@ namespace
 		fruit::ViewportSize size;
 		fruit::Point<int> location;
 
-		fruit::SizeRequestResult handle(fruit::SizeRequestEvent const&) const
+		fruit::SizeRequestResult handle(fruit::DeviceId, fruit::SizeRequestEvent const&) const
 		{
 			return fruit::SizeRequestResult{size, size};
 		}
 
-		void handle(fruit::GeometryUpdateEvent const& event)
+		void handle(fruit::DeviceId, fruit::GeometryUpdateEvent const& event)
 		{
 			size = event.size;
 			location = event.location;
 		}
 
-		void handle(fruit::UpdateEventSw const&) const {}
+		void handle(fruit::DeviceId, fruit::UpdateEventSw const&) const {}
 	};
 }
 
@@ -38,7 +38,7 @@ TESTCASE(LineLayoutSizeRequest)
 	layout.push_back(fruit::LayoutBox{std::ref(b)});
 	layout.push_back(fruit::LayoutBox{std::ref(c)});
 
-	auto size = layout.handle(fruit::SizeRequestEvent{}).min_size;
+	auto size = layout.handle(fruit::DeviceId{-1}, fruit::SizeRequestEvent{}).min_size;
 	EXPECT_EQ(size.width, 3);
 	EXPECT_EQ(size.height, 9);
 }
@@ -55,7 +55,7 @@ TESTCASE(LineLayoutSizeRequestHorizontal)
 	layout.push_back(fruit::LayoutBox{std::ref(b)});
 	layout.push_back(fruit::LayoutBox{std::ref(c)});
 
-	auto size = layout.handle(fruit::SizeRequestEvent{}).min_size;
+	auto size = layout.handle(fruit::DeviceId{-1}, fruit::SizeRequestEvent{}).min_size;
 	EXPECT_EQ(size.height, 3);
 	EXPECT_EQ(size.width, 9);
 }
@@ -76,7 +76,7 @@ TESTCASE(LineLayoutGeometryUpdateVertical)
 	layout.push_back(fruit::LayoutBox{std::ref(b)});
 	layout.push_back(fruit::LayoutBox{std::ref(c)});
 
-	layout.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{3, 2}, fruit::Point{3, 4, 5}});
+	layout.handle(fruit::DeviceId{-1}, fruit::GeometryUpdateEvent{fruit::ViewportSize{3, 2}, fruit::Point{3, 4, 5}});
 	EXPECT_EQ(a.location.x(), 3);
 	EXPECT_EQ(b.location.x(), 3);
 	EXPECT_EQ(c.location.x(), 3);
@@ -107,7 +107,7 @@ TESTCASE(LineLayoutGeometryUpdateVerticalNoConstraints)
 	layout.push_back(fruit::LayoutBox{std::ref(c), 0.0f, 1.0f});
 	layout.set_height(1.0f);
 
-	layout.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{3, 3}, fruit::Point{3, 4, 5}});
+	layout.handle(fruit::DeviceId{-1}, fruit::GeometryUpdateEvent{fruit::ViewportSize{3, 3}, fruit::Point{3, 4, 5}});
 	EXPECT_EQ(a.location.x(), 3);
 	EXPECT_EQ(b.location.x(), 3);
 	EXPECT_EQ(c.location.x(), 3);
@@ -138,7 +138,7 @@ TESTCASE(LineLayoutGeometryUpdateVerticalPartialConstraints)
 	layout.push_back(fruit::LayoutBox{std::ref(c), 0.0f, 1.0f});
 	layout.set_height(1.0f);
 
-	layout.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{3, 4}, fruit::Point{3, 4, 5}});
+	layout.handle(fruit::DeviceId{-1}, fruit::GeometryUpdateEvent{fruit::ViewportSize{3, 4}, fruit::Point{3, 4, 5}});
 	EXPECT_EQ(a.location.x(), 3);
 	EXPECT_EQ(b.location.x(), 3);
 	EXPECT_EQ(c.location.x(), 3);
@@ -168,7 +168,7 @@ TESTCASE(LineLayoutGeometryUpdateHorizontal)
 	layout.push_back(fruit::LayoutBox{std::ref(b)});
 	layout.push_back(fruit::LayoutBox{std::ref(c)});
 
-	layout.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{2, 3}, fruit::Point{4, 3, 5}});
+	layout.handle(fruit::DeviceId{-1}, fruit::GeometryUpdateEvent{fruit::ViewportSize{2, 3}, fruit::Point{4, 3, 5}});
 	EXPECT_EQ(a.location.y(), 3);
 	EXPECT_EQ(b.location.y(), 3);
 	EXPECT_EQ(c.location.y(), 3);
@@ -199,7 +199,7 @@ TESTCASE(LineLayoutGeometryUpdateNoConstraintsHorizontal)
 	layout.push_back(fruit::LayoutBox{std::ref(c), 1.0f, 0.0f});
 	layout.set_width(1.0f);
 
-	layout.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{3, 3}, fruit::Point{4, 3, 5}});
+	layout.handle(fruit::DeviceId{-1}, fruit::GeometryUpdateEvent{fruit::ViewportSize{3, 3}, fruit::Point{4, 3, 5}});
 	EXPECT_EQ(a.location.y(), 3);
 	EXPECT_EQ(b.location.y(), 3);
 	EXPECT_EQ(c.location.y(), 3);
@@ -230,7 +230,7 @@ TESTCASE(LineLayoutGeometryUpdatePartialConstraintsHorizontal)
 	layout.push_back(fruit::LayoutBox{std::ref(c), 1.0f, 0.0f});
 	layout.set_width(1.0f);
 
-	layout.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{4, 3}, fruit::Point{4, 3, 5}});
+	layout.handle(fruit::DeviceId{-1}, fruit::GeometryUpdateEvent{fruit::ViewportSize{4, 3}, fruit::Point{4, 3, 5}});
 	EXPECT_EQ(a.location.y(), 3);
 	EXPECT_EQ(b.location.y(), 3);
 	EXPECT_EQ(c.location.y(), 3);
@@ -259,6 +259,6 @@ TESTCASE(LineLayoutGeometryUpdateLineLayoutInLineLayout1)
 	inner.push_back(fruit::LayoutBox{std::ref(a), 0.5f, 0.0f});
 	outer.push_back(fruit::LayoutBox{std::ref(inner), 0.5f, 0.0f});
 
-	outer.handle(fruit::GeometryUpdateEvent{fruit::ViewportSize{8, 8}, fruit::Origin<int>});
+	outer.handle(fruit::DeviceId{-1}, fruit::GeometryUpdateEvent{fruit::ViewportSize{8, 8}, fruit::Origin<int>});
 	EXPECT_EQ(a.size, (fruit::ViewportSize{2, 3}));
 }

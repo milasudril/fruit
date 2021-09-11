@@ -3,11 +3,11 @@
 #include "./line_layout.hpp"
 #include "./utils.hpp"
 
-fruit::ViewportSize fruit::LineLayout::compute_min_size() const
+fruit::ViewportSize fruit::LineLayout::compute_min_size(DeviceId sender) const
 {
 	ViewportSize s{0, 0};
-	std::ranges::for_each(m_content, [&s, direction = m_direction](auto const& item) {
-		auto const size_member = item.compute_min_size();
+	std::ranges::for_each(m_content, [&s, direction = m_direction, sender](auto const& item) {
+		auto const size_member = item.compute_min_size(sender);
 		if(direction == Direction::LeftToRight)
 		{
 			s.width += size_member.width;
@@ -22,7 +22,7 @@ fruit::ViewportSize fruit::LineLayout::compute_min_size() const
 	return max(s, requested_size(*this, ViewportSize{0, 0}));
 }
 
-void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
+void fruit::LineLayout::handle(DeviceId sender, GeometryUpdateEvent const& event)
 {
 	auto content = m_content;
 	normalize_sum(std::span{std::data(content), std::size(content)}, m_direction);
@@ -39,7 +39,7 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 			if(!completed[k])
 			{
 				auto const& item = content[k];
-				auto const min_size = item.compute_min_size();
+				auto const min_size = item.compute_min_size(sender);
 				auto const item_req_size = requested_size(item, current_size);
 				auto const sel_size = max(min_size, item_req_size);
 				auto const failed = (m_direction == Direction::LeftToRight)?
@@ -75,7 +75,7 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 		if(!completed[k])
 		{
 			auto const& item = content[k];
-			auto const min_size = item.compute_min_size();
+			auto const min_size = item.compute_min_size(sender);
 			auto const item_req_size = requested_size(item, current_size);
 			sizes[k] =  max(min_size, item_req_size);
 		}
@@ -84,7 +84,7 @@ void fruit::LineLayout::handle(GeometryUpdateEvent const& event)
 	auto origin = event.location;
 	for(size_t k = 0; k != std::size(content); ++k)
 	{
-		m_content[k].event_handler.handle(GeometryUpdateEvent{sizes[k], origin});
+		m_content[k].event_handler.handle(sender, GeometryUpdateEvent{sizes[k], origin});
 		origin += (m_direction == Direction::LeftToRight) ?
 			Vector{sizes[k].width, 0, 0} : Vector{0, sizes[k].height, 0};
 	}

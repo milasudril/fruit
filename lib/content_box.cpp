@@ -27,7 +27,7 @@ namespace
 	}
 }
 
-fruit::SizeRequestResult fruit::ContentBox::handle(SizeRequestEvent const& event) const
+fruit::SizeRequestResult fruit::ContentBox::handle(DeviceId, SizeRequestEvent const& event) const
 {
 	auto size = m_padding_near
 		+ m_padding_far
@@ -44,7 +44,7 @@ fruit::SizeRequestResult fruit::ContentBox::handle(SizeRequestEvent const& event
 	return SizeRequestResult{res, res};
 }
 
-void fruit::ContentBox::handle(UpdateEventSw const& event) const
+void fruit::ContentBox::handle(DeviceId, UpdateEventSw const& event) const
 {
 	auto const size_vec = Vector{m_size.width, m_size.height, 0};
 

@@ -81,8 +81,8 @@ namespace fruit
 			if(handlers == std::end(m_sensitive_widgets))
 			{ return; }
 
-			std::ranges::for_each(std::begin(handlers->second), std::end(handlers->second),[&e](auto& item) {
-				item.handle(e);
+			std::ranges::for_each(std::begin(handlers->second), std::end(handlers->second),[sender, &e](auto& item) {
+				item.handle(sender, e);
 			});
 		}
 

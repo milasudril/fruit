@@ -8,16 +8,20 @@ namespace
 {
 	struct TestEventHandler
 	{
+		fruit::DeviceId sender_a{-1};
 		int recv_val_a{0};
+		fruit::DeviceId sender_b{-1};
 		long recv_val_b{0};
 
-		void handle(int sent_val)
+		void handle(fruit::DeviceId sender, int sent_val)
 		{
+			sender_a = sender;
 			recv_val_a = sent_val;
 		}
 
-		void handle(long sent_val)
+		void handle(fruit::DeviceId sender, long sent_val)
 		{
+			sender_b = sender;
 			recv_val_b = sent_val;
 		}
 	};
@@ -26,7 +30,7 @@ namespace
 	{
 		int recv_val{0};
 
-		void handle(int sent_val)
+		void handle(fruit::DeviceId, int sent_val)
 		{
 			recv_val += sent_val;
 		}

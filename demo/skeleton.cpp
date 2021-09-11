@@ -73,6 +73,7 @@ bool initOpenGL(GLFWwindow* window)
 	printf("OpenGL version: %s\n", reinterpret_cast<char const*>(gl_version));
 	return true;
 }
+
 class Texture
 {
 public:
@@ -201,9 +202,10 @@ constexpr std::array<std::pair<float, float>, 6> texture_uvs{
 struct MyEventHandler
 {
 	template<int n>
-	void handle(fruit::LocationEvent const& e, std::integral_constant<int, n>)
+	void handle(fruit::DeviceId sender, fruit::LocationEvent const& e, std::integral_constant<int, n>)
 	{
-		printf("button_%d  (%.8e, %.8e) %.8e %d\n",
+		printf("%s button_%d  (%.8e, %.8e) %.8e %d\n",
+				to_string(sender).c_str(),
 				n,
 				e.loc.x(), e.loc.y(),
 				e.button_pressure.value(),
