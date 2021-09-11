@@ -5,6 +5,9 @@
 
 namespace fruit
 {
+	/**
+	 * \brief Describes the pressure which a button is being pressed
+	 */
 	class ButtonPressure
 	{
 	public:
@@ -31,7 +34,14 @@ namespace fruit
 		return obj.value() < 0.0f;
 	}
 
-
+	/**
+	 * \brief Describes an event that happened at a certain point
+	 *
+	 * A LocationEvent represent an action that occured on a certain point. Typical application
+	 * includes movement of the mouse cursor, as well as performing a mouse click.
+	 *
+	 * \ingroup Events
+	 */
 	struct LocationEvent
 	{
 		struct MouseMoveTag{};

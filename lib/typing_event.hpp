@@ -7,6 +7,11 @@
 
 namespace fruit
 {
+	/**
+	 * \brief Describes a notification that the user is currently typing
+	 *
+	 * \ingroup Events
+	 */
 	struct TypingEvent
 	{
 		Scancode scancode;

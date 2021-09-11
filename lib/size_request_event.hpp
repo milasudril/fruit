@@ -11,6 +11,11 @@ namespace fruit
 		ViewportSize max_size;
 	};
 
+	/**
+	 * \brief An event sent to ask about the size of an object
+	 *
+	 * \ingroup Events
+	 */
 	struct SizeRequestEvent
 	{
 		using result_type =  SizeRequestResult;

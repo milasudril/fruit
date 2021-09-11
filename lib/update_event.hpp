@@ -9,6 +9,11 @@
 
 namespace fruit
 {
+	/**
+	 * \brief Describes a notification that an object should redraw itself
+	 *
+	 * \ingroup Events
+	 */
 	struct UpdateEventSw
 	{
 		ImageView<Pixel> buffer;

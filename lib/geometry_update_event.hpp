@@ -6,6 +6,11 @@
 
 namespace fruit
 {
+	/**
+	 * \brief Describes a notification that an object has been moved or changed size
+	 *
+	 * \ingroup Events
+	 */
 	struct GeometryUpdateEvent
 	{
 		ViewportSize size;
