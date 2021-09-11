@@ -24,7 +24,7 @@ namespace fruit
 {
 	class FontfaceLoader;
 
-	namespace detail
+	namespace fontface_detail
 	{
 		struct Deleter
 		{
@@ -102,7 +102,7 @@ namespace fruit
 		{ return m_handle != nullptr; }
 
 	private:
-		std::unique_ptr<std::remove_pointer_t<FT_Face>, detail::Deleter> m_handle;
+		std::unique_ptr<std::remove_pointer_t<FT_Face>, fontface_detail::Deleter> m_handle;
 		std::vector<std::byte> m_data;
 		int m_size;
 	};
@@ -116,7 +116,7 @@ namespace fruit
 		{ return m_handle.get(); }
 
 	private:
-		std::unique_ptr<std::remove_pointer_t<FT_Library>, detail::Deleter> m_handle;
+		std::unique_ptr<std::remove_pointer_t<FT_Library>, fontface_detail::Deleter> m_handle;
 	};
 }
 
