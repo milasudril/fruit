@@ -203,28 +203,17 @@ struct MyEventHandler
 	template<int n>
 	void handle(fruit::LocationEvent const& e, std::integral_constant<int, n>)
 	{
-		if(e.btn_state_chg_mask)
-		{
-			printf("Button %d  (%.8e, %.8e) %016lx (%.8e, %.8e)\n",
+		printf("button_%d  (%.8e, %.8e) %.8e %d\n",
 				n,
 				e.loc.x(), e.loc.y(),
-				*e.btn_state_chg_mask,
-				e.ball_offset.x(), e.ball_offset.y()
-				);
-		}
-		else
-		{
-			printf("Button %d  (%.8e, %.8e) (%.8e, %.8e)\n",
-				n,
-				e.loc.x(), e.loc.y(),
-				e.ball_offset.x(), e.ball_offset.y());
-		}
+				e.button_pressure.value(),
+				e.active_button);
 	}
 };
 
 int main()
 {
-	using MyUi = fruit::UiManager<Texture, fruit::LocationEvent>;
+	using MyUi = fruit::UiManager<Texture, fruit::LocationEvent, fruit::BallEvent>;
 
 	MyUi ui;
 
@@ -315,7 +304,7 @@ int main()
 
 	glfwSetScrollCallback(window.get(), [](GLFWwindow* src, double dx, double dy) {
 		auto& ui = *reinterpret_cast<MyUi*>(glfwGetWindowUserPointer(src));
-		ui.send(fruit::DeviceId{-1}, fruit::convert(fruit::LocationEvent::MouseWheelTag{}, *src, dx, dy));
+		ui.send(fruit::DeviceId{-1}, fruit::convert(fruit::BallEvent::ScrollTag{}, *src, dx, dy));
 	});
 
 	while(!glfwWindowShouldClose(window.get()))

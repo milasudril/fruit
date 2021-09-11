@@ -7,6 +7,8 @@ namespace fruit
 {
 	struct BallEvent
 	{
+		struct ScrollTag{};
+
 		Vector<float> offset;
 	};
 }
