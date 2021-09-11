@@ -198,20 +198,20 @@ struct MyEventHandler
 	void handle(fruit::DeviceId sender, fruit::LocationEvent const& e, std::integral_constant<int, n>)
 	{
 		printf("%s button_%d  (%.8e, %.8e) %.8e %d\n",
-				to_string(sender).c_str(),
-				n,
-				e.loc.x(), e.loc.y(),
-				e.button_pressure.value(),
-				e.active_button);
+			to_string(sender).c_str(),
+			n,
+			e.loc.x(), e.loc.y(),
+			e.button_pressure.value(),
+			e.active_button);
 	}
 
 	template<int n>
 	void handle(fruit::DeviceId sender, fruit::BoundaryCrossedEvent const& e, std::integral_constant<int, n>)
 	{
 		printf("%s button_%d  %.8e\n",
-				to_string(sender).c_str(),
-				n,
-				e.direction);
+			to_string(sender).c_str(),
+			n,
+			e.direction);
 	}
 
 	void handle(fruit::DeviceId, fruit::FbUpdateEvent const& e, std::integral_constant<int, 0>)
@@ -246,16 +246,16 @@ int main()
 	GLuint vbo{};
 	glCreateBuffers(1, &vbo);
 	glNamedBufferStorage(vbo,
-						 std::size(texture_rect)*sizeof(fruit::Point<float>),
-						 std::data(texture_rect),
-						 GL_MAP_READ_BIT);
+		std::size(texture_rect)*sizeof(fruit::Point<float>),
+		std::data(texture_rect),
+		GL_MAP_READ_BIT);
 
 	GLuint uvs{};
 	glCreateBuffers(1, &uvs);
 	glNamedBufferStorage(uvs,
-						 std::size(texture_uvs)*sizeof(std::pair<float,float>),
-						 std::data(texture_uvs),
-						 GL_MAP_READ_BIT);
+		std::size(texture_uvs)*sizeof(std::pair<float,float>),
+		std::data(texture_uvs),
+		GL_MAP_READ_BIT);
 
 	GLuint va{};
 	glCreateVertexArrays(1, &va);
