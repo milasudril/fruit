@@ -61,29 +61,7 @@ namespace fruit
 
 		void handle(DeviceId sender, UpdateEventSw const& event) const;
 
-		void handle(DeviceId sender, LocationEvent const& event)
-		{
-			auto point = event.loc;
-			auto const end = m_location + Vector{m_size.width, m_size.height, 0};
-			if((point.x() > m_location.x() && point.x() < end.x())
-				&& (point.y() > m_location.y() && point.y() < end.y()))
-			{
-				if(!m_cursor_inside)
-				{
-					m_cursor_inside = true;
-					m_event_handler.handle(sender, BoundaryCrossedEvent{BoundaryCrossedEvent::domain_entered});
-				}
-				m_event_handler.handle(sender, event);
-			}
-			else
-			{
-				if(m_cursor_inside)
-				{
-					m_cursor_inside = false;
-					m_event_handler.handle(sender, BoundaryCrossedEvent{BoundaryCrossedEvent::domain_left});
-				}
-			}
-		}
+		void handle(DeviceId sender, LocationEvent const& event);
 
 		template<class T>
 		ContentBox& content(T&& value)
