@@ -54,7 +54,7 @@ WindowHandle createWindow()
 	return WindowHandle{glfwCreateWindow(800, 500, "Fruit skeleton", nullptr, nullptr)};
 }
 
-bool initOpenGL(GLFWwindow* window)
+bool init_open_gl(GLFWwindow* window)
 {
 	glfwMakeContextCurrent(window);
 
@@ -224,19 +224,25 @@ struct MyEventHandler
 
 int main()
 {
+	// Setup fruit
 	using MyUi = fruit::UiManager<fruit::LocationEvent, fruit::BallEvent>;
 	Texture texture;
 	MyUi ui;
+	MyEventHandler eh{std::ref(texture)};
+	ui.set_display_handler(std::ref(eh), std::integral_constant<int, 0>{});
 
+	// Create a window and associate event dispatcher
 	auto window = createWindow();
 	glfwSetWindowUserPointer(window.get(), &ui);
 
-	if(!initOpenGL(window.get()))
+	if(!init_open_gl(window.get()))
 	{ return 1; }
 
+	// Create and enable shaders
 	auto shader_prog = create_shader_program();
 	glUseProgram(shader_prog);
 
+	// VBO:s of vertices and UV:s
 	GLuint vbo{};
 	glCreateBuffers(1, &vbo);
 	glNamedBufferStorage(vbo,
@@ -254,10 +260,9 @@ int main()
 	GLuint va{};
 	glCreateVertexArrays(1, &va);
 
+	// Create two "buttons"
 	fruit::FontMapper font_mapper;
 	fruit::FontStore fonts;
-	MyEventHandler eh{std::ref(texture)};
-	ui.set_display_handler(std::ref(eh), std::integral_constant<int, 0>{});
 	fruit::ContentBox button_1;
 	button_1.border_width_top(16)
 		.border_width_right(8)
@@ -288,15 +293,23 @@ int main()
 			.char_height(32))
 			.event_handler(std::ref(eh), std::integral_constant<int, 1>{});
 
+	// Put them in a line
 	fruit::LineLayout line;
 	line.set_width(1.0f);
 	line.push_back(fruit::LayoutBox{std::ref(button_1), 1.0f, 0});
 	line.push_back(fruit::LayoutBox{std::ref(button_2), 1.0f, 0});
+
+	// Bind `line` to renderer so its content will be rendered properly
 	ui.bind_to_renderer(std::ref(line));
+
+	// Bind event buttons so they receive LocationEvents
 	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(button_1)}, fruit::DeviceId{-1});
 	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(button_2)}, fruit::DeviceId{-1});
+
+	// Make sure that ui has a valid framebuffer
 	ui.set_viewport_size(800, 500);
 
+	// Setup GLFW callbacks
 	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
 		glViewport(0, 0, w, h);
 		auto& ui = *reinterpret_cast<MyUi*>(glfwGetWindowUserPointer(src));
@@ -318,11 +331,15 @@ int main()
 		ui.send(fruit::DeviceId{-1}, fruit::convert(fruit::BallEvent::ScrollTag{}, *src, dx, dy));
 	});
 
+	// Emter the main loop
 	while(!glfwWindowShouldClose(window.get()))
 	{
 		glfwPollEvents();
-		ui.update();
 
+		// Render stuff below ui
+
+		// Render UI
+		ui.update();
 		glBindVertexArray(va);
 		texture.bind();
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -332,6 +349,8 @@ int main()
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		// Render stuff in front of ui
 
 		glfwSwapBuffers(window.get());
 	}
