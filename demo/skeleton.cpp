@@ -3,7 +3,6 @@
 //@		{
 //@			"name":"skeleton.o",
 //@			"dependencies": [
-//				{"ref":"glfw3", "origin":"pkg-config"},
 //@				{"ref":"glew", "origin":"pkg-config"},
 //@				{"ref":"GL", "origin":"system", "rel":"external"}
 //@			]
