@@ -39,9 +39,9 @@ namespace fruit
 		{}
 
 		template<class Widget, class Tag>
-		explicit EventHandler(std::reference_wrapper<Widget> widget, Tag):Base{widget},
-		m_func{[](void* self, Event const& event){
-			return static_cast<Widget*>(self)->handle(event, Tag{});
+		explicit EventHandler(std::reference_wrapper<Widget> widget, Tag):Base{widget, Tag{}},
+		m_func{[](void* self, DeviceId sender, Event const& event){
+			return static_cast<Widget*>(self)->handle(sender, event, Tag{});
 		}}
 		{}
 

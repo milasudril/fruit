@@ -9,6 +9,7 @@
 #include "./update_event.hpp"
 #include "./location_event.hpp"
 #include "./event_handler.hpp"
+#include "./boundary_crossed_event.hpp"
 
 #include <variant>
 
@@ -20,6 +21,7 @@ namespace fruit
 		{
 		public:
 			void handle(DeviceId, LocationEvent const&) const {}
+			void handle(DeviceId, BoundaryCrossedEvent const&) const {}
 		};
 
 		inline EmptyEh empty_eh;
@@ -38,13 +40,14 @@ namespace fruit
 			m_size{0, 0},
 			m_location{Origin<int>},
 			m_bg_color{1.0, 1.0, 1.0, 1.0},
-			m_border_color{0, 0, 0, 0}
+			m_border_color{0, 0, 0, 0},
+			m_cursor_inside{false}
 		{}
 
 		template<class Callback, class Tag>
 		ContentBox& event_handler(std::reference_wrapper<Callback> cb, Tag)
 		{
-			m_event_handler = EventHandler<LocationEvent>{cb, Tag{}};
+			m_event_handler = EventHandler<LocationEvent, BoundaryCrossedEvent>{cb, Tag{}};
 			return *this;
 		}
 
@@ -58,14 +61,27 @@ namespace fruit
 
 		void handle(DeviceId sender, UpdateEventSw const& event) const;
 
-		void handle(DeviceId sender, LocationEvent const& event) const
+		void handle(DeviceId sender, LocationEvent const& event)
 		{
 			auto point = event.loc;
 			auto const end = m_location + Vector{m_size.width, m_size.height, 0};
 			if((point.x() > m_location.x() && point.x() < end.x())
 				&& (point.y() > m_location.y() && point.y() < end.y()))
 			{
+				if(!m_cursor_inside)
+				{
+					m_cursor_inside = true;
+					m_event_handler.handle(sender, BoundaryCrossedEvent{BoundaryCrossedEvent::domain_entered});
+				}
 				m_event_handler.handle(sender, event);
+			}
+			else
+			{
+				if(m_cursor_inside)
+				{
+					m_cursor_inside = false;
+					m_event_handler.handle(sender, BoundaryCrossedEvent{BoundaryCrossedEvent::domain_left});
+				}
 			}
 		}
 
@@ -133,7 +149,7 @@ namespace fruit
 
 
 	private:
-		EventHandler<LocationEvent> m_event_handler;
+		EventHandler<LocationEvent, BoundaryCrossedEvent> m_event_handler;
 
 		Vector<int> m_padding_near;
 		Vector<int> m_padding_far;
@@ -148,6 +164,8 @@ namespace fruit
 
 		Pixel m_bg_color;
 		Pixel m_border_color;
+
+		bool m_cursor_inside;
 	};
 }
 

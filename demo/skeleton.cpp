@@ -211,6 +211,16 @@ struct MyEventHandler
 				e.button_pressure.value(),
 				e.active_button);
 	}
+
+	template<int n>
+	void handle(fruit::DeviceId sender, fruit::BoundaryCrossedEvent const& e, std::integral_constant<int, n>)
+	{
+		printf("%s button_%d  %.8e\n",
+				to_string(sender).c_str(),
+				n,
+				e.direction);
+	}
+
 };
 
 int main()

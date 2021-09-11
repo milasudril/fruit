@@ -10,8 +10,20 @@ namespace fruit
 	 */
 	struct BoundaryCrossedEvent
 	{
+		static constexpr float domain_left = 1.0f;
+		static constexpr float domain_entered = -1.0f;
 		float direction;
 	};
+
+	constexpr bool entered_domain(BoundaryCrossedEvent const& event)
+	{
+		return event.direction < 0.0f;
+	}
+
+	constexpr bool left_domain(BoundaryCrossedEvent const& event)
+	{
+		return event.direction > 0.0f;
+	}
 }
 
 #endif
