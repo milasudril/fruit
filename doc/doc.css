@@ -64,7 +64,31 @@ td.mdescLeft, td.mdescRight{padding-bottom: 1ex}
 table.mlabels *, table.memname *{display:inline}
 .memproto{margin-left: 3em}
 
+/*Source code*/
+.fragment{border:1px solid;padding:1ex;margin:1ex;border-radius: 1ex; overflow-x:scroll}
+span.preprocessor,
+span.keyword,
+span.stringliteral,
+span.keywordtype, 
+span.keywordflow, 
+div.line,
+a.hl_class,
+a.hl_function,
+a.hl_struct
+{font-family: "Cascadia Code", "Inconsolata", "Consolas", monospace; font-size:1.8ex;}
+.ttc{display:none}
+span.comment{font-size:1.8ex}
+
+div.line{white-space: pre}
+span.stringliteral{font-style: italic}
+span.keyword{font-weight: bold}
+span.keywordtype{font-weight: bold;}
+span.keywordflow{font-weight: bold}
+
 /* Colors */
 h1, h2, .title, #projectname {color: #649F85; }
+.fragment{border-color:#649F85}
+span.comment{color:#408000}
 
 a[href] { color: #CF8299; }
+
