@@ -49,11 +49,11 @@ int main()
 	ExampleEventHandler event_handler;
 
 	// Events that end up in the event handler may be associated with a compile-time "control id"
-	// This way, it is possible to know which control that triggered the event. For simplicity, we
-	// use std::integral_constant<int, 0>. A real application may want to use an enum for different
-	// controls.
+	// This way, it is possible to know which control that triggered the event. The control id is
+	// bound by using a type. For this purpose we can use std::integral_constant with appropriate
+	// template arguments.
 	//
-	ui.set_display_handler(std::ref(event_handler), ControlIdTag<ControlId::display>);
+	ui.set_display_handler(std::ref(event_handler), ControlIdTag<ControlId::display>{});
 
 	// Initiate font managment. For simplicity, we use the FontMapper and FontStore to handle fonts.
 	// It is also possible to skip FontStore if you already have a class for font lookups. If you
@@ -77,7 +77,7 @@ int main()
 		.content(fruit::TextLine{*fonts.load_and_replace("Andika", font_mapper).font}
 			.text(u8"Hello, World")
 			.char_height(32))
-		.event_handler(std::ref(eh), ControlIdTag<ControlId::button>);
+		.event_handler(std::ref(eh), ControlIdTag<ControlId::button>{});
 
 	// Binding `hello_button` to renderer makes fruit render the button
 	//
@@ -99,3 +99,9 @@ int main()
 	return 0;
 }
 ~~~
+
+## Event routing
+
+## Font managment
+
+## Color conventions
