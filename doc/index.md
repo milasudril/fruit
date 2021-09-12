@@ -12,3 +12,90 @@ An example of an input library is GLFW, but you can also use ports from JACK as 
 combination of multiple libraries. For drawing, you can use any library that accepts raster graphics
 such as Cairo, OpenGL, or Vulkan. Since fruit does not have its own event loop, it is also possible
 to embed a fruit-based component into a GTK or Qt-based application.
+
+## An example
+
+Before digging into details, it is a good idea to have a look at basic example
+
+~~~{.cpp}
+#include <fruit/font_store.hpp>
+#include <fruit/line_layout.hpp>
+#include <fruit/location_event.hpp>
+#include <fruit/ui_manager.hpp>
+#include <fruit/content_box.hpp>
+
+enum class ControlId:int{display, button}
+
+template<ControlId id>
+using ControlIdTag = std::integral_constant<ControlId, id>;
+
+struct ExampleEventHandler
+{
+};
+
+int main()
+{
+	// First, create a UiManager that will manage an internal framebuffer, and route different kinds
+	// of events. We want to route LocationEvents. Thus, we add LocationEvent to the list of supported
+	// events.
+	//
+	using ExampleUi = fruit::UiManager<fruit::LocationEvent>;
+	ExampleUi ui;
+
+	// To act on events, we need to have one or more event handlers. In this example, we will use
+	// the same event handler for both LocationEvents and click and FbUpdateEvents. Use an
+	// instance of ExampleEventHandler to receive all events.
+	//
+	ExampleEventHandler event_handler;
+
+	// Events that end up in the event handler may be associated with a compile-time "control id"
+	// This way, it is possible to know which control that triggered the event. For simplicity, we
+	// use std::integral_constant<int, 0>. A real application may want to use an enum for different
+	// controls.
+	//
+	ui.set_display_handler(std::ref(event_handler), ControlIdTag<ControlId::display>);
+
+	// Initiate font managment. For simplicity, we use the FontMapper and FontStore to handle fonts.
+	// It is also possible to skip FontStore if you already have a class for font lookups. If you
+	// want to load a TTF directly, you can skip FontMapper.
+	//
+	fruit::FontMapper font_mapper;
+	fruit::FontStore fonts;
+
+	// Create a "button" and set some properties
+	//
+	fruit::ContentBox hello_button;
+	hello_button.border_width_top(4)
+		.border_width_right(4)
+		.border_width_bottom(4)
+		.border_width_left(4)
+		.padding_left(4)
+		.padding_top(4)
+		.padding_right(4)
+		.padding_bottom(4)
+		.border_color(fruit::Pixel{1.0f, 0.5f, 0.0f, 1.0f})
+		.content(fruit::TextLine{*fonts.load_and_replace("Andika", font_mapper).font}
+			.text(u8"Hello, World")
+			.char_height(32))
+		.event_handler(std::ref(eh), ControlIdTag<ControlId::button>);
+
+	// Binding `hello_button` to renderer makes fruit render the button
+	//
+	ui.bind_to_renderer(std::ref(hello_button));
+
+	// We also want to catch LocationEvents
+	//
+	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(button_1)});
+
+	// Make sure that ui has a valid framebuffer. You should set the initial size to match the
+	// initial size of the target buffer.
+	//
+	ui.set_viewport_size(800, 500);
+
+	// Configure your "input library" so events form it are being routed to `ui`
+
+	// Run the event loop
+
+	return 0;
+}
+~~~
