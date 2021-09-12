@@ -86,7 +86,7 @@ namespace fruit
 			});
 		}
 
-		void bind(EventHandler<Event> widget, DeviceId device)
+		void bind(EventHandler<Event> widget, DeviceId device = DeviceId{-1})
 		{
 			auto& v = m_sensitive_widgets[device];
 			auto i = std::ranges::find(v, widget);
