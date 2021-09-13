@@ -116,13 +116,33 @@ int main()
 
 ## Color conventions
 
-Fruit uses 32-bit float values to represent channel values, where zero represents black and one
-represents white. The channel layout is RGBA, with 16 bytes per pixel. Color values should be treated
-as linear values. Thus, a value of 0.5 represents half intensity. Alpha blending assumes that color
-values are premultiplied with the opacity. This means that (1.0, 0.0, 0.0, 0.0) could represent a red
-light.
+Fruit uses 32-bit floating point values to represent channel values, where zero represents black and
+one represents white. The channel layout is RGBA, with 16 bytes per pixel. Color values should be
+treated as linear values. Thus, a value of 0.5 represents half intensity. Alpha blending assumes that
+color values are premultiplied with the opacity. This means that (1.0, 0.0, 0.0, 0.0) could represent
+a red light.
 
 ## Layout managment
+
+In the example above, the button is placed in the default location, which is (0, 0). It is possible
+to manually set its location by letting `hello_button` process a GeometryUpdateEvent. It is also
+possible to use a LineLayout to control the size and location of a control.
+
+~~~{.cpp}
+	fruit::LineLayout line_layout;
+	line_layout.push_back(fruit::LayoutBox{std::ref(hello_button), 0, 0});
+~~~
+
+Instead of binding the `hello_button` to the renderer, the `line_layout` should be bound. This is
+because a LineLayout needs to know the size of the framebuffer, and this size is controlled by the
+renderer. As before, other events are bound directly:
+
+~~~{.cpp}
+	ui.bind_to_renderer(std::ref(line_layout));
+
+	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(hello_button)});
+	// As before
+~~~
 
 ## Event routing
 
