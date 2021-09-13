@@ -133,9 +133,8 @@ possible to use a LineLayout to control the size and location of a control.
 	line_layout.push_back(fruit::LayoutBox{std::ref(hello_button), 0, 0});
 ~~~
 
-Instead of binding the `hello_button` to the renderer, the `line_layout` should be bound. This is
-because a LineLayout needs to know the size of the framebuffer, and this size is controlled by the
-renderer. As before, other events are bound directly:
+Instead of binding the `hello_button` to the renderer, the `line_layout` should be bound. The
+LineLayout will dispatch to all of the managed elements.
 
 ~~~{.cpp}
 	ui.bind_to_renderer(std::ref(line_layout));
