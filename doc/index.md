@@ -15,7 +15,8 @@ to embed a fruit-based component into a GTK or Qt-based application.
 
 ## An example
 
-Before digging into details, it is a good idea to have a look at basic example
+Before digging into details, it is a good idea to have a look at basic example. The example below
+shows how to initiate fruit, and creating a button.
 
 ~~~{.cpp}
 #include <fruit/font_store.hpp>
@@ -114,6 +115,12 @@ int main()
 ~~~
 
 ## Color conventions
+
+Fruit uses 32-bit float values to represent channel values, where zero represents black and one
+represents white. The channel layout is RGBA, with 16 bytes per pixel. Color values should be treated
+as linear values. Thus, a value of 0.5 represents half intensity. Alpha blending assumes that color
+values are premultiplied with the opacity. This means that (1.0, 0.0, 0.0, 0.0) could represent a red
+light.
 
 ## Layout managment
 
