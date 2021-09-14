@@ -153,3 +153,19 @@ To keeping track of loaded fonts, it is possible to use a FontStore. Through a F
 possible to load a font from different sources, as well as looking up an already loaded font.
 
 ## Event routing
+
+Inputs and notifications are routed Fruit using events. An application is expected to trigger events
+when an input library notifies the application about an external trigger. For example, if the input
+library detects a trigger associated with a pointing device such as a mouse or trackball, the
+application should send a LocationEvent to all components that should potentially act on that trigger.
+
+Events are routed throug an EventDispatcher. Notice that UiManager may act as an EventDispatcher for
+the specified evnets. Thus, an application will typically use an UiManager to manage event routing.
+
+When an external trigger is being handled by a component, it is possible that the event is forwarded
+back to the appliocation through a callback. It is also possible that an internal event is generated.
+For example, when a ContentBox receives a LocationEvent, it may forward the event when the location
+is inside the ContentBox. It may also trigger a BoundaryCrossedEvent.
+
+Events are also used by layout managers to control the location and size of objects. In this case,
+SizeRequestEvents and GeometryUpdateEvents are sent.
