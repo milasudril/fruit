@@ -172,6 +172,14 @@ is inside the ContentBox. It may also trigger a BoundaryCrossedEvent.
 Events are also used by layout managers to control the location and size of objects. In this case,
 SizeRequestEvents and GeometryUpdateEvents are sent.
 
+### Tagging event handlers
+
+As shown in the example, callbacks are tagged with a compile-time dummy type. The tagging is used to
+enable tag dispatching. Thus, the same event handler can be associated with multiple components, and
+it is still possible to destigiuish between different event sources. You can use any type as long
+as it is default constructible, and move constructible, though it is strongly recommended to use a
+class with no non-static data members such as std::integral_constant or std::type_identity.
+
 ### Using multiple devices of similar type
 
 Some systems may have an arbitrary number of (virtual) input devices. In this case an application may
