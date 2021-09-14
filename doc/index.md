@@ -20,7 +20,6 @@ shows how to initiate fruit, and creating a button.
 
 ~~~{.cpp}
 #include <fruit/font_store.hpp>
-#include <fruit/line_layout.hpp>
 #include <fruit/ui_manager.hpp>
 #include <fruit/content_box.hpp>
 

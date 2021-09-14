@@ -6,7 +6,6 @@
 //@	}
 
 #include "lib/font_store.hpp"
-#include "lib/line_layout.hpp"
 #include "lib/ui_manager.hpp"
 #include "lib/content_box.hpp"
 
