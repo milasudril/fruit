@@ -108,6 +108,8 @@ int main()
 	// Configure your "input library" so events form it are being routed to `ui`
 
 	// Run the event loop
+	
+	ui.update();  // This will trigger an update to the entire UI.
 
 	return 0;
 }

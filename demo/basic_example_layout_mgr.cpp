@@ -65,6 +65,7 @@ int main()
 	ui.bind(fruit::EventHandler<fruit::LocationEvent>{std::ref(hello_button)});
 
 	ui.set_viewport_size(800, 500);
+	ui.update();
 
 	return 0;
 }
