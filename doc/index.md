@@ -171,3 +171,10 @@ is inside the ContentBox. It may also trigger a BoundaryCrossedEvent.
 
 Events are also used by layout managers to control the location and size of objects. In this case,
 SizeRequestEvents and GeometryUpdateEvents are sent.
+
+### Using multiple devices of similar type
+
+Some systems may have an arbitrary number of (virtual) input devices. In this case an application may
+need to know which device triggered the event. If this is the case, the application can bind a component
+to specific DeviceId:s. If the application does not specify a DeviceId when binding components or
+sending events, DeviceId{-1} is used.
