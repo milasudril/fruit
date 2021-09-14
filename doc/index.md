@@ -142,6 +142,14 @@ LineLayout will dispatch to all of the managed elements.
 	// As before
 ~~~
 
-## Event routing
-
 ## Font managment
+
+Fruit supports loading fonts in different ways. If the font you want to load is "installled", you
+can use a FontMapper. A FontMapper is able to lookup a font by its common name, in the example above
+Andika is loaded. It is also possible to load a font from a file, as well as a memory buffer. Fruit
+supports fonts that can be loaded by FreeType.
+
+To keeping track of loaded fonts, it is possible to use a FontStore. Through a FontStore, it is
+possible to load a font from different sources, as well as looking up an already loaded font.
+
+## Event routing
