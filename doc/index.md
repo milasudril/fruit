@@ -115,13 +115,14 @@ int main()
 }
 ~~~
 
-## Color conventions
+## Format of the internal framebuffer
 
-Fruit uses 32-bit floating point values to represent channel values, where zero represents black and
-one represents white. The channel layout is RGBA, with 16 bytes per pixel. Color values should be
-treated as linear values. Thus, a value of 0.5 represents half intensity. Alpha blending assumes that
-color values are premultiplied with the opacity. This means that (1.0, 0.0, 0.0, 0.0) could represent
-a red light.
+A UiManager maintains an internal framebuffer which everythiung is rendered to. The upper left corner
+has coordinates (0, 0). The color values are encoded using 32-bit floating point values per channel
+where zero represents black and one represents white. The channel layout is RGBA, with 16 bytes per
+pixel. Color values should be treated as linear values. Thus, a value of 0.5 represents half intensity.
+Alpha blending assumes that color values are premultiplied with the opacity. This means that
+(1.0, 0.0, 0.0, 0.0) could represent a red light.
 
 ## Layout managment
 
