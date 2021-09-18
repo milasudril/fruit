@@ -232,7 +232,7 @@ int main()
 
 	// Create a window and associate event dispatcher
 	auto window = createWindow();
-	glfwSetWindowUserPointer(window.get(), &ui);
+	fruit::GlfwCallbackContext ctxt{*window, ui};
 
 	if(!init_open_gl(window.get()))
 	{ return 1; }
