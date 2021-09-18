@@ -50,12 +50,25 @@ namespace fruit
 			glfwSetWindowUserPointer(&m_window.get(), &user_data);
 		}
 		
-		// TODO: Move ctor
-		// TODO: Move assign
-		
 		~GlfwCallbackContext()
 		{
- 			glfwSetWindowUserPointer(&m_window.get(), m_old_user_pointer);
+			if(m_old_user_pointer != nullptr)
+			{ glfwSetWindowUserPointer(&m_window.get(), m_old_user_pointer); }
+		}
+		
+		GlfwCallbackContext(GlfwCallbackContext&& other):
+			m_window{other.m_window},
+			m_old_user_pointer{other.get()}
+		{
+			other.m_old_user_pointer = nullptr;
+		}
+		
+		GlfwCallbackContext& operator=(GlfwCallbackContext&& other)
+		{
+			m_window = other.m_window;
+			m_old_user_pointer = other.m_old_user_pointer;
+			other.m_old_user_pointer = nullptr;
+			return *this;
 		}
 		
 		UserData& get() const
