@@ -36,7 +36,6 @@ namespace fruit
 
 	inline BallEvent convert(BallEvent::ScrollTag, GLFWwindow&, double dx, double dy)
 	{
-
 		return BallEvent{Vector{static_cast<float>(dx), static_cast<float>(dy), 0.0f}};
 	}
 }
