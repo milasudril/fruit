@@ -38,62 +38,6 @@ namespace fruit
 	{
 		return BallEvent{Vector{static_cast<float>(dx), static_cast<float>(dy), 0.0f}};
 	}
-	
-	template<class UserData>
-	class GlfwCallbackContext
-	{
-	public: 
-		explicit GlfwCallbackContext(GLFWwindow& window, UserData& user_data):
-			m_window{window}
-		{
-			m_old_user_pointer = glfwGetWindowUserPointer(&m_window.get());
-			glfwSetWindowUserPointer(&m_window.get(), &user_data);
-		}
-		
-		// TODO: Move ctor
-		// TODO: Move assign
-		
-		~GlfwCallbackContext()
-		{
- 			glfwSetWindowUserPointer(&m_window.get(), m_old_user_pointer);
-		}
-		
-		UserData& get() const
-		{
-			return *static_cast<UserData*>(glfwGetWindowUserPointer(&m_window.get()));
-		}
-
-	private:
-		std::reference_wrapper<GLFWwindow> m_window;
-		void* m_old_user_pointer;
-	};
-
-	template<class UserData>
-	explicit GlfwCallbackContext(GLFWwindow&, UserData&) -> GlfwCallbackContext<UserData>;	
-#if 0
-	// Setup GLFW callbacks
-	glfwSetFramebufferSizeCallback(window.get(), [](GLFWwindow* src, int w, int h){
-		glViewport(0, 0, w, h);
-		auto& ui = *reinterpret_cast<MyUi*>(glfwGetWindowUserPointer(src));
-		ui.
-		set_viewport_size(w, h);
-	});
-
-	glfwSetCursorPosCallback(window.get(), [](GLFWwindow* src, double x, double y){
-		auto& ui = *reinterpret_cast<MyUi*>(glfwGetWindowUserPointer(src));
-		ui.send(fruit::DeviceId{-1}, fruit::convert(fruit::LocationEvent::MouseMoveTag{}, *src, x, y));
-	});
-
-	glfwSetMouseButtonCallback(window.get(), [](GLFWwindow* src, int button, int action, int) {
-		auto& ui = *reinterpret_cast<MyUi*>(glfwGetWindowUserPointer(src));
-		ui.send(fruit::DeviceId{-1}, fruit::convert(fruit::LocationEvent::MouseButtonTag{}, *src, button, action));
-	});
-
-	glfwSetScrollCallback(window.get(), [](GLFWwindow* src, double dx, double dy) {
-		auto& ui = *reinterpret_cast<MyUi*>(glfwGetWindowUserPointer(src));
-		ui.send(fruit::DeviceId{-1}, fruit::convert(fruit::BallEvent::ScrollTag{}, *src, dx, dy));
-	});
-#endif
 }
 
 #endif
