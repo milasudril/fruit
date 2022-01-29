@@ -124,6 +124,7 @@ namespace fruit
 		TextSegment& text(std::basic_string_view<char8_t> buffer) &
 		{
 			FRUIT_ASSERT(valid());
+			m_saved_text = buffer;
 			text_impl(buffer);
 			return *this;
 		}
@@ -131,7 +132,7 @@ namespace fruit
 		TextSegment&& text(std::basic_string_view<char8_t> buffer) &&
 		{
 			FRUIT_ASSERT(valid());
-			text_impl(buffer);
+			m_saved_text = buffer;
 			return std::move(*this);
 		}
 
@@ -202,9 +203,10 @@ namespace fruit
 		}
 
 	private:
-		void text_impl(std::basic_string_view<char8_t> buffer);
+		void text_impl(std::basic_string_view<char8_t> buffer) const;
 		TextShapeResult shape_impl(TextShaper const& shaper) const;
 		std::unique_ptr<hb_buffer_t, text_segment_detail::Deleter> m_handle;
+		std::basic_string<char8_t> m_saved_text;
 	};
 }
 

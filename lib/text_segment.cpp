@@ -159,7 +159,7 @@ fruit::TextAlphaMask fruit::render(TextShapeResult const& shape_result)
 		render_horizontal(shape_result);
 }
 
-void fruit::TextSegment::text_impl(std::basic_string_view<char8_t> buffer)
+void fruit::TextSegment::text_impl(std::basic_string_view<char8_t> buffer) const
 {
 	auto const handle = native_handle();
 	// https://lists.freedesktop.org/archives/harfbuzz/2016-July/005711.html
@@ -174,13 +174,15 @@ void fruit::TextSegment::text_impl(std::basic_string_view<char8_t> buffer)
 	hb_buffer_add_utf8(handle, data, size, 0, size);
 
 	hb_buffer_set_language(handle, lang);
-	direction(dir).script(s);
+	hb_buffer_set_direction(native_handle(), static_cast<hb_direction_t>(dir));
+	hb_buffer_set_script(native_handle(), static_cast<hb_script_t>(s));
 }
 
 fruit::TextShapeResult fruit::TextSegment::shape_impl(TextShaper const& shaper) const
 {
 	auto const handle = m_handle.get();
 	auto const shaper_ref = shaper.native_handle();
+	text_impl(m_saved_text);
 	FT_Set_Pixel_Sizes(shaper.font().native_handle(), 0, shaper.char_height());
 	hb_ft_font_changed(shaper_ref);
 	hb_shape(shaper_ref, handle, nullptr, 0);

@@ -23,85 +23,85 @@ namespace fruit
 
 		TextLine& text(std::basic_string_view<char8_t> buffer) &
 		{
-			m_render_result = {};
 			m_text.text(buffer);
+			m_render_result.reset();
 			return *this;
 		}
 
 		TextLine&& text(std::basic_string_view<char8_t> buffer) &&
 		{
-			m_render_result = {};
 			m_text.text(buffer);
+			m_render_result.reset();
 			return std::move(*this);
 		}
 
 		TextLine& direction(TextDirection val) &
 		{
-			m_render_result = {};
 			m_text.direction(val);
+			m_render_result.reset();
 			return *this;
 		}
 
 		TextLine&& direction(TextDirection val) &&
 		{
-			m_render_result = {};
 			m_text.direction(val);
+			m_render_result.reset();
 			return std::move(*this);
 		}
 
 		TextLine& language(LanguageTag const& lang) &
 		{
-			m_render_result = {};
 			m_text.language(lang);
+			m_render_result.reset();
 			return *this;
 		}
 
 		TextLine&& language(LanguageTag const& lang) &&
 		{
-			m_render_result = {};
 			m_text.language(lang);
+			m_render_result.reset();
 			return std::move(*this);
 		}
 
 		TextLine& script(WritingSystem val) &
 		{
-			m_render_result = {};
 			m_text.script(val);
+			m_render_result.reset();
 			return *this;
 		}
 
 		TextLine&& script(WritingSystem val) &&
 		{
-			m_render_result = {};
 			m_text.script(val);
+			m_render_result.reset();
 			return std::move(*this);
 		}
 
 		TextLine& char_height(int size) &
 		{
-			m_render_result = {};
-			m_char_height = size;
+			m_char_height = std::max(size, 16);
+			m_render_result.reset();
 			return *this;
 		}
 
 		TextLine&& char_height(int size) &&
 		{
-			m_render_result = {};
-			m_char_height = size;
+			m_char_height = std::max(size, 16);
+			m_render_result.reset();
 			return std::move(*this);
 		}
 
 		TextLine& font(FontFace& font) &
 		{
-			m_render_result = {};
+			m_render_result.reset();
 			m_font = font;
 			return *this;
 		}
 
 		TextLine&& font(FontFace& font) &&
 		{
-			m_render_result = {};
 			m_font = font;
+			m_render_result.reset();
 			return std::move(*this);
 		}
 
@@ -127,6 +127,8 @@ namespace fruit
 		SizeRequestResult handle_no_result(SizeRequestEvent const&) const;
 
 		void do_render() const;
+
+		// FIXME: This may trigger false maybe uninitialized warnings in gcc 10
 		mutable std::optional<std::pair<TextShapeResult, TextAlphaMask>> m_render_result;
 	};
 }
