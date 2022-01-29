@@ -27,7 +27,7 @@ fruit::TextShapeResult::TextShapeResult(uint32_t num_glyphs,
 							TextDirection direction,
 							int char_height):
 	m_glyph_count{num_glyphs},
-	m_font{font},
+	m_font{&font.get()},
 	m_direction{direction},
 	m_char_height{char_height}
 {

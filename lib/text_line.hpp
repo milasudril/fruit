@@ -24,76 +24,76 @@ namespace fruit
 		TextLine& text(std::basic_string_view<char8_t> buffer) &
 		{
 			m_text.text(buffer);
-			m_render_result.reset();
+			m_render_result = {};
 			return *this;
 		}
 
 		TextLine&& text(std::basic_string_view<char8_t> buffer) &&
 		{
 			m_text.text(buffer);
-			m_render_result.reset();
+			m_render_result = {};
 			return std::move(*this);
 		}
 
 		TextLine& direction(TextDirection val) &
 		{
 			m_text.direction(val);
-			m_render_result.reset();
+			m_render_result = {};
 			return *this;
 		}
 
 		TextLine&& direction(TextDirection val) &&
 		{
 			m_text.direction(val);
-			m_render_result.reset();
+			m_render_result = {};
 			return std::move(*this);
 		}
 
 		TextLine& language(LanguageTag const& lang) &
 		{
 			m_text.language(lang);
-			m_render_result.reset();
+			m_render_result = {};
 			return *this;
 		}
 
 		TextLine&& language(LanguageTag const& lang) &&
 		{
 			m_text.language(lang);
-			m_render_result.reset();
+			m_render_result = {};
 			return std::move(*this);
 		}
 
 		TextLine& script(WritingSystem val) &
 		{
 			m_text.script(val);
-			m_render_result.reset();
+			m_render_result = {};
 			return *this;
 		}
 
 		TextLine&& script(WritingSystem val) &&
 		{
 			m_text.script(val);
-			m_render_result.reset();
+			m_render_result = {};
 			return std::move(*this);
 		}
 
 		TextLine& char_height(int size) &
 		{
 			m_char_height = std::max(size, 16);
-			m_render_result.reset();
+			m_render_result = {};
 			return *this;
 		}
 
 		TextLine&& char_height(int size) &&
 		{
 			m_char_height = std::max(size, 16);
-			m_render_result.reset();
+			m_render_result = {};
 			return std::move(*this);
 		}
 
 		TextLine& font(FontFace& font) &
 		{
-			m_render_result.reset();
+			m_render_result = {};
 			m_font = font;
 			return *this;
 		}
@@ -101,18 +101,18 @@ namespace fruit
 		TextLine&& font(FontFace& font) &&
 		{
 			m_font = font;
-			m_render_result.reset();
+			m_render_result = {};
 			return std::move(*this);
 		}
 
 		SizeRequestResult handle(SizeRequestEvent const&) const
 		{
-			if(!m_render_result) [[unlikely]]
+			if(!m_render_result.first.valid()) [[unlikely]]
 			{
 				return handle_no_result(SizeRequestEvent{});
 			}
 
-			auto const& img = m_render_result->second;
+			auto const& img = m_render_result.second;
 			auto const min_size = ViewportSize{static_cast<int>(img.width()), static_cast<int>(img.height())};
 			return SizeRequestResult{min_size, min_size};
 		}
@@ -128,8 +128,7 @@ namespace fruit
 
 		void do_render() const;
 
-		// FIXME: This may trigger false maybe uninitialized warnings in gcc 10
-		mutable std::optional<std::pair<TextShapeResult, TextAlphaMask>> m_render_result;
+		mutable std::pair<TextShapeResult, TextAlphaMask> m_render_result;
 	};
 }
 

@@ -49,6 +49,10 @@ namespace fruit
 	class TextShapeResult
 	{
 	public:
+		TextShapeResult():m_glyph_count{0}, m_font{nullptr}, m_direction{}, m_char_height{0}{}
+
+		bool valid() const { return m_glyph_count != 0; }
+
 		explicit TextShapeResult(uint32_t num_glyphs,
 		                         hb_glyph_info_t const* info,
 		                         hb_glyph_position_t const* geom,
@@ -70,7 +74,7 @@ namespace fruit
 
 		FontFace const& font() const
 		{
-			return m_font;
+			return *m_font;
 		}
 
 		int char_height() const
@@ -89,7 +93,7 @@ namespace fruit
 		size_t m_glyph_count;
 		std::unique_ptr<GlyphInfo[]> m_glyph_info;
 		std::unique_ptr<GlyphGeometry[]> m_glyph_geometry;
-		std::reference_wrapper<FontFace const> m_font;
+		FontFace const* m_font;
 		TextDirection m_direction;
 		int m_char_height;
 	};
