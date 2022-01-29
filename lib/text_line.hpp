@@ -113,11 +113,11 @@ namespace fruit
 			}
 
 			auto const& img = m_render_result->second;
-			auto const min_size = ViewportSize{img.width(), img.height()};
+			auto const min_size = ViewportSize{static_cast<int>(img.width()), static_cast<int>(img.height())};
 			return SizeRequestResult{min_size, min_size};
 		}
 
-		void compose(ImageView<Pixel> output_buffer, Point<int> origin, Pixel color) const;
+		void compose(image_span<Pixel> output_buffer, Point<int> origin, Pixel color) const;
 
 	private:
 		TextSegment m_text;
@@ -127,7 +127,7 @@ namespace fruit
 		SizeRequestResult handle_no_result(SizeRequestEvent const&) const;
 
 		void do_render() const;
-		mutable std::optional<std::pair<TextShapeResult, Image<uint8_t>>> m_render_result;
+		mutable std::optional<std::pair<TextShapeResult, TextAlphaMask>> m_render_result;
 	};
 }
 

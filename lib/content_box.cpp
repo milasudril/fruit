@@ -16,12 +16,12 @@ namespace
 		return fruit::SizeRequestResult{}.min_size;
 	}
 
-	void compose(fruit::ImageView<fruit::Pixel>, std::monostate, fruit::Point<int>, fruit::Pixel)
+	void compose(fruit::image_span<fruit::Pixel>, std::monostate, fruit::Point<int>, fruit::Pixel)
 	{
 	}
 
 	template<class T>
-	void compose(fruit::ImageView<fruit::Pixel> buffer, T const& item, fruit::Point<int> origin, fruit::Pixel color)
+	void compose(fruit::image_span<fruit::Pixel> buffer, T const& item, fruit::Point<int> origin, fruit::Pixel color)
 	{
 		item.compose(buffer, origin, color);
 	}

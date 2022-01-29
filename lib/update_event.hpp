@@ -16,7 +16,7 @@ namespace fruit
 	 */
 	struct RedrawEvent
 	{
-		ImageView<Pixel> buffer;
+		image_span<Pixel> buffer;
 	};
 
 	/**
@@ -26,7 +26,7 @@ namespace fruit
 	 */
 	struct FbUpdateEvent
 	{
-		ImageView<Pixel const> buffer;
+		image_span<Pixel const> buffer;
 	};
 }
 

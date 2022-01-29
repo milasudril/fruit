@@ -86,10 +86,10 @@ public:
 		}
 	}
 
-	void operator()(fruit::ImageView<fruit::Pixel const> buffer)
+	void operator()(fruit::image_span<fruit::Pixel const> buffer)
 	{
-		auto width = buffer.width();
-		auto height = buffer.height();
+		auto width = static_cast<int>(buffer.width());
+		auto height = static_cast<int>(buffer.height());
 		if(m_handle == 0 || width != m_width || height != m_height)
 		{
 			allocate(width, height);

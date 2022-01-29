@@ -94,7 +94,9 @@ namespace fruit
 		int m_char_height;
 	};
 
-	Image<uint8_t> render(TextShapeResult const& res);
+	using TextAlphaMask = pixel_store::image<uint8_t>;
+
+	TextAlphaMask render(TextShapeResult const& res);
 
 	class TextSegment
 	{

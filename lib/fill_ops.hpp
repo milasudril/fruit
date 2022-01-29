@@ -9,7 +9,7 @@
 
 namespace fruit::fill_ops
 {
-	void source_over(ImageView<Pixel> target_buffer, Point<int> begin, Point<int> end, Pixel source);
+	void source_over(image_span<Pixel> target_buffer, Point<int> begin, Point<int> end, Pixel source);
 }
 
 #endif

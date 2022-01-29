@@ -28,7 +28,7 @@ namespace fruit
 
 		void set_viewport_size(int width, int height)
 		{
-			m_framebuffer = Image<Pixel>{width, height};
+			m_framebuffer = image<Pixel>{static_cast<uint32_t>(width), static_cast<uint32_t>(height)};
 			m_dispatcher.send(m_dev_id, GeometryUpdateEvent{ViewportSize{width, height}, Origin<int>});
 			update();
 		}
@@ -37,9 +37,9 @@ namespace fruit
 		{
 			if(m_framebuffer.data() != nullptr)
 			{
-				memset(m_framebuffer.data(), 0, size(m_framebuffer));
-				m_dispatcher.send(m_dev_id, RedrawEvent{m_framebuffer});
-				m_event_handler.handle(m_dev_id, FbUpdateEvent{m_framebuffer});
+				memset(m_framebuffer.data(), 0, area(m_framebuffer));
+				m_dispatcher.send(m_dev_id, RedrawEvent{m_framebuffer.pixels()});
+				m_event_handler.handle(m_dev_id, FbUpdateEvent{std::as_const(m_framebuffer).pixels()});
 			}
 		}
 
@@ -63,7 +63,7 @@ namespace fruit
 		}
 
 	private:
-		Image<Pixel> m_framebuffer;
+		image<Pixel> m_framebuffer;
 		DeviceId m_dev_id;
 		EventDispatcher<RedrawEvent, GeometryUpdateEvent> m_dispatcher;
 		EventHandler<FbUpdateEvent> m_event_handler;

@@ -13,7 +13,7 @@ fruit::SizeRequestResult fruit::TextLine::handle_no_result(SizeRequestEvent cons
 	}
 
 	auto const& img = m_render_result->second;
-	auto const min_size = ViewportSize{img.width(), img.height()};
+	auto const min_size = ViewportSize{static_cast<int>(img.width()), static_cast<int>(img.height())};
 	return SizeRequestResult{min_size, min_size};
 }
 
@@ -30,7 +30,7 @@ void fruit::TextLine::do_render() const
 	m_render_result = std::optional{std::pair{std::move(shape_res), std::move(res)}};
 }
 
-void fruit::TextLine::compose(ImageView<Pixel> target_buffer, Point<int> origin, Pixel color) const
+void fruit::TextLine::compose(image_span<Pixel> target_buffer, Point<int> origin, Pixel color) const
 {
 	if(!m_render_result)
 	{
@@ -40,13 +40,13 @@ void fruit::TextLine::compose(ImageView<Pixel> target_buffer, Point<int> origin,
 	}
 
 	auto const& img = m_render_result->second;
-	auto const end = origin + Vector{img.width(), img.height(), 0};
-	for(int y = origin.y(); y < std::min(end.y(), target_buffer.height()); ++y)
+	auto const end = origin + Vector{static_cast<int>(img.width()), static_cast<int>(img.height()), 0};
+	for(int y = origin.y(); y < std::min(end.y(), static_cast<int>(target_buffer.height())); ++y)
 	{
-		for(int x = origin.x(); x < std::min(end.x(), target_buffer.width()); ++x)
+		for(int x = origin.x(); x < std::min(end.x(), static_cast<int>(target_buffer.width())); ++x)
 		{
 			auto const factor = static_cast<float>(img(x - origin.x(), y - origin.y()))/255.0f;
-			target_buffer(x, y) = color + target_buffer(x, y)*(1.0f - factor);
+			target_buffer(x, y).value() = color.value() + target_buffer(x, y).value()*(1.0f - factor);
 		}
 	}
 }

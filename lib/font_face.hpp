@@ -48,7 +48,7 @@ namespace fruit
 
 	struct GlyphRenderResult
 	{
-		ImageView<uint8_t const> image;
+		image_span<uint8_t const> image;
 		Vector<int> render_offset;
 	};
 
@@ -66,9 +66,8 @@ namespace fruit
 			FT_Set_Pixel_Sizes(handle, 0, size);
 			FT_Load_Char(handle, char_index, FT_LOAD_RENDER);
 			auto& glyph = *handle->glyph;
-			return GlyphRenderResult{ImageView<uint8_t const>{glyph.bitmap.buffer,
-				static_cast<int>(glyph.bitmap.width),
-				static_cast<int>(glyph.bitmap.rows)},
+			return GlyphRenderResult{image_span<uint8_t const>{glyph.bitmap.buffer, glyph.bitmap.width,
+				glyph.bitmap.rows},
 				is_horizontal(dir) ?
 					Vector{glyph.bitmap_left, size - glyph.bitmap_top, 0}:
 					Vector{static_cast<int>(glyph.bitmap.width/2 + glyph.bitmap_left), -glyph.bitmap_top, 0}};
@@ -81,9 +80,9 @@ namespace fruit
 			FT_Load_Glyph(handle, index.value(), FT_LOAD_RENDER);
 			auto& glyph = *handle->glyph;
 
-			return GlyphRenderResult{ImageView<uint8_t const>{glyph.bitmap.buffer,
-				static_cast<int>(glyph.bitmap.width),
-				static_cast<int>(glyph.bitmap.rows)},
+			return GlyphRenderResult{image_span<uint8_t const>{glyph.bitmap.buffer,
+				glyph.bitmap.width,
+				glyph.bitmap.rows},
 				is_horizontal(dir) ?
 					Vector{glyph.bitmap_left, size - glyph.bitmap_top, 0}:
 					Vector{0, -glyph.bitmap_top, 0}};
