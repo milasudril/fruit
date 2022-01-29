@@ -43,10 +43,16 @@ namespace fruit
 		std::array<char, BufferSize + 1> m_storage;
 	};
 
+	namespace detail
+	{
+		template<class T>
+		void unused(T&&){}
+	}
+
 	[[noreturn]] inline void write_and_abort(ErrorMessage const& msg)
 	{
 		auto buffer = msg.get();
-		write(STDERR_FILENO, std::data(buffer), std::size(buffer));
+		detail::unused(write(STDERR_FILENO, std::data(buffer), std::size(buffer)));
 		fsync(STDERR_FILENO);
 		abort();
 	}

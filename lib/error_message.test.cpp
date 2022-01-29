@@ -7,7 +7,7 @@
 TESTCASE(MakeErrorMessage)
 {
 	std::string testval{"foobar"};
-	auto msg = fruit::make_error_message(__FILE__, __LINE__, "Test", "Testing {} placeholder", testval);
+	auto msg = fruit::make_error_message("Foo", 10, "Test", "Testing {} placeholder", testval);
 	auto const str = std::string{msg.get().data()};
-	EXPECT_EQ(str, "lib/error_message.test.cpp:10: Test: Testing foobar placeholder");
+	EXPECT_EQ(str, "Foo:10: Test: Testing foobar placeholder");
 }
