@@ -79,7 +79,7 @@ namespace fruit
 
 		TextLine& char_height(int size) &
 		{
-			m_char_height = std::max(size, 16);
+			m_char_height = std::max(size, 8);
 			m_render_result = {};
 			return *this;
 		}
