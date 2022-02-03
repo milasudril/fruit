@@ -6,9 +6,7 @@
 #ifndef FRUIT_LIB_TEXTSEGMENT_HPP
 #define FRUIT_LIB_TEXTSEGMENT_HPP
 
-#include "./text_direction.hpp"
-#include "./writing_system.hpp"
-#include "./language_tag.hpp"
+#include "./text_properties.hpp"
 #include "./error_message.hpp"
 #include "./text_shaper.hpp"
 #include "./viewport_size.hpp"
@@ -105,12 +103,6 @@ namespace fruit
 	class TextSegment
 	{
 	public:
-		TextSegment():m_direction{TextDirection::LeftToRight},
-		m_language{LanguageTag{"en-us"}},
-		m_script{WritingSystem::Latin}
-		{
-		}
-
 		TextSegment& text(std::basic_string_view<char8_t> buffer) &
 		{
 			m_text = buffer;
@@ -125,54 +117,53 @@ namespace fruit
 
 		TextSegment& direction(TextDirection val) &
 		{
-			m_direction = val;
+			m_properties.direction = val;
 			return *this;
 		}
 
 		TextSegment&& direction(TextDirection val) &&
 		{
-			m_direction = val;
+			m_properties.direction = val;
 			return std::move(*this);
 		}
 
 
 		TextDirection direction() const
 		{
-			return m_direction;
+			return m_properties.direction;
 		}
-
 		TextSegment& language(LanguageTag const& lang) &
 		{
-			m_language = lang;
+			m_properties.language = lang;
 			return *this;
 		}
 
 		TextSegment&& language(LanguageTag const& lang) &&
 		{
-			m_language = lang;
+			m_properties.language = lang;
 			return std::move(*this);
 		}
 
 		LanguageTag const& language() const
 		{
-			return m_language;
+			return m_properties.language;
 		}
 
 		TextSegment& script(WritingSystem val) &
 		{
-			m_script = val;
+			m_properties.script = val;
 			return *this;
 		}
 
 		TextSegment&& script(WritingSystem val) &&
 		{
-			m_script = val;
+			m_properties.script = val;
 			return std::move(*this);
 		}
 
 		WritingSystem script() const
 		{
-			return m_script;
+			return m_properties.script;
 		}
 
 		TextShapeResult shape(TextShaper const& shaper) const &
@@ -183,9 +174,7 @@ namespace fruit
 
 	private:
 		TextShapeResult shape_impl(TextShaper const& shaper) const;
-		TextDirection m_direction;
-		LanguageTag m_language;
-		WritingSystem m_script;
+		TextProperties m_properties;
 		std::basic_string<char8_t> m_text;
 	};
 }

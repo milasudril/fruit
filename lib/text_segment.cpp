@@ -168,9 +168,9 @@ fruit::TextShapeResult fruit::TextSegment::shape_impl(TextShaper const& shaper) 
 
 	auto const n = std::size(m_text);
 	hb_buffer_add_utf8(handle, reinterpret_cast<char const*>(std::data(m_text)), n, 0, n);
-	hb_buffer_set_language(handle, hb_language_from_string(m_language.c_str(), -1));
-	hb_buffer_set_direction(handle, static_cast<hb_direction_t>(m_direction));
-	hb_buffer_set_script(handle, static_cast<hb_script_t>(m_script));
+	hb_buffer_set_language(handle, hb_language_from_string(m_properties.language.c_str(), -1));
+	hb_buffer_set_direction(handle, static_cast<hb_direction_t>(m_properties.direction));
+	hb_buffer_set_script(handle, static_cast<hb_script_t>(m_properties.script));
 	FT_Set_Pixel_Sizes(shaper.font().native_handle(), 0, shaper.char_height());
 	hb_ft_font_changed(shaper.native_handle());
 	hb_shape(shaper.native_handle(), handle, nullptr, 0);
