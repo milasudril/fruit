@@ -1,6 +1,5 @@
 //@	{
-//@		"dependencies_extra":[{"ref":"./text_segment.o", "rel":"implementation"}],
-//@		"dependencies": [{"ref":"harfbuzz", "origin":"pkg-config"}]
+//@	 "dependencies_extra":[{"ref":"./text_segment.o", "rel":"implementation"}]
 //@	}
 
 #ifndef FRUIT_LIB_TEXTSEGMENT_HPP
@@ -12,8 +11,6 @@
 #include "./text_shaper.hpp"
 #include "./viewport_size.hpp"
 #include "./image.hpp"
-
-#include <hb.h>
 
 #include <string_view>
 #include <memory>

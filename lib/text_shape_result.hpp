@@ -1,4 +1,7 @@
-//@	{"dependencies_extra":[{"ref":"./text_shape_result.o", "rel":"implementation"}]}
+//@	{
+//@	"dependencies_extra":[{"ref":"./text_shape_result.o", "rel":"implementation"}],
+//@	"dependencies": [{"ref":"harfbuzz", "origin":"pkg-config"}]
+//@	}
 
 #ifndef FRUIT_LIB_TEXT_SHAPE_RESULT_HPP
 #define FRUIT_LIB_TEXT_SHAPE_RESULT_HPP
