@@ -10,6 +10,8 @@
 #include "./vector.hpp"
 #include "./font_face.hpp"
 #include "./error_message.hpp"
+#include "./text_properties.hpp"
+#include "./text_shaper.hpp"
 
 #include "pixel_store/image.hpp"
 
@@ -84,5 +86,7 @@ namespace fruit
 	using TextAlphaMask = pixel_store::image<uint8_t>;
 
 	TextAlphaMask render(TextShapeResult const& res);
+
+	TextShapeResult shape(TextShaper const& shaper, std::basic_string_view<char8_t> text, TextProperties properties);
 }
 #endif

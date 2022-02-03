@@ -1,7 +1,3 @@
-//@	{
-//@	 "dependencies_extra":[{"ref":"./text_segment.o", "rel":"implementation"}]
-//@	}
-
 #ifndef FRUIT_LIB_TEXTSEGMENT_HPP
 #define FRUIT_LIB_TEXTSEGMENT_HPP
 
@@ -86,12 +82,10 @@ namespace fruit
 
 		TextShapeResult shape(TextShaper const& shaper) const &
 		{
-			FRUIT_ASSERT(shaper.valid());
-			return shape_impl(shaper);
+			return fruit::shape(shaper, m_text, m_properties);
 		}
 
 	private:
-		TextShapeResult shape_impl(TextShaper const& shaper) const;
 		TextProperties m_properties;
 		std::basic_string<char8_t> m_text;
 	};
