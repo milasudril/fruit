@@ -93,8 +93,8 @@ namespace fruit
 
 		TextLine& font(FontFace& font) &
 		{
-			m_render_result = {};
 			m_font = font;
+			m_render_result = {};
 			return *this;
 		}
 

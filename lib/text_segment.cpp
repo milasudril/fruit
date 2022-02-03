@@ -159,33 +159,21 @@ fruit::TextAlphaMask fruit::render(TextShapeResult const& shape_result)
 		render_horizontal(shape_result);
 }
 
-void fruit::TextSegment::text_impl(std::basic_string_view<char8_t> buffer) const
-{
-	auto const handle = native_handle();
-	// https://lists.freedesktop.org/archives/harfbuzz/2016-July/005711.html
-	auto const dir = direction();
-	auto const s = script();
-	// Do not want to convert to string and back
-	auto lang = hb_buffer_get_language(handle);
-
-	hb_buffer_reset(handle);
-	auto const data = reinterpret_cast<char const*>(std::data(buffer));
-	auto const size = std::size(buffer);
-	hb_buffer_add_utf8(handle, data, size, 0, size);
-
-	hb_buffer_set_language(handle, lang);
-	hb_buffer_set_direction(native_handle(), static_cast<hb_direction_t>(dir));
-	hb_buffer_set_script(native_handle(), static_cast<hb_script_t>(s));
-}
-
 fruit::TextShapeResult fruit::TextSegment::shape_impl(TextShaper const& shaper) const
 {
-	auto const handle = m_handle.get();
-	auto const shaper_ref = shaper.native_handle();
-	text_impl(m_saved_text);
+	std::unique_ptr<hb_buffer_t, text_segment_detail::Deleter> ptr{hb_buffer_create()};
+	auto const handle = ptr.get();
+	if(!hb_buffer_allocation_successful(handle))
+	{ FRUIT_JAM("Failed to allocate hb_buffer"); }
+
+	auto const n = std::size(m_text);
+	hb_buffer_add_utf8(handle, reinterpret_cast<char const*>(std::data(m_text)), n, 0, n);
+	hb_buffer_set_language(handle, hb_language_from_string(m_language.c_str(), -1));
+	hb_buffer_set_direction(handle, static_cast<hb_direction_t>(m_direction));
+	hb_buffer_set_script(handle, static_cast<hb_script_t>(m_script));
 	FT_Set_Pixel_Sizes(shaper.font().native_handle(), 0, shaper.char_height());
-	hb_ft_font_changed(shaper_ref);
-	hb_shape(shaper_ref, handle, nullptr, 0);
+	hb_ft_font_changed(shaper.native_handle());
+	hb_shape(shaper.native_handle(), handle, nullptr, 0);
 	unsigned int glyph_count{};
 	auto const glyph_info = hb_buffer_get_glyph_infos(handle, &glyph_count);
 	auto const glyph_pos = hb_buffer_get_glyph_positions(handle, &glyph_count);

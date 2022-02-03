@@ -105,112 +105,88 @@ namespace fruit
 	class TextSegment
 	{
 	public:
-		TextSegment():m_handle{hb_buffer_create()}
+		TextSegment():m_direction{TextDirection::LeftToRight},
+		m_language{LanguageTag{"en-us"}},
+		m_script{WritingSystem::Latin}
 		{
-			if(!hb_buffer_allocation_successful(native_handle()))
-			{ FRUIT_JAM("Failed to allocate hb_buffer"); }
-
-			direction(TextDirection::LeftToRight).
-				language(LanguageTag{"en-us"}).
-				script(WritingSystem::Latin);
-		}
-
-		bool valid() const
-		{
-			return m_handle != nullptr;
-		}
-
-		hb_buffer_t* native_handle() const
-		{
-			return m_handle.get();
 		}
 
 		TextSegment& text(std::basic_string_view<char8_t> buffer) &
 		{
-			FRUIT_ASSERT(valid());
-			m_saved_text = buffer;
-			text_impl(buffer);
+			m_text = buffer;
 			return *this;
 		}
 
 		TextSegment&& text(std::basic_string_view<char8_t> buffer) &&
 		{
-			FRUIT_ASSERT(valid());
-			m_saved_text = buffer;
+			m_text = buffer;
 			return std::move(*this);
 		}
 
 		TextSegment& direction(TextDirection val) &
 		{
-			FRUIT_ASSERT(valid());
-			hb_buffer_set_direction(native_handle(), static_cast<hb_direction_t>(val));
+			m_direction = val;
 			return *this;
 		}
 
 		TextSegment&& direction(TextDirection val) &&
 		{
-			FRUIT_ASSERT(valid());
-			hb_buffer_set_direction(native_handle(), static_cast<hb_direction_t>(val));
+			m_direction = val;
 			return std::move(*this);
 		}
 
 
 		TextDirection direction() const
 		{
-			FRUIT_ASSERT(valid());
-			return static_cast<TextDirection>(hb_buffer_get_direction(native_handle()));
+			return m_direction;
 		}
 
 		TextSegment& language(LanguageTag const& lang) &
 		{
-			FRUIT_ASSERT(valid());
-			hb_buffer_set_language(native_handle(), hb_language_from_string(lang.c_str(), -1));
+			m_language = lang;
 			return *this;
 		}
 
 		TextSegment&& language(LanguageTag const& lang) &&
 		{
-			FRUIT_ASSERT(valid());
-			hb_buffer_set_language(native_handle(), hb_language_from_string(lang.c_str(), -1));
+			m_language = lang;
 			return std::move(*this);
 		}
 
-		LanguageTag language() const
+		LanguageTag const& language() const
 		{
-			FRUIT_ASSERT(valid());
-			return LanguageTag{hb_language_to_string(hb_buffer_get_language(native_handle()))};
+			return m_language;
 		}
 
 		TextSegment& script(WritingSystem val) &
 		{
-			hb_buffer_set_script(native_handle(), static_cast<hb_script_t>(val));
+			m_script = val;
 			return *this;
 		}
 
 		TextSegment&& script(WritingSystem val) &&
 		{
-			hb_buffer_set_script(native_handle(), static_cast<hb_script_t>(val));
+			m_script = val;
 			return std::move(*this);
 		}
 
 		WritingSystem script() const
 		{
-			FRUIT_ASSERT(valid());
-			return static_cast<WritingSystem>(hb_buffer_get_script(native_handle()));
+			return m_script;
 		}
 
 		TextShapeResult shape(TextShaper const& shaper) const &
 		{
-			FRUIT_ASSERT(valid());
 			FRUIT_ASSERT(shaper.valid());
 			return shape_impl(shaper);
 		}
 
 	private:
-		void text_impl(std::basic_string_view<char8_t> buffer) const;
 		TextShapeResult shape_impl(TextShaper const& shaper) const;
-		std::unique_ptr<hb_buffer_t, text_segment_detail::Deleter> m_handle;
-		std::basic_string<char8_t> m_saved_text;
+		TextDirection m_direction;
+		LanguageTag m_language;
+		WritingSystem m_script;
+		std::basic_string<char8_t> m_text;
 	};
 }
 

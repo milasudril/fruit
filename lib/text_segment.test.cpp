@@ -7,16 +7,6 @@
 
 #include "testfwk/testfwk.hpp"
 
-TESTCASE(TextSegmentValidity)
-{
-	fruit::TextSegment segment;
-	EXPECT_EQ(segment.valid(), true);
-
-	auto other = std::move(segment);
-	EXPECT_EQ(segment.valid(), false);
-	EXPECT_EQ(other.valid(), true);
-}
-
 TESTCASE(TextSegmentDirection)
 {
 	fruit::TextSegment segment;
