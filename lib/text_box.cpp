@@ -50,9 +50,11 @@ void fruit::TextBox::compose(image_span<Pixel> target_buffer, Point<int> origin,
 		{ return; }
 	}
 
-	std::ranges::for_each(m_render_result.second, [target_buffer, origin, color](auto const& item) {
+	std::ranges::for_each(m_render_result.second, [target_buffer, origin, color](auto const& item) mutable {
 		auto const& img = item;
-		auto const end = origin + Vector{static_cast<int>(img.width()), static_cast<int>(img.height()), 0};
+		auto const dx = Vector{static_cast<int>(img.width()), 0, 0};
+		auto const dy = Vector{0, static_cast<int>(img.height()), 0};
+		auto const end = origin + dx + dy;
 		for(int y = origin.y(); y < std::min(end.y(), static_cast<int>(target_buffer.height())); ++y)
 		{
 			for(int x = origin.x(); x < std::min(end.x(), static_cast<int>(target_buffer.width())); ++x)
@@ -61,5 +63,6 @@ void fruit::TextBox::compose(image_span<Pixel> target_buffer, Point<int> origin,
 				target_buffer(x, y).value() = factor*color.value() + target_buffer(x, y).value()*(1.0f - factor);
 			}
 		}
+		origin += dy;
 	});
 }

@@ -90,7 +90,7 @@ namespace
 		auto const size = shape_result.char_height();
 		auto bb = bounding_box_horizontal(shape_result);
 		if(bb.width == 0 || bb.height == 0)
-		{ return fruit::TextAlphaMask{}; }
+		{ return fruit::TextAlphaMask{1u, static_cast<uint32_t>(size)}; }
 
 		fruit::TextAlphaMask buffer{static_cast<uint32_t>(bb.width), static_cast<uint32_t>(bb.height)};
 		auto glyphs = shape_result.glyph_info();
@@ -118,7 +118,7 @@ namespace
 		auto const size = shape_result.char_height();
 		auto bb = bounding_box_vertical(shape_result, size);
 		if(bb.width == 0 || bb.height == 0)
-		{ return fruit::TextAlphaMask{}; }
+		{ return fruit::TextAlphaMask{static_cast<uint32_t>(size), 1u}; }
 
 		fruit::TextAlphaMask buffer{static_cast<uint32_t>(bb.width), static_cast<uint32_t>(bb.height)};
 		auto glyphs = shape_result.glyph_info();
