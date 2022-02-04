@@ -29,7 +29,7 @@ void fruit::TextBox::handle_no_result(SizeRequestEvent const&) const
 void fruit::TextBox::do_render() const
 {
 	auto shape_res = m_text.shape(TextShaper{m_font, m_char_height});
-	if(std::ranges::all_of(shape_res, [](auto const& item) { return item.glyph_count(); }))
+	if(std::ranges::all_of(shape_res, [](auto const& item) { return item.glyph_count() == 0; }))
 	{
 		m_render_result = {};
 		return;

@@ -89,8 +89,8 @@ namespace
 	{
 		auto const size = shape_result.char_height();
 		auto bb = bounding_box_horizontal(shape_result);
-		FRUIT_ASSERT(bb.width > 0);
-		FRUIT_ASSERT(bb.height > 0);
+		if(bb.width == 0 || bb.height == 0)
+		{ return fruit::TextAlphaMask{}; }
 
 		fruit::TextAlphaMask buffer{static_cast<uint32_t>(bb.width), static_cast<uint32_t>(bb.height)};
 		auto glyphs = shape_result.glyph_info();
@@ -117,8 +117,8 @@ namespace
 	{
 		auto const size = shape_result.char_height();
 		auto bb = bounding_box_vertical(shape_result, size);
-		FRUIT_ASSERT(bb.width > 0);
-		FRUIT_ASSERT(bb.height > 0);
+		if(bb.width == 0 || bb.height == 0)
+		{ return fruit::TextAlphaMask{}; }
 
 		fruit::TextAlphaMask buffer{static_cast<uint32_t>(bb.width), static_cast<uint32_t>(bb.height)};
 		auto glyphs = shape_result.glyph_info();
