@@ -1,5 +1,5 @@
-#ifndef FRUIT_LIB_TEXTSEGMENT_HPP
-#define FRUIT_LIB_TEXTSEGMENT_HPP
+#ifndef FRUIT_LIB_TEXTSEGMENTLIST_HPP
+#define FRUIT_LIB_TEXTSEGMENTLIST_HPP
 
 #include "./text_shape_result.hpp"
 #include "./text_properties.hpp"
@@ -11,31 +11,32 @@
 #include <string_view>
 #include <memory>
 #include <stdexcept>
+#include <vector>
 
 namespace fruit
 {
-	class TextSegment
+	class TextSegmentList
 	{
 	public:
-		TextSegment& text(std::basic_string_view<char8_t> buffer) &
+		TextSegmentList& text(std::vector<std::basic_string<char8_t>>&& buffer) &
 		{
-			m_text = buffer;
+			m_text = std::move(buffer);
 			return *this;
 		}
 
-		TextSegment&& text(std::basic_string_view<char8_t> buffer) &&
+		TextSegmentList&& text(std::vector<std::basic_string<char8_t>>&& buffer) &&
 		{
-			m_text = buffer;
+			m_text = std::move(buffer);
 			return std::move(*this);
 		}
 
-		TextSegment& direction(TextDirection val) &
+		TextSegmentList& direction(TextDirection val) &
 		{
 			m_properties.direction = val;
 			return *this;
 		}
 
-		TextSegment&& direction(TextDirection val) &&
+		TextSegmentList&& direction(TextDirection val) &&
 		{
 			m_properties.direction = val;
 			return std::move(*this);
@@ -46,13 +47,13 @@ namespace fruit
 		{
 			return m_properties.direction;
 		}
-		TextSegment& language(LanguageTag const& lang) &
+		TextSegmentList& language(LanguageTag const& lang) &
 		{
 			m_properties.language = lang;
 			return *this;
 		}
 
-		TextSegment&& language(LanguageTag const& lang) &&
+		TextSegmentList&& language(LanguageTag const& lang) &&
 		{
 			m_properties.language = lang;
 			return std::move(*this);
@@ -63,13 +64,13 @@ namespace fruit
 			return m_properties.language;
 		}
 
-		TextSegment& script(WritingSystem val) &
+		TextSegmentList& script(WritingSystem val) &
 		{
 			m_properties.script = val;
 			return *this;
 		}
 
-		TextSegment&& script(WritingSystem val) &&
+		TextSegmentList&& script(WritingSystem val) &&
 		{
 			m_properties.script = val;
 			return std::move(*this);
@@ -80,14 +81,19 @@ namespace fruit
 			return m_properties.script;
 		}
 
-		TextShapeResult shape(TextShaper const& shaper) const
+		std::vector<TextShapeResult> shape(TextShaper const& shaper) const
 		{
-			return fruit::shape(shaper, m_text, m_properties);
+			std::vector<TextShapeResult> ret;
+			ret.reserve(std::size(m_text));
+			std::ranges::transform(m_text, std::back_inserter(ret), [&props = m_properties, &shaper](auto const& val) {
+				return fruit::shape(shaper, val, props);
+			});
+			return ret;
 		}
 
 	private:
 		TextProperties m_properties;
-		std::basic_string<char8_t> m_text;
+		std::vector<std::basic_string<char8_t>> m_text;
 	};
 }
 
