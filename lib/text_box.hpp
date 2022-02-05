@@ -80,15 +80,23 @@ namespace fruit
 
 		TextBox& char_height(int size) &
 		{
-			m_char_height = std::max(size, 8);
-			m_render_result = {};
+			auto tmp  = std::max(size, 8);
+			if(tmp != m_char_height)
+			{
+				m_char_height = tmp;
+				m_render_result = {};
+			}
 			return *this;
 		}
 
 		TextBox&& char_height(int size) &&
 		{
-			m_char_height = std::max(size, 16);
-			m_render_result = {};
+			auto tmp  = std::max(size, 8);
+			if(tmp != m_char_height)
+			{
+				m_char_height = tmp;
+				m_render_result = {};
+			}
 			return std::move(*this);
 		}
 
